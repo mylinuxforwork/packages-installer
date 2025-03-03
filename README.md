@@ -1,3 +1,3 @@
-# packagesinstaller
+# Packages Installer
 
 A description of this project.

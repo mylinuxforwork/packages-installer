@@ -35,6 +35,7 @@ class PackagesinstallerApplication(Adw.Application):
     loaded_configuration = {}
     save_configuration = {}
     loaded_filename = ""
+    packages_group_list = []
 
     def __init__(self):
         super().__init__(application_id='com.ml4w.packagesinstaller',
@@ -57,14 +58,16 @@ class PackagesinstallerApplication(Adw.Application):
         win.present()
 
     def on_saveas_file(self, *args):
-        dialog = Gtk.FileDialog(initial_name=self.loaded_filename)
-        dialog.save(parent=self.props.active_window, cancellable=None, callback=self.on_file_saveased)
+        self.create_json()
+        # dialog = Gtk.FileDialog(initial_name=self.loaded_filename)
+        # dialog.save(parent=self.props.active_window, cancellable=None, callback=self.on_file_saveased)
 
     def on_file_saveased(self, dialog, result):
         file = dialog.save_finish(result)
         if file is not None:
             print("Saving now")
             contents="JSON"
+            self.create_json()
             '''
             file.replace_contents_async(
                 contents,
@@ -94,6 +97,19 @@ class PackagesinstallerApplication(Adw.Application):
                 self.loaded_filename = self.get_file_name(file)
                 print(self.loaded_filename)
 
+    # Create the json file from current configuration
+    def create_json(self):
+
+        self.save_configuration["title"] = self.props.active_window.config_title.get_text()
+        self.save_configuration["description"] = self.props.active_window.config_description.get_text()
+        self.save_configuration["distribution"] = self.props.active_window.config_distribution.get_text()
+        self.save_configuration["isinstalledcommand"] = self.props.active_window.config_isinstalledcommand.get_text()
+
+        for i in self.packages_group_list:
+            print(i["package"].get_text())
+        print(json.dumps(self.save_configuration))
+
+    # Loads configuration from selected source
     def set_configuration(self):
         self.props.active_window.config_title.set_text(self.loaded_configuration["title"])
         self.props.active_window.config_description.set_text(self.loaded_configuration["description"])
@@ -101,6 +117,9 @@ class PackagesinstallerApplication(Adw.Application):
         self.props.active_window.config_isinstalledcommand.set_text(self.loaded_configuration["isinstalledcommand"])
 
         for i in self.loaded_configuration["packages"]:
+
+            subgroup_list = []
+
             row = Adw.ExpanderRow()
             row.set_title(i["package"])
 
@@ -109,6 +128,7 @@ class PackagesinstallerApplication(Adw.Application):
             package_row.set_text(i["package"])
             package_row.bind_property("text", row, "title", GObject.BindingFlags.BIDIRECTIONAL)
             row.add_row(package_row)
+            subgroup_list["package"] = package_row
 
             if "description" in i:
                 description = i["description"]
@@ -121,11 +141,13 @@ class PackagesinstallerApplication(Adw.Application):
             package_row.set_text(description)
             package_row.bind_property("text", row, "subtitle", GObject.BindingFlags.BIDIRECTIONAL)
             row.add_row(package_row)
+            subgroup_list["description"] = package_row
 
             package_row = Adw.EntryRow()
             package_row.set_title("Installation Command")
             package_row.set_text(i["installationcommand"])
             row.add_row(package_row)
+            subgroup_list["command"] = package_row
 
             package_row = Adw.ActionRow()
             package_row.set_title("")
@@ -136,6 +158,7 @@ class PackagesinstallerApplication(Adw.Application):
             package_row.add_suffix(btn)
             row.add_row(package_row)
 
+            self.packages_group_list.append(subgroup_list)
             self.props.active_window.packages_group.add(row)
 
         self.page_stack.set_visible_child_name("page_configuration")

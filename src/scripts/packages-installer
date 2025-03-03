@@ -1,0 +1,116 @@
+#!/bin/bash
+# jq tutorial: https://www.baeldung.com/linux/jq-command-json
+
+# -----------------------------------------------------
+# Variables
+# -----------------------------------------------------
+version="1.0"
+name="Packages Installer Script"
+json=""
+
+# -----------------------------------------------------
+# Load Configuration from file
+# -----------------------------------------------------
+_loadFromFile() {
+    file=$1
+    json=$(cat $1)
+    _showHeader
+}
+
+# -----------------------------------------------------
+# Load Configuration from remote
+# -----------------------------------------------------
+_loadFromRemote() {
+    echo "Loading from Remote"
+}
+
+# -----------------------------------------------------
+# Run the installation
+# -----------------------------------------------------
+_showHeader() {
+    title=$(echo $json | jq -r '.title')
+    description=$(echo $json | jq -r '.description')
+
+    echo $title
+    echo "---------------------------------------------------"
+    echo $description
+    echo
+    _runInstallation
+}
+
+# -----------------------------------------------------
+# Run the installation
+# -----------------------------------------------------
+_runInstallation() {
+    l=$(echo $json | jq '.packages | length')
+    for ((i=0; i<$l; i++)); do
+        package=$(echo $json | jq -r '.packages['$i'].package')
+        description=$(echo $json | jq -r '.packages['$i'].description')
+        command=$(echo $json | jq -r '.packages['$i'].command')
+        precommand=$(echo $json | jq -r '.packages['$i'].precommand')
+        postcommand=$(echo $json | jq -r '.packages['$i'].postcommand')
+
+        echo "Installing $package ..."
+        if [[ ! -z $description ]] && [[ ! $description == "null" ]]; then
+            echo $description
+        fi
+
+        _installPackage "$command" "$package" "$precommand" "$postcommand"
+        echo
+    done
+}
+
+# -----------------------------------------------------
+# Install Package
+# -----------------------------------------------------
+_installPackage() {
+    command=$1
+    package=$2
+    precommand=$3
+    postcommand=$4
+
+    if [[ $(_isInstalled "$package") == 0 ]]; then
+        echo "Package $package is already installed"
+    else
+        if [[ ! -z $precommand ]] && [[ ! $precommand == "null" ]]; then
+            eval "$precommand"
+        fi
+
+        eval "$command $package"
+
+        if [[ ! -z $postcommand ]] && [[ ! $postcommand == "null" ]]; then
+            eval "$postcommand"
+        fi
+    fi
+}
+
+# -----------------------------------------------------
+# Install Package
+# -----------------------------------------------------
+_isInstalled() {
+    package=$1
+    isInstalledCommand=$(echo $json | jq -r '.isinstalledcommand')
+    result=$(echo "$isInstalledCommand" | sed "s/PACKAGE/$package/g")
+    check="$(eval $result)"
+    if [ -n "${check}" ]; then
+        echo 0
+    else
+        echo 1
+    fi
+}
+
+# -----------------------------------------------------
+# Manage Parameters
+# -----------------------------------------------------
+while getopts "r:f:h" opt; do
+    case $opt in
+        r) _loadFromRemote $OPTARG ;;
+        f) _loadFromFile $OPTARG ;;
+        h)
+            echo ":: ML4W Installer"
+            echo "-r url: Will install from a remote resource with url"
+            echo "-f path: Will install from a file resource with path"
+            exit
+            ;;
+    esac
+done

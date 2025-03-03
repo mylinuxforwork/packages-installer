@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=packagesinstaller
+Exec=packagesinstaller
+Icon=com.ml4w.packagesinstaller
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=GTK;
+StartupNotify=true
+DBusActivatable=true

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+  <template class="PackagesinstallerWindow" parent="AdwApplicationWindow">
+    <property name="title" translatable="yes">Packages Installer</property>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
+    <property name="content">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <child type="end">
+              <object class="GtkMenuButton">
+                <property name="primary">True</property>
+                <property name="icon-name">open-menu-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Main Menu</property>
+                <property name="menu-model">primary_menu</property>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkButton" id="btn_run">
+                <property name="name">suggested</property>
+                <property name="label" translatable="yes">Run</property>
+                <property name="action-name">app.run_config</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <property name="content">
+          <object class="GtkStack" id="page_stack">
+
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">page_welcome</property>
+                <property name="title" translatable="yes">Welcome</property>
+                <property name="child">
+                  <object class="AdwStatusPage">
+                    <property name="title" translatable="yes">Welcome</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">page_load_configuration</property>
+                <property name="title" translatable="yes">Load Configuration</property>
+                <property name="child">
+                  <object class="AdwPreferencesPage">
+                    <child>
+                      <object class="AdwPreferencesGroup">
+                        <property name="title">Remote Configuration</property>
+                        <property name="description">Please enter the url of the remote configuration.</property>
+
+                        <child>
+                          <object class="AdwEntryRow" id="open_remote_url">
+                            <property name="title">Remote Configuration Url</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwActionRow">
+                            <property name="title">Load remote configuration</property>
+                            <child type="suffix">
+                              <object class="GtkButton">
+                                <property name="halign">3</property>
+                                <property name="valign">3</property>
+                                <property name="label">Load</property>
+                                <property name="action-name">app.open_remote</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+
+                    <child>
+                      <object class="AdwPreferencesGroup">
+                        <property name="title">Local Configuration</property>
+                        <property name="description">Please open a local configuration from your computer.</property>
+
+                        <child>
+                          <object class="AdwActionRow">
+                            <property name="title">Open local configuration</property>
+                            <child type="suffix">
+                              <object class="GtkButton">
+                                <property name="halign">3</property>
+                                <property name="valign">3</property>
+                                <property name="label">Open</property>
+                                <property name="action-name">app.open_file</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+
+                  </object>
+                </property>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">page_configuration</property>
+                <property name="title" translatable="yes">Description</property>
+                <property name="child">
+                  <object class="AdwPreferencesPage">
+                    <child>
+                      <object class="AdwPreferencesGroup">
+                        <property name="title">Description</property>
+                        <property name="description">Define detailed information to your installation configuration.</property>
+                        <child type="header-suffix">
+                          <object class="GtkButton">
+                            <property name="halign">3</property>
+                            <property name="valign">3</property>
+                            <property name="label">Save As</property>
+                            <property name="action-name">app.saveas_file</property>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="AdwEntryRow" id="config_title">
+                            <property name="title">Title</property>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="AdwEntryRow" id="config_description">
+                            <property name="title">Description</property>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="AdwEntryRow" id="config_distribution">
+                            <property name="title">Linux Distribution</property>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="AdwEntryRow" id="config_isinstalledcommand">
+                            <property name="title">IsInstalled Command</property>
+                          </object>
+                        </child>
+
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesGroup" id="packages_group">
+                        <property name="title">Packages</property>
+                        <property name="description">Add a packages that you want to install.</property>
+                        <child type="header-suffix">
+                          <object class="GtkButton">
+                            <property name="halign">3</property>
+                            <property name="valign">3</property>
+                            <property name="label">Add Package</property>
+                            <property name="action-name">app.add_package</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+
+          </object>
+        </property>
+      </object>
+    </property>
+  </template>
+  <menu id="primary_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About Packages Installer</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
+

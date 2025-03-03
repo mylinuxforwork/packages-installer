@@ -1,0 +1,22 @@
+{
+    "title": "ML4W Dotfiles Packages for Arch Linux",
+    "distribution": "Arch Linux",
+    "description": "Required packages for the ML4W Dotfiles for Hyprland",
+    "isinstalledcommand": "sudo pacman -Qs --color always \"PACKAGE\" | grep \"local\" | grep \"PACKAGE\"",
+    "packages": [
+        {
+            "package": "kitty",
+            "description": "Terminal kitty",
+            "installationcommand": "sudo pacman -S --noconfirm"
+        },
+        {
+            "package": "alacritty",
+            "description": "Terminal alacritty",
+            "installationcommand": "sudo pacman -S --noconfirm"
+        },
+        {
+            "package": "rsync",
+            "installationcommand": "sudo pacman -S --noconfirm"
+        }
+    ]
+}

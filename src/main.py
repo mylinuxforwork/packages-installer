@@ -105,8 +105,14 @@ class PackagesinstallerApplication(Adw.Application):
         self.save_configuration["distribution"] = self.props.active_window.config_distribution.get_text()
         self.save_configuration["isinstalledcommand"] = self.props.active_window.config_isinstalledcommand.get_text()
 
+        packages = []
+        package = {}
         for i in self.packages_group_list:
-            print(i["package"].get_text())
+            package["package"] = i["package"].get_text()
+            package["description"] = i["description"].get_text()
+            package["installationcommand"] = i["installationcommand"].get_text()
+            packages.append(package)
+        self.save_configuration["packages"] = packages
         print(json.dumps(self.save_configuration))
 
     # Loads configuration from selected source
@@ -118,7 +124,7 @@ class PackagesinstallerApplication(Adw.Application):
 
         for i in self.loaded_configuration["packages"]:
 
-            subgroup_list = []
+            subgroup_list = {}
 
             row = Adw.ExpanderRow()
             row.set_title(i["package"])
@@ -147,7 +153,7 @@ class PackagesinstallerApplication(Adw.Application):
             package_row.set_title("Installation Command")
             package_row.set_text(i["installationcommand"])
             row.add_row(package_row)
-            subgroup_list["command"] = package_row
+            subgroup_list["installationcommand"] = package_row
 
             package_row = Adw.ActionRow()
             package_row.set_title("")
@@ -158,10 +164,15 @@ class PackagesinstallerApplication(Adw.Application):
             package_row.add_suffix(btn)
             row.add_row(package_row)
 
-            self.packages_group_list.append(subgroup_list)
-            self.props.active_window.packages_group.add(row)
+            self.packages_group_list.append(row)
 
+        self.update_packages_group()
         self.page_stack.set_visible_child_name("page_configuration")
+
+    def update_packages_group(self):
+        for row in self.packages_group_list:
+            self.props.active_window.packages_group.append(row)
+
 
     def delete_package(self, widget, package_row, *args):
         self.props.active_window.packages_group.remove(package_row)
@@ -203,7 +214,6 @@ class PackagesinstallerApplication(Adw.Application):
 
 
 def main(version):
-    lib.installInstallationScript()
-    print(sys.argv)
+    lib.setupConfigFolder()
     app = PackagesinstallerApplication()
     return app.run(sys.argv)

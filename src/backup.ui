@@ -1,0 +1,41 @@
+                    <child>
+                      <object class="GtkListBox">
+                      <property name="selection-mode">0</property>
+                      <style>
+                        <class name="boxed-list"/>
+                      </style>
+                        <child>
+                          <object class="AdwEntryRow" id="config_title">
+                            <property name="title">Title</property>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="AdwEntryRow" id="config_description">
+                            <property name="title">Description</property>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="AdwEntryRow" id="config_distribution">
+                            <property name="title">Linux Distribution</property>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="AdwEntryRow" id="config_isinstalledcommand">
+                            <property name="title">IsInstalled Command</property>
+                          </object>
+                        </child>
+
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBox" id="packages_group">
+                        <property name="selection-mode">0</property>
+                        <style>
+                          <class name="boxed-list"/>
+                        </style>
+                      </object>
+                    </child>
+

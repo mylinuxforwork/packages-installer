@@ -99,7 +99,8 @@ class PackagesinstallerApplication(Adw.Application):
         self.props.active_window.config_title.set_text("")
         self.props.active_window.config_description.set_text("")
         self.props.active_window.config_distribution.set_text("")
-        self.props.active_window.config_isinstalledcommand.set_text("")
+        self.props.active_window.config_successmessage.set_text("")
+        self.props.active_window.config_errormessage.set_text("")
 
     # Cancel configuration
     def on_cancel(self, *args):
@@ -158,7 +159,8 @@ class PackagesinstallerApplication(Adw.Application):
         self.props.active_window.config_title.set_text(self.loaded_configuration["title"])
         self.props.active_window.config_description.set_text(self.loaded_configuration["description"])
         self.props.active_window.config_distribution.set_text(self.loaded_configuration["distribution"])
-        self.props.active_window.config_isinstalledcommand.set_text(self.loaded_configuration["isinstalledcommand"])
+        self.props.active_window.config_successmessage.set_text(self.loaded_configuration["successmessage"])
+        self.props.active_window.config_errormessage.set_text(self.loaded_configuration["errormessage"])
 
         for i in self.loaded_configuration["packages"]:
             item = PackageItem()

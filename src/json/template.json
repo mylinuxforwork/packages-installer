@@ -1,8 +1,9 @@
 {
     "title": "ML4W Dotfiles Packages for Arch Linux",
-    "distribution": "Arch Linux",
+    "distribution": "arch",
     "description": "Required packages for the ML4W Dotfiles for Hyprland",
-    "isinstalledcommand": "sudo pacman -Qs --color always \"PACKAGE\" | grep \"local\" | grep \"PACKAGE\"",
+    "successmessage": "Success",
+    "errormessage": "Error",
     "packages": [
         {
             "package": "kitty",

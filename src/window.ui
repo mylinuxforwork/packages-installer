@@ -186,8 +186,14 @@
                         </child>
 
                         <child>
-                          <object class="AdwEntryRow" id="config_isinstalledcommand">
-                            <property name="title">IsInstalled Command</property>
+                          <object class="AdwEntryRow" id="config_successmessage">
+                            <property name="title">Success Message</property>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="AdwEntryRow" id="config_errormessage">
+                            <property name="title">Error Message</property>
                           </object>
                         </child>
 

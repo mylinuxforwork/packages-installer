@@ -4,17 +4,32 @@
 # -----------------------------------------------------
 # Variables
 # -----------------------------------------------------
-version="1.0"
 name="Packages Installer Script"
+title=""
+description=""
+distribution=""
+successmessage=""
+errormessage=""
 json=""
+
+# -----------------------------------------------------
+# Load Configuration
+# -----------------------------------------------------
+_loadConfiguration() {
+	file=$1
+	_loadFromFile $file
+}
 
 # -----------------------------------------------------
 # Load Configuration from file
 # -----------------------------------------------------
 _loadFromFile() {
     file=$1
-    json=$(cat $1)
-    _showHeader
+    if [ ! -f $file ]; then
+		exit
+    fi
+    json=$(cat $file)
+	_showHeader
 }
 
 # -----------------------------------------------------
@@ -30,6 +45,9 @@ _loadFromRemote() {
 _showHeader() {
     title=$(echo $json | jq -r '.title')
     description=$(echo $json | jq -r '.description')
+    distribution=$(echo $json | jq -r '.distribution')
+    successmessage=$(echo $json | jq -r '.successmessage')
+    errormessage=$(echo $json | jq -r '.errormessage')
 
     echo $title
     echo "---------------------------------------------------"
@@ -46,16 +64,14 @@ _runInstallation() {
     for ((i=0; i<$l; i++)); do
         package=$(echo $json | jq -r '.packages['$i'].package')
         description=$(echo $json | jq -r '.packages['$i'].description')
-        command=$(echo $json | jq -r '.packages['$i'].command')
-        precommand=$(echo $json | jq -r '.packages['$i'].precommand')
-        postcommand=$(echo $json | jq -r '.packages['$i'].postcommand')
+        installationcommand=$(echo $json | jq -r '.packages['$i'].installationcommand')
 
         echo "Installing $package ..."
         if [[ ! -z $description ]] && [[ ! $description == "null" ]]; then
             echo $description
         fi
 
-        _installPackage "$command" "$package" "$precommand" "$postcommand"
+        _installPackage "$installationcommand" "$package"
         echo
     done
 }
@@ -64,53 +80,44 @@ _runInstallation() {
 # Install Package
 # -----------------------------------------------------
 _installPackage() {
-    command=$1
-    package=$2
-    precommand=$3
-    postcommand=$4
-
-    if [[ $(_isInstalled "$package") == 0 ]]; then
-        echo "Package $package is already installed"
-    else
-        if [[ ! -z $precommand ]] && [[ ! $precommand == "null" ]]; then
-            eval "$precommand"
-        fi
-
-        eval "$command $package"
-
-        if [[ ! -z $postcommand ]] && [[ ! $postcommand == "null" ]]; then
-            eval "$postcommand"
-        fi
-    fi
+    installationcommand="$1"
+    package="$2"
+    [[ $(_isInstalled "$package") == "0" ]] && echo "$package is already installed" || eval "$installationcommand $package"
 }
 
-# -----------------------------------------------------
-# Install Package
-# -----------------------------------------------------
+# ------------------------------------------------------
+# Is package installed?
+# ------------------------------------------------------
 _isInstalled() {
-    package=$1
-    isInstalledCommand=$(echo $json | jq -r '.isinstalledcommand')
-    result=$(echo "$isInstalledCommand" | sed "s/PACKAGE/$package/g")
-    check="$(eval $result)"
-    if [ -n "${check}" ]; then
-        echo 0
-    else
-        echo 1
-    fi
+    package="$1"
+    case $distribution in
+        arch)
+            check="$(sudo pacman -Qs --color always "${package}" | grep "local" | grep "${package} ")"
+            [ -n "${check}" ] && echo "0" || echo "1"
+        ;;
+        fedora)
+            check=$(dnf list --installed | grep $package)
+            [ -n "${check}" ] && echo "0" || echo "1"
+        ;;
+        opensuse)
+			echo 1
+        ;;
+        *)
+			echo 1
+        ;;
+    esac
 }
 
 # -----------------------------------------------------
 # Manage Parameters
 # -----------------------------------------------------
-while getopts "r:f:h" opt; do
+while getopts ":h:" opt; do
     case $opt in
-        r) _loadFromRemote $OPTARG ;;
-        f) _loadFromFile $OPTARG ;;
         h)
-            echo ":: ML4W Installer"
-            echo "-r url: Will install from a remote resource with url"
-            echo "-f path: Will install from a file resource with path"
+            echo ":: Packages Installer Script"
             exit
-            ;;
+        ;;
     esac
 done
+
+[ ! -z $1 ] && _loadConfiguration "$1" || exit

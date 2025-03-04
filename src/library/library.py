@@ -46,7 +46,8 @@ class Library:
         save_configuration["title"] = win.config_title.get_text()
         save_configuration["description"] = win.config_description.get_text()
         save_configuration["distribution"] = win.config_distribution.get_text()
-        save_configuration["isinstalledcommand"] = win.config_isinstalledcommand.get_text()
+        save_configuration["successmessage"] = win.config_successmessage.get_text()
+        save_configuration["errormessage"] = win.config_errormessage.get_text()
 
         packages = []
 

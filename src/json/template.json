@@ -17,46 +17,6 @@
         {
             "package": "rsync",
             "installationcommand": "sudo pacman -S --noconfirm"
-        },
-        {
-            "package": "rsync",
-            "installationcommand": "sudo pacman -S --noconfirm"
-        },
-        {
-            "package": "rsync",
-            "installationcommand": "sudo pacman -S --noconfirm"
-        },
-        {
-            "package": "rsync",
-            "installationcommand": "sudo pacman -S --noconfirm"
-        },
-        {
-            "package": "rsync",
-            "installationcommand": "sudo pacman -S --noconfirm"
-        },
-        {
-            "package": "rsync",
-            "installationcommand": "sudo pacman -S --noconfirm"
-        },
-        {
-            "package": "rsync",
-            "installationcommand": "sudo pacman -S --noconfirm"
-        },
-        {
-            "package": "rsync",
-            "installationcommand": "sudo pacman -S --noconfirm"
-        },
-        {
-            "package": "rsync",
-            "installationcommand": "sudo pacman -S --noconfirm"
-        },
-        {
-            "package": "rsync",
-            "installationcommand": "sudo pacman -S --noconfirm"
-        },
-        {
-            "package": "rsync",
-            "installationcommand": "sudo pacman -S --noconfirm"
         }
     ]
 }

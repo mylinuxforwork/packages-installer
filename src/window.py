@@ -27,6 +27,7 @@ class PackagesinstallerWindow(Adw.ApplicationWindow):
     page_stack = Gtk.Template.Child()
     open_remote_url = Gtk.Template.Child()
     btn_run = Gtk.Template.Child()
+    btn_cancel = Gtk.Template.Child()
 
     config_title = Gtk.Template.Child()
     config_description = Gtk.Template.Child()
@@ -34,6 +35,7 @@ class PackagesinstallerWindow(Adw.ApplicationWindow):
     config_isinstalledcommand = Gtk.Template.Child()
 
     packages_group = Gtk.Template.Child()
+    history_group = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

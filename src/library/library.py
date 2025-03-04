@@ -19,11 +19,46 @@ class Library:
     # Setup the installation script
     def setupConfigFolder(self):
         if not os.path.exists(config_folder):
-            print("")
-            print("------------------------------------------------------------")
-            print("ML4W Installer SETUP")
-            print("------------------------------------------------------------")
-
             # Create folder if not exists
             pathlib.Path(config_folder).mkdir(parents=True, exist_ok=True)
+
+    # Get file_name of seleced file
+    def get_file_name(self, file):
+        info = file.query_info("standard::name", Gio.FileQueryInfoFlags.NONE, None)
+        return info.get_name()
+
+    # Load history.json if exists
+    def load_history_json(self):
+        if os.path.exists(config_folder + "/history.json"):
+            history_json = open(config_folder + "/history.json")
+        else:
+            history_json = "[]"
+        return history_json
+
+    # Write history.json with new updates
+    def write_history_json(self,result):
+        with open(config_folder + '/history.json', 'w', encoding='utf-8') as f:
+            json.dump(result, f, ensure_ascii=False, indent=4)
+
+    # Create the json file from current configuration
+    def create_json(self,win,liststore):
+        save_configuration = {}
+        save_configuration["title"] = win.config_title.get_text()
+        save_configuration["description"] = win.config_description.get_text()
+        save_configuration["distribution"] = win.config_distribution.get_text()
+        save_configuration["isinstalledcommand"] = win.config_isinstalledcommand.get_text()
+
+        packages = []
+
+        for i in range(liststore.get_n_items()):
+            item = liststore.get_item(i)
+            package = {}
+            package["package"] = item.package
+            package["description"] = item.description
+            package["installationcommand"] = item.installationcommand
+            packages.append(package)
+
+        save_configuration["packages"] = packages
+
+        return save_configuration
 

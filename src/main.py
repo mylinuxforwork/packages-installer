@@ -1,6 +1,6 @@
 # main.py
 #
-# Copyright 2025 Unknown
+# Copyright 2025 Stephan Raabe
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,23 +20,38 @@
 import sys
 import gi
 import json
+import os
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
 from gi.repository import GObject,Gtk, Gio, Adw
 from .window import PackagesinstallerWindow
+from urllib.request import urlopen
+from urllib.parse import urlparse
+
 from .library.library import Library
+from .library.historyitem import HistoryItem
+from .library.packageitem import PackageItem
 
 lib = Library()
 
 class PackagesinstallerApplication(Adw.Application):
 
+    # Configuration
     loaded_configuration = {}
     save_configuration = {}
     loaded_filename = ""
-    packages_group_list = []
+    loaded_file = ""
 
+    # Local or Remote configuration
+    config_type = ""
+
+    # List Stores
+    liststore = Gio.ListStore()
+    historystore = Gio.ListStore()
+
+    # Init Application
     def __init__(self):
         super().__init__(application_id='com.ml4w.packagesinstaller',
                          flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
@@ -46,46 +61,71 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('open_file', self.on_open_file)
         self.create_action('saveas_file', self.on_saveas_file)
         self.create_action('open_remote', self.on_open_remote)
+        self.create_action('add_package', self.on_add_package)
+        self.create_action('cancel', self.on_cancel)
 
+    # Activate Application
     def do_activate(self):
         win = self.props.active_window
         if not win:
             win = PackagesinstallerWindow(application=self)
 
+        # Setup History
+        self.load_history()
+        self.props.active_window.history_group.bind_model(self.historystore,self.create_history_row)
+
+        # Show Load Configuration Page
         self.page_stack = win.page_stack
         self.page_stack.set_visible_child_name("page_load_configuration")
 
         win.present()
 
+    # -----------------------------------------------------
+    # History
+    # -----------------------------------------------------
+
+    # Load History
+    def load_history(self):
+        history = lib.load_history_json()
+
+    # -----------------------------------------------------
+    # Configuration
+    # -----------------------------------------------------
+
+    # Reset configuration
+    def reset_configuration(self):
+        self.loaded_filename = ""
+        self.liststore.remove_all()
+        self.props.active_window.config_title.set_text("")
+        self.props.active_window.config_description.set_text("")
+        self.props.active_window.config_distribution.set_text("")
+        self.props.active_window.config_isinstalledcommand.set_text("")
+
+    # Cancel configuration
+    def on_cancel(self, *args):
+        self.page_stack.set_visible_child_name("page_load_configuration")
+        self.props.active_window.btn_run.set_visible(False)
+        self.props.active_window.btn_cancel.set_visible(False)
+        self.reset_configuration()
+
+    # -----------------------------------------------------
+    # Save/Save As file
+    # -----------------------------------------------------
+
     def on_saveas_file(self, *args):
-        self.create_json()
-        # dialog = Gtk.FileDialog(initial_name=self.loaded_filename)
-        # dialog.save(parent=self.props.active_window, cancellable=None, callback=self.on_file_saveased)
+        dialog = Gtk.FileDialog(initial_name=self.loaded_filename)
+        dialog.save(parent=self.props.active_window, cancellable=None, callback=self.on_file_saveased)
 
     def on_file_saveased(self, dialog, result):
         file = dialog.save_finish(result)
         if file is not None:
-            print("Saving now")
-            contents="JSON"
-            self.create_json()
-            '''
-            file.replace_contents_async(
-                contents,
-                etag=None,
-                make_backup=False,
-                flags=Gio.FileCreateFlags.NONE,
-                cancellable=None,
-                callback=on_replace_contents,
-            )
-            '''
+            lib.create_json(self.props.active_window,self.liststore)
+            with open(file, 'w', encoding='utf-8') as f:
+                json.dump(self.save_configuration, f, ensure_ascii=False, indent=4)
 
-    def on_replace_contents(file, result):
-        file.replace_contents_finish(result)
-        print(f"File {file.get_basename()} saved")
-
-    def get_file_name(self, file):
-        info = file.query_info("standard::name", Gio.FileQueryInfoFlags.NONE, None)
-        return info.get_name()
+    # -----------------------------------------------------
+    # Open File/Remote
+    # -----------------------------------------------------
 
     def on_file_opened(self, dialog, result):
         file = dialog.open_finish(result)
@@ -93,27 +133,25 @@ class PackagesinstallerApplication(Adw.Application):
             with open(file, 'r') as f:
                 value = f.read()
             if self.convert_to_json(value):
+                self.config_type = "local"
                 self.set_configuration()
-                self.loaded_filename = self.get_file_name(file)
-                print(self.loaded_filename)
+                self.loaded_filename = lib.get_file_name(file)
 
-    # Create the json file from current configuration
-    def create_json(self):
+    def on_open_file(self, *args):
+        dialog = Gtk.FileDialog()
+        dialog.open(self.props.active_window, None, self.on_file_opened)
 
-        self.save_configuration["title"] = self.props.active_window.config_title.get_text()
-        self.save_configuration["description"] = self.props.active_window.config_description.get_text()
-        self.save_configuration["distribution"] = self.props.active_window.config_distribution.get_text()
-        self.save_configuration["isinstalledcommand"] = self.props.active_window.config_isinstalledcommand.get_text()
-
-        packages = []
-        package = {}
-        for i in self.packages_group_list:
-            package["package"] = i["package"].get_text()
-            package["description"] = i["description"].get_text()
-            package["installationcommand"] = i["installationcommand"].get_text()
-            packages.append(package)
-        self.save_configuration["packages"] = packages
-        print(json.dumps(self.save_configuration))
+    def on_open_remote(self, *args):
+        link = self.props.active_window.open_remote_url.get_text()
+        f = urlopen(link)
+        value = f.read()
+        if self.convert_to_json(value):
+            self.config_type = "remote"
+            self.loaded_file = link
+            a = urlparse(link)
+            self.loaded_filename = os.path.basename(a.path)
+            self.set_configuration()
+            self.page_stack.set_visible_child_name("page_configuration")
 
     # Loads configuration from selected source
     def set_configuration(self):
@@ -123,74 +161,108 @@ class PackagesinstallerApplication(Adw.Application):
         self.props.active_window.config_isinstalledcommand.set_text(self.loaded_configuration["isinstalledcommand"])
 
         for i in self.loaded_configuration["packages"]:
-
-            subgroup_list = {}
-
-            row = Adw.ExpanderRow()
-            row.set_title(i["package"])
-
-            package_row = Adw.EntryRow()
-            package_row.set_title("Package")
-            package_row.set_text(i["package"])
-            package_row.bind_property("text", row, "title", GObject.BindingFlags.BIDIRECTIONAL)
-            row.add_row(package_row)
-            subgroup_list["package"] = package_row
-
+            item = PackageItem()
+            item.package = i["package"]
             if "description" in i:
-                description = i["description"]
+                item.description = i["description"]
             else:
-                description = ""
+                item.description = ""
+            item.installationcommand = i["installationcommand"]
+            self.liststore.append(item)
 
-            package_row = Adw.EntryRow()
-            package_row.set_title("Description")
-            row.set_subtitle(description)
-            package_row.set_text(description)
-            package_row.bind_property("text", row, "subtitle", GObject.BindingFlags.BIDIRECTIONAL)
-            row.add_row(package_row)
-            subgroup_list["description"] = package_row
+        self.props.active_window.packages_group.bind_model(self.liststore,self.create_package_row)
 
-            package_row = Adw.EntryRow()
-            package_row.set_title("Installation Command")
-            package_row.set_text(i["installationcommand"])
-            row.add_row(package_row)
-            subgroup_list["installationcommand"] = package_row
+        # Adding Remote Configurations to the History
+        if self.config_type == "remote":
+            history_item = HistoryItem()
+            history_item.title = self.loaded_configuration["title"]
+            history_item.description = self.loaded_configuration["description"]
+            history_item.remote = self.loaded_file
+            self.historystore.append(history_item)
 
-            package_row = Adw.ActionRow()
-            package_row.set_title("")
-            btn = Gtk.Button()
-            btn.set_label("Delete")
-            btn.set_valign(3)
-            btn.connect("clicked",self.delete_package,row)
-            package_row.add_suffix(btn)
-            row.add_row(package_row)
-
-            self.packages_group_list.append(row)
-
-        self.update_packages_group()
         self.page_stack.set_visible_child_name("page_configuration")
+        self.props.active_window.btn_run.set_visible(True)
+        self.props.active_window.btn_cancel.set_visible(True)
 
-    def update_packages_group(self):
-        for row in self.packages_group_list:
-            self.props.active_window.packages_group.append(row)
+    # -----------------------------------------------------
+    # History Row
+    # -----------------------------------------------------
 
+    def create_history_row(self,item):
+        row = Adw.ActionRow()
+        row.set_title(item.title)
+        row.set_subtitle(item.description + "\n" + item.remote)
+        btn = Gtk.Button()
+        btn.set_label("Open")
+        btn.connect("clicked",self.open_history_configuration,row)
+        btn.set_valign(3)
+        row.add_suffix(btn)
+        return row
 
-    def delete_package(self, widget, package_row, *args):
-        self.props.active_window.packages_group.remove(package_row)
+    def open_history_configuration(self, *args):
+        print("Open Configuration from History")
 
-    def convert_to_json(self,value):
-        try:
-            self.loaded_configuration = json.loads(value)
-            return True
-        except:
-            return False
+    # -----------------------------------------------------
+    # Package Row
+    # -----------------------------------------------------
 
-    def on_open_file(self, *args):
-        dialog = Gtk.FileDialog()
-        dialog.open(self.props.active_window, None, self.on_file_opened)
+    def create_package_row(self,item):
+        row = Adw.ExpanderRow()
+        row.set_title(item.package)
+        btn = Gtk.Button()
+        btn.set_label("Delete")
+        btn.connect("clicked",self.delete_package,row)
+        btn.set_valign(3)
+        row.add_suffix(btn)
 
-    def on_open_remote(self, *args):
-        print(self.props.active_window.open_remote_url.get_text())
-        self.page_stack.set_visible_child_name("page_configuration")
+        btn = Gtk.Button()
+        btn.set_label("Up")
+        btn.connect("clicked",self.move_package,row)
+        btn.set_valign(3)
+        row.add_prefix(btn)
+
+        package_row = Adw.EntryRow()
+        package_row.set_title("Package")
+        package_row.set_text(item.package)
+        package_row.bind_property("text", row, "title", GObject.BindingFlags.BIDIRECTIONAL)
+        package_row.bind_property("text", item, "package", GObject.BindingFlags.BIDIRECTIONAL)
+
+        row.add_row(package_row)
+
+        package_row = Adw.EntryRow()
+        package_row.set_title("Description")
+        row.set_subtitle(item.description)
+        package_row.set_text(item.description)
+        package_row.bind_property("text", row, "subtitle", GObject.BindingFlags.BIDIRECTIONAL)
+        package_row.bind_property("text", item, "description", GObject.BindingFlags.BIDIRECTIONAL)
+        row.add_row(package_row)
+
+        package_row = Adw.EntryRow()
+        package_row.set_title("Installation Command")
+        package_row.set_text(item.installationcommand)
+        # package_row.bind_property("text", item, "installationcommand", GObject.BindingFlags.BIDIRECTIONAL)
+        row.add_row(package_row)
+
+        return row
+
+    # Add Package to the liststore
+    def on_add_package(self, *args):
+        print("drin")
+
+    # Delete a Package from the liststore
+    def delete_package(self, widget, row, *args):
+        self.liststore.remove(row.get_index())
+
+    # Move Package up in the liststore
+    def move_package(self, widget, row, *args):
+        pos = row.get_index()
+        c = self.liststore.get_item(pos)
+        self.liststore.remove(pos)
+        self.liststore.insert(pos-1,c)
+
+    # -----------------------------------------------------
+    # About Dialog
+    # -----------------------------------------------------
 
     def on_about_action(self, *args):
         about = Adw.AboutDialog(application_name='Packages Installer',
@@ -205,6 +277,19 @@ class PackagesinstallerApplication(Adw.Application):
     def on_preferences_action(self, widget, _):
         print('app.preferences action activated')
 
+    # -----------------------------------------------------
+    # Helpers
+    # -----------------------------------------------------
+
+    # Convert string to json
+    def convert_to_json(self,value):
+        try:
+            self.loaded_configuration = json.loads(value)
+            return True
+        except:
+            return False
+
+    # Create am action
     def create_action(self, name, callback, shortcuts=None):
         action = Gio.SimpleAction.new(name, None)
         action.connect("activate", callback)
@@ -212,6 +297,9 @@ class PackagesinstallerApplication(Adw.Application):
         if shortcuts:
             self.set_accels_for_action(f"app.{name}", shortcuts)
 
+# -----------------------------------------------------
+# Run Application
+# -----------------------------------------------------
 
 def main(version):
     lib.setupConfigFolder()

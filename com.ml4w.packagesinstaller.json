@@ -9,7 +9,10 @@
         "--share=ipc",
         "--socket=fallback-x11",
         "--device=dri",
-        "--socket=wayland"
+        "--socket=wayland",
+        "--talk-name=org.freedesktop.Flatpak",
+        "--persist=DIR",
+	"--filesystem=host"
     ],
     "cleanup" : [
         "/include",

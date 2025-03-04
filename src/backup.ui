@@ -39,3 +39,40 @@
                       </object>
                     </child>
 
+            row = Adw.ExpanderRow()
+            row.set_title(i["package"])
+
+            package_row = Adw.EntryRow()
+            package_row.set_title("Package")
+            package_row.set_text(i["package"])
+            package_row.bind_property("text", row, "title", GObject.BindingFlags.BIDIRECTIONAL)
+            row.add_row(package_row)
+            subgroup_list["package"] = package_row
+
+            if "description" in i:
+                description = i["description"]
+            else:
+                description = ""
+
+            package_row = Adw.EntryRow()
+            package_row.set_title("Description")
+            row.set_subtitle(description)
+            package_row.set_text(description)
+            package_row.bind_property("text", row, "subtitle", GObject.BindingFlags.BIDIRECTIONAL)
+            row.add_row(package_row)
+            subgroup_list["description"] = package_row
+
+            package_row = Adw.EntryRow()
+            package_row.set_title("Installation Command")
+            package_row.set_text(i["installationcommand"])
+            row.add_row(package_row)
+            subgroup_list["installationcommand"] = package_row
+
+            package_row = Adw.ActionRow()
+            package_row.set_title("")
+            btn = Gtk.Button()
+            btn.set_label("Delete")
+            btn.set_valign(3)
+            btn.connect("clicked",self.delete_package,row)
+            package_row.add_suffix(btn)
+            row.add_row(package_row)

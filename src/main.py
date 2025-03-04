@@ -60,7 +60,8 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('preferences', self.on_preferences_action)
         self.create_action('open_file', self.on_open_file)
         self.create_action('saveas_file', self.on_saveas_file)
-        self.create_action('open_remote', self.on_open_remote)
+#        self.create_action('open_remote', self.on_open_remote)
+        self.create_action('open_remote', self.create_advanced_dialog)
         self.create_action('add_package', self.on_add_package)
         self.create_action('cancel', self.on_cancel)
 
@@ -143,6 +144,9 @@ class PackagesinstallerApplication(Adw.Application):
         dialog.open(self.props.active_window, None, self.on_file_opened)
 
     def on_open_remote(self, *args):
+
+        self.createAdvancedDialog().catch(console.error);
+
         link = self.props.active_window.open_remote_url.get_text()
         f = urlopen(link)
         value = f.read()
@@ -185,6 +189,37 @@ class PackagesinstallerApplication(Adw.Application):
         self.page_stack.set_visible_child_name("page_configuration")
         self.props.active_window.btn_run.set_visible(True)
         self.props.active_window.btn_cancel.set_visible(True)
+
+    def create_advanced_dialog(self, *_args):
+        dialog = Adw.AlertDialog(
+            heading="Remote Configuration",
+            body="Please enter the url of the remote configuration.",
+            close_response="cancel",
+        )
+
+        dialog.add_response("cancel", "Cancel")
+        dialog.add_response("load", "Load")
+
+        # Use SUGGESTED appearance to mark important responses such as the affirmative action
+        dialog.set_response_appearance("load", Adw.ResponseAppearance.SUGGESTED)
+
+        entry = Gtk.Entry()
+        dialog.set_extra_child(entry)
+
+        dialog.choose(self.props.active_window, None, self.on_response_selected_advanced)
+
+    def on_response_selected_advanced(self,_dialog, task):
+        entry = _dialog.get_extra_child()
+        link = entry.get_text()
+        f = urlopen(link)
+        value = f.read()
+        if self.convert_to_json(value):
+            self.config_type = "remote"
+            self.loaded_file = link
+            a = urlparse(link)
+            self.loaded_filename = os.path.basename(a.path)
+            self.set_configuration()
+            self.page_stack.set_visible_child_name("page_configuration")
 
     # -----------------------------------------------------
     # History Row

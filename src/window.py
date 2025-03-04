@@ -25,7 +25,6 @@ class PackagesinstallerWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'PackagesinstallerWindow'
 
     page_stack = Gtk.Template.Child()
-    open_remote_url = Gtk.Template.Child()
     btn_run = Gtk.Template.Child()
     btn_cancel = Gtk.Template.Child()
 

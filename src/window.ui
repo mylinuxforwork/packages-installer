@@ -59,49 +59,62 @@
                         <property name="orientation">1</property>
                         <property name="margin-end">60</property>
                         <property name="margin-start">60</property>
+                        <property name="spacing">20</property>
+
+                        <!-- ML4W Headline -->
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Packages Installer</property>
+                            <style>
+                              <class name="title-1"/>
+                            </style>
+                          </object>
+                        </child>
+                        <!-- ML4W Headline -->
+
+                        <!-- ML4W Headline -->
+                        <child>
+                          <object class="GtkLabel" id="ml4w_version">
+                            <property name="label">Install your personal packages configuration on your computer.</property>
+                            <property name="margin-bottom">2</property>
+                          </object>
+                        </child>
+                        <!-- ML4W Headline -->
 
                         <child>
-                          <object class="AdwPreferencesGroup">
-                            <property name="title">Local Configuration</property>
-                            <property name="description">Please open a local configuration from your computer.</property>
-                            <child type="header-suffix">
-                              <object class="GtkButton">
-                                <property name="halign">3</property>
-                                <property name="valign">3</property>
-                                <property name="label">Open</property>
-                                <property name="action-name">app.open_file</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="AdwPreferencesGroup">
-                            <property name="title">Remote Configuration</property>
-                            <property name="description">Please enter the url of the remote configuration.</property>
-                            <child type="header-suffix">
-                              <object class="GtkButton">
-                                <property name="halign">3</property>
-                                <property name="valign">3</property>
-                                <property name="label">Load</property>
-                                <property name="action-name">app.open_remote</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkListBox">
-                            <property name="selection-mode">0</property>
-                            <property name="margin-bottom">20</property>
-                            <style>
-                              <class name="boxed-list"/>
-                            </style>
+                          <object class="GtkBox">
+                            <property name="orientation">0</property>
+                            <property name="halign">3</property>
+                            <property name="spacing">20</property>
+                            <property name="margin-bottom">30</property>
+                            <property name="homogeneous">true</property>
+                            <!-- Shortcut Button -->
                             <child>
-                              <object class="AdwEntryRow" id="open_remote_url">
-                                <property name="title">Remote Configuration Url</property>
+                              <object class="GtkButton">
+                                <property name="label">Open Local Configuration</property>
+                                <property name="action-name">app.open_file</property>
+                                <style>
+                                  <class name="suggested-action"/>
+                                </style>
                               </object>
                             </child>
+                            <!-- Shortcut Buttons -->
+
+                            <!-- Shortcut Button -->
+                            <child>
+                              <object class="GtkButton">
+                                <property name="label">Open Remote Configuration</property>
+                                <property name="action-name">app.open_remote</property>
+                                <style>
+                                  <class name="suggested-action"/>
+                                </style>
+                              </object>
+                            </child>
+                            <!-- Shortcut Buttons -->
+
                           </object>
                         </child>
+
                         <child>
                           <object class="AdwPreferencesGroup">
                             <property name="title">Remote Configuration History</property>

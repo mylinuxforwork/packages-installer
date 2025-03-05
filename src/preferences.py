@@ -20,21 +20,12 @@
 from gi.repository import Adw
 from gi.repository import Gtk
 
-@Gtk.Template(resource_path='/com/ml4w/packagesinstaller/window.ui')
-class PackagesinstallerWindow(Adw.ApplicationWindow):
-    __gtype_name__ = 'PackagesinstallerWindow'
+@Gtk.Template(resource_path='/com/ml4w/packagesinstaller/preferences.ui')
+class PackagesinstallerPreferences(Adw.PreferencesDialog):
+    __gtype_name__ = 'PackagesinstallerPreferences'
 
-    page_stack = Gtk.Template.Child()
-    btn_run = Gtk.Template.Child()
-    btn_cancel = Gtk.Template.Child()
+    pref_terminal = Gtk.Template.Child()
 
-    config_title = Gtk.Template.Child()
-    config_description = Gtk.Template.Child()
-    config_distribution = Gtk.Template.Child()
-    config_successmessage = Gtk.Template.Child()
-
-    packages_group = Gtk.Template.Child()
-    history_group = Gtk.Template.Child()
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, t):
+        super().__init__()
+        self.pref_terminal.set_text(t)

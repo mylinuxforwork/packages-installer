@@ -61,6 +61,18 @@
                         <property name="margin-start">60</property>
                         <property name="spacing">20</property>
 
+                        <child>
+                          <object class="GtkImage">
+                            <property name="name">logo</property>
+                            <property name="icon-name">com.ml4w.packagesinstaller</property>
+                            <property name="pixel-size">196</property>
+                            <property name="margin-bottom">30</property>
+                            <style>
+                              <class name="icon-dropshadow"/>
+                            </style>
+                          </object>
+                        </child>
+
                         <!-- ML4W Headline -->
                         <child>
                           <object class="GtkLabel">
@@ -75,7 +87,7 @@
                         <!-- ML4W Headline -->
                         <child>
                           <object class="GtkLabel" id="ml4w_version">
-                            <property name="label">Install your personal packages configuration on your computer.</property>
+                            <property name="label">Create and edit installation configurations for the Packages Installer script.</property>
                             <property name="margin-bottom">2</property>
                           </object>
                         </child>
@@ -88,6 +100,19 @@
                             <property name="spacing">20</property>
                             <property name="margin-bottom">30</property>
                             <property name="homogeneous">true</property>
+
+                            <!-- Shortcut Button -->
+                            <child>
+                              <object class="GtkButton">
+                                <property name="label">Create New Configuration</property>
+                                <property name="action-name">app.new_file</property>
+                                <style>
+                                  <class name="suggested-action"/>
+                                </style>
+                              </object>
+                            </child>
+                            <!-- Shortcut Buttons -->
+
                             <!-- Shortcut Button -->
                             <child>
                               <object class="GtkButton">
@@ -201,12 +226,6 @@
                         <child>
                           <object class="AdwEntryRow" id="config_successmessage">
                             <property name="title">Success Message</property>
-                          </object>
-                        </child>
-
-                        <child>
-                          <object class="AdwEntryRow" id="config_errormessage">
-                            <property name="title">Error Message</property>
                           </object>
                         </child>
 

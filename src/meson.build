@@ -30,6 +30,7 @@ packagesinstaller_sources = [
   '__init__.py',
   'main.py',
   'window.py',
+  'preferences.py'
 ]
 
 install_data(packagesinstaller_sources, install_dir: moduledir)

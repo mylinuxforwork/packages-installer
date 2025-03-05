@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+  <template class="PackagesinstallerPreferences" parent="AdwPreferencesDialog">
+    <property name="title" translatable="yes">Preferences</property>
+    <child>
+      <object class="AdwPreferencesPage" id="appearance_page">
+        <property name="title" translatable="yes">Appearance</property>
+        <property name="icon-name">brush-monitor-symbolic</property>
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title" translatable="yes">Applications</property>
+            <property name="description" translatable="yes">Define the default applications.</property>
+            <child>
+              <object class="AdwEntryRow" id="pref_terminal">
+                <property name="title" translatable="yes">Terminal</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -9,7 +9,7 @@ from gi.repository import Gtk, Adw, Gio, Gdk
 
 home_folder = os.path.expanduser('~')
 script_folder = "com.ml4w.packagesinstaller"
-config_folder = home_folder + "/" + script_folder
+config_folder = home_folder + "/.config/" + script_folder
 
 path_name = str(pathlib.Path(__file__).resolve().parent.parent)
 
@@ -47,7 +47,6 @@ class Library:
         save_configuration["description"] = win.config_description.get_text()
         save_configuration["distribution"] = win.config_distribution.get_text()
         save_configuration["successmessage"] = win.config_successmessage.get_text()
-        save_configuration["errormessage"] = win.config_errormessage.get_text()
 
         packages = []
 

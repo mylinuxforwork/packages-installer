@@ -3,7 +3,6 @@
     "distribution": "arch",
     "description": "Required packages for the ML4W Dotfiles for Hyprland",
     "successmessage": "Success",
-    "errormessage": "Error",
     "packages": [
         {
             "package": "kitty",

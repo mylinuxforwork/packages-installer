@@ -9,7 +9,6 @@ title=""
 description=""
 distribution=""
 successmessage=""
-errormessage=""
 json=""
 
 # -----------------------------------------------------
@@ -30,6 +29,7 @@ _loadFromFile() {
     fi
     json=$(cat $file)
 	_showHeader
+    _runInstallation
 }
 
 # -----------------------------------------------------
@@ -47,19 +47,18 @@ _showHeader() {
     description=$(echo $json | jq -r '.description')
     distribution=$(echo $json | jq -r '.distribution')
     successmessage=$(echo $json | jq -r '.successmessage')
-    errormessage=$(echo $json | jq -r '.errormessage')
 
     echo $title
     echo "---------------------------------------------------"
     echo $description
     echo
-    _runInstallation
 }
 
 # -----------------------------------------------------
 # Run the installation
 # -----------------------------------------------------
 _runInstallation() {
+    sudo -v
     l=$(echo $json | jq '.packages | length')
     for ((i=0; i<$l; i++)); do
         package=$(echo $json | jq -r '.packages['$i'].package')

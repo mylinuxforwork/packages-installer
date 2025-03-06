@@ -210,6 +210,29 @@
                     </child>
                     <child>
                       <object class="AdwPreferencesGroup">
+                        <property name="title">Command Variables</property>
+                        <property name="description">Define command variables and use them in your packages list.</property>
+                        <child type="header-suffix">
+                          <object class="GtkButton">
+                            <property name="halign">3</property>
+                            <property name="valign">3</property>
+                            <property name="label">Add Variable</property>
+                            <property name="action-name">app.add_variable</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBox" id="variables_group">
+                        <property name="selection-mode">0</property>
+                        <property name="margin-bottom">20</property>
+                        <style>
+                          <class name="boxed-list"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesGroup">
                         <property name="title">Packages</property>
                         <property name="description">Define detailed information to your installation configuration.</property>
                         <child type="header-suffix">

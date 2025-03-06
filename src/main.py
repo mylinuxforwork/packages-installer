@@ -33,6 +33,7 @@ from urllib.parse import urlparse
 
 from .library.library import Library
 from .library.packageitem import PackageItem
+from .library.variableitem import VariableItem
 from .library.preferences import Preferences
 
 lib = Library()
@@ -51,6 +52,9 @@ class PackagesinstallerApplication(Adw.Application):
     # List Stores
     liststore = Gio.ListStore()
 
+    # List Stores
+    variablestore = Gio.ListStore()
+
     # Preferences
     preferences = Preferences()
 
@@ -66,6 +70,7 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('saveas_file', self.on_saveas_file)
         self.create_action('open_remote', self.load_remote_dialog)
         self.create_action('add_package', self.on_add_package)
+        self.create_action('add_variable', self.on_add_variable)
         self.create_action('cancel', self.on_cancel)
 
     # Activate Application
@@ -78,8 +83,9 @@ class PackagesinstallerApplication(Adw.Application):
         self.page_stack = win.page_stack
         self.page_stack.set_visible_child_name("page_load_configuration")
 
-        # Bind ListStore
+        # Bind ListStores
         self.props.active_window.packages_group.bind_model(self.liststore,self.create_package_row)
+        self.props.active_window.variables_group.bind_model(self.variablestore,self.create_variable_row)
 
         # Load preferences
         self.preferences = Preferences()
@@ -97,6 +103,7 @@ class PackagesinstallerApplication(Adw.Application):
     def reset_configuration(self):
         self.loaded_filename = ""
         self.liststore.remove_all()
+        self.variablestore.remove_all()
         self.props.active_window.config_title.set_text("")
         self.props.active_window.config_description.set_text("")
         self.props.active_window.config_distribution.set_text("")
@@ -135,7 +142,7 @@ class PackagesinstallerApplication(Adw.Application):
     def on_file_saveased(self, dialog, result):
         file = dialog.save_finish(result)
         if file is not None:
-            lib.create_json(self.props.active_window,self.liststore)
+            self.save_configuration = lib.create_json(self.props.active_window,self.variablestore,self.liststore)
             with open(file, 'w', encoding='utf-8') as f:
                 json.dump(self.save_configuration, f, ensure_ascii=False, indent=4)
 
@@ -173,6 +180,16 @@ class PackagesinstallerApplication(Adw.Application):
         self.props.active_window.config_distribution.set_text(self.loaded_configuration["distribution"])
         self.props.active_window.config_successmessage.set_text(self.loaded_configuration["successmessage"])
 
+        for i in self.loaded_configuration["variables"]:
+            item = VariableItem()
+            item.var_name = i["name"]
+            if "description" in i:
+                item.var_description = i["description"]
+            else:
+                item.pkg_description = ""
+            item.var_value = i["value"]
+            self.variablestore.append(item)
+
         for i in self.loaded_configuration["packages"]:
             item = PackageItem()
             item.pkg_package = i["package"]
@@ -180,7 +197,7 @@ class PackagesinstallerApplication(Adw.Application):
                 item.pkg_description = i["description"]
             else:
                 item.pkg_description = ""
-            item.pkg_installation = i["installationcommand"]
+            item.pkg_command = i["command"]
             self.liststore.append(item)
 
         self.page_stack.set_visible_child_name("page_configuration")
@@ -234,6 +251,51 @@ class PackagesinstallerApplication(Adw.Application):
                     close_response="okay",
                 )
                 dialog.add_response("okay", "Okay")
+
+    # -----------------------------------------------------
+    # Variable Row
+    # -----------------------------------------------------
+
+    def create_variable_row(self,item):
+        row = Adw.ExpanderRow()
+        row.set_title(item.var_name)
+        btn = Gtk.Button()
+        btn.set_label("Delete")
+        btn.connect("clicked",self.delete_variable,row)
+        btn.set_valign(3)
+        row.add_suffix(btn)
+
+        package_row = Adw.EntryRow()
+        package_row.set_title("Variable")
+        package_row.set_text(item.var_name)
+        package_row.bind_property("text", row, "title", GObject.BindingFlags.BIDIRECTIONAL)
+        package_row.bind_property("text", item, "var_name", GObject.BindingFlags.BIDIRECTIONAL)
+        row.add_row(package_row)
+
+        package_row = Adw.EntryRow()
+        package_row.set_title("Value")
+        package_row.set_text(item.var_value)
+        package_row.bind_property("text", item, "var_value", GObject.BindingFlags.BIDIRECTIONAL)
+        row.add_row(package_row)
+
+        package_row = Adw.EntryRow()
+        package_row.set_title("Description")
+        row.set_subtitle(item.var_description)
+        package_row.set_text(item.var_description)
+        package_row.bind_property("text", row, "subtitle", GObject.BindingFlags.BIDIRECTIONAL)
+        package_row.bind_property("text", item, "var_description", GObject.BindingFlags.BIDIRECTIONAL)
+        row.add_row(package_row)
+
+        return row
+
+    # Add Variable to the variablestore
+    def on_add_variable(self, *args):
+        item = VariableItem()
+        self.variablestore.insert(0,item)
+
+    # Delete a Variable from the variablestore
+    def delete_variable(self, widget, row, *args):
+        self.variablestore.remove(row.get_index())
 
     # -----------------------------------------------------
     # Package Row

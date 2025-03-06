@@ -34,6 +34,7 @@ class PackagesinstallerWindow(Adw.ApplicationWindow):
     config_successmessage = Gtk.Template.Child()
 
     packages_group = Gtk.Template.Child()
+    variables_group = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -28,21 +28,33 @@ class Library:
         return info.get_name()
 
     # Create the json file from current configuration
-    def create_json(self,win,liststore):
+    def create_json(self,win,variablestore,liststore):
         save_configuration = {}
         save_configuration["title"] = win.config_title.get_text()
         save_configuration["description"] = win.config_description.get_text()
         save_configuration["distribution"] = win.config_distribution.get_text()
         save_configuration["successmessage"] = win.config_successmessage.get_text()
 
+        variables = []
+
+        for i in range(variablestore.get_n_items()):
+            item = variablestore.get_item(i)
+            variable = {}
+            variable["name"] = item.var_name
+            variable["description"] = item.var_description
+            variable["value"] = item.var_value
+            variables.append(variable)
+
+        save_configuration["variables"] = variables
+
         packages = []
 
         for i in range(liststore.get_n_items()):
             item = liststore.get_item(i)
             package = {}
-            package["package"] = item.package
-            package["description"] = item.description
-            package["installationcommand"] = item.installationcommand
+            package["package"] = item.pkg_package
+            package["description"] = item.pkg_description
+            package["command"] = item.pkg_command
             packages.append(package)
 
         save_configuration["packages"] = packages

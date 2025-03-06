@@ -3,20 +3,27 @@
     "distribution": "arch",
     "description": "Required packages for the ML4W Dotfiles for Hyprland",
     "successmessage": "Success",
+    "variables": [
+        {
+            "name": "var",
+            "description": "Replacement",
+            "value": "value"
+        }
+    ],
     "packages": [
         {
             "package": "kitty",
             "description": "Terminal kitty",
-            "installationcommand": "sudo pacman -S --noconfirm"
+            "command": "sudo pacman -S --noconfirm"
         },
         {
             "package": "alacritty",
             "description": "Terminal alacritty",
-            "installationcommand": "sudo pacman -S --noconfirm"
+            "command": "sudo pacman -S --noconfirm"
         },
         {
             "package": "rsync",
-            "installationcommand": "sudo pacman -S --noconfirm"
+            "command": "sudo pacman -S --noconfirm"
         }
     ]
 }

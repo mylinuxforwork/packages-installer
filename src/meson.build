@@ -30,8 +30,12 @@ packagesinstaller_sources = [
   '__init__.py',
   'main.py',
   'window.py',
-  'preferences.py'
+  'preferences.py',
+  'addvariable.py',
+  'addpackage.py'
 ]
 
 install_data(packagesinstaller_sources, install_dir: moduledir)
 install_subdir('library', install_dir: moduledir)
+install_subdir('scripts', install_dir: moduledir)
+install_subdir('json', install_dir: moduledir)

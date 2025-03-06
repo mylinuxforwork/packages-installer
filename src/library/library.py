@@ -61,3 +61,31 @@ class Library:
 
         return save_configuration
 
+    # Generates the installation script content based on the template
+    def generate_installer(self,win,variablestore,liststore):
+
+        with open(path_name + "/scripts/installer.sh", 'r') as file:
+            installer = file.read()
+
+        installer = installer.replace("{title}",win.config_title.get_text())
+        installer = installer.replace("{description}",win.config_description.get_text())
+        installer = installer.replace("{distribution}",win.config_distribution.get_text())
+        installer = installer.replace("{successmessage}",win.config_successmessage.get_text())
+
+        packages = ""
+
+        for i in range(liststore.get_n_items()):
+            item = liststore.get_item(i)
+            pkg_command = item.pkg_command
+
+            for i in range(variablestore.get_n_items()):
+                variable = variablestore.get_item(i)
+                pkg_command = pkg_command.replace("{" + variable.var_name + "}",variable.var_value)
+
+            pkg_command = pkg_command.replace("{package}",item.pkg_package)
+
+            packages = packages + pkg_command + "\n"
+
+        installer = installer.replace("{packages}",packages)
+
+        return installer

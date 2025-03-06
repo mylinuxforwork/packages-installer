@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+  <template class="PackagesinstallerAddVariable" parent="AdwDialog">
+    <property name="title" translatable="yes">Add Variable</property>
+    <child>
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar"></object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-end">20</property>
+            <property name="margin-start">20</property>
+            <property name="margin-bottom">20</property>
+            <property name="orientation">1</property>
+            <property name="spacing">20</property>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwEntryRow" id="add_var_name">
+                    <property name="title" translatable="yes">Name</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwEntryRow" id="add_var_value">
+                    <property name="title" translatable="yes">Value</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwEntryRow" id="add_var_description">
+                    <property name="title" translatable="yes">Description</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="add_var_btn">
+                <property name="label">Add</property>
+                <property name="sensitive">false</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

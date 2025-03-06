@@ -32,8 +32,8 @@
             <child type="end">
               <object class="GtkButton" id="btn_run">
                 <property name="name">suggested</property>
-                <property name="label" translatable="yes">Run</property>
-                <property name="action-name">app.run_config</property>
+                <property name="label" translatable="yes">Generate</property>
+                <property name="action-name">app.generate_script</property>
                 <property name="visible">false</property>
                 <style>
                   <class name="suggested-action"/>

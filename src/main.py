@@ -21,13 +21,18 @@ import sys
 import gi
 import json
 import os
+import pathlib
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
 from gi.repository import GObject,Gtk, Gio, Adw
+
 from .window import PackagesinstallerWindow
 from .preferences import PackagesinstallerPreferences
+from .addvariable import PackagesinstallerAddVariable
+from .addpackage import PackagesinstallerAddPackage
+
 from urllib.request import urlopen
 from urllib.parse import urlparse
 
@@ -40,11 +45,14 @@ lib = Library()
 
 class PackagesinstallerApplication(Adw.Application):
 
+    path_name = str(pathlib.Path(__file__).resolve().parent)
+
     # Configuration
     loaded_configuration = {}
     save_configuration = {}
     loaded_filename = ""
     loaded_file = ""
+    installscript = ""
 
     # Local or Remote configuration
     config_type = ""
@@ -71,6 +79,7 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('open_remote', self.load_remote_dialog)
         self.create_action('add_package', self.on_add_package)
         self.create_action('add_variable', self.on_add_variable)
+        self.create_action('generate_script', self.on_generate_script)
         self.create_action('cancel', self.on_cancel)
 
     # Activate Application
@@ -145,6 +154,17 @@ class PackagesinstallerApplication(Adw.Application):
             self.save_configuration = lib.create_json(self.props.active_window,self.variablestore,self.liststore)
             with open(file, 'w', encoding='utf-8') as f:
                 json.dump(self.save_configuration, f, ensure_ascii=False, indent=4)
+
+    # -----------------------------------------------------
+    # Save/Save As installation script
+    # -----------------------------------------------------
+
+    def on_script_saveased(self, dialog, result):
+        file = dialog.save_finish(result)
+        if file is not None:
+            with open(file, 'w', encoding='utf-8') as f:
+                f.write(self.installscript)
+            f.close()
 
     # -----------------------------------------------------
     # New configuration
@@ -275,14 +295,14 @@ class PackagesinstallerApplication(Adw.Application):
         package_row = Adw.EntryRow()
         package_row.set_title("Value")
         package_row.set_text(item.var_value)
+        row.set_subtitle(item.var_value)
         package_row.bind_property("text", item, "var_value", GObject.BindingFlags.BIDIRECTIONAL)
+        package_row.bind_property("text", row, "subtitle", GObject.BindingFlags.BIDIRECTIONAL)
         row.add_row(package_row)
 
         package_row = Adw.EntryRow()
         package_row.set_title("Description")
-        row.set_subtitle(item.var_description)
         package_row.set_text(item.var_description)
-        package_row.bind_property("text", row, "subtitle", GObject.BindingFlags.BIDIRECTIONAL)
         package_row.bind_property("text", item, "var_description", GObject.BindingFlags.BIDIRECTIONAL)
         row.add_row(package_row)
 
@@ -290,8 +310,8 @@ class PackagesinstallerApplication(Adw.Application):
 
     # Add Variable to the variablestore
     def on_add_variable(self, *args):
-        item = VariableItem()
-        self.variablestore.insert(0,item)
+        self.addvariable_dialog = PackagesinstallerAddVariable(self.variablestore)
+        self.addvariable_dialog.present(self.props.active_window)
 
     # Delete a Variable from the variablestore
     def delete_variable(self, widget, row, *args):
@@ -331,15 +351,15 @@ class PackagesinstallerApplication(Adw.Application):
 
         package_row = Adw.EntryRow()
         package_row.set_title("Description")
-        row.set_subtitle(item.pkg_description)
         package_row.set_text(item.pkg_description)
-        package_row.bind_property("text", row, "subtitle", GObject.BindingFlags.BIDIRECTIONAL)
         package_row.bind_property("text", item, "pkg_description", GObject.BindingFlags.BIDIRECTIONAL)
         row.add_row(package_row)
 
         package_row = Adw.EntryRow()
         package_row.set_title("Installation Command")
         package_row.set_text(item.pkg_command)
+        row.set_subtitle(item.pkg_command)
+        package_row.bind_property("text", row, "subtitle", GObject.BindingFlags.BIDIRECTIONAL)
         package_row.bind_property("text", item, "pkg_command", GObject.BindingFlags.BIDIRECTIONAL)
         row.add_row(package_row)
 
@@ -347,8 +367,8 @@ class PackagesinstallerApplication(Adw.Application):
 
     # Add Package to the liststore
     def on_add_package(self, *args):
-        item = PackageItem()
-        self.liststore.insert(0,item)
+        self.addpackage_dialog = PackagesinstallerAddPackage(self.liststore)
+        self.addpackage_dialog.present(self.props.active_window)
 
     # Delete a Package from the liststore
     def delete_package(self, widget, row, *args):
@@ -392,6 +412,15 @@ class PackagesinstallerApplication(Adw.Application):
 
     def on_save_preferences(self, dialog, *args):
         self.preferences.write_json()
+
+    # -----------------------------------------------------
+    # Generate Script
+    # -----------------------------------------------------
+
+    def on_generate_script(self,*args):
+        self.installscript = lib.generate_installer(self.props.active_window,self.variablestore,self.liststore)
+        dialog = Gtk.FileDialog(initial_name=self.loaded_filename)
+        dialog.save(parent=self.props.active_window, cancellable=None, callback=self.on_script_saveased)
 
     # -----------------------------------------------------
     # Helpers

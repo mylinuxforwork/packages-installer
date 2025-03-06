@@ -27,19 +27,6 @@ class Library:
         info = file.query_info("standard::name", Gio.FileQueryInfoFlags.NONE, None)
         return info.get_name()
 
-    # Load history.json if exists
-    def load_history_json(self):
-        if os.path.exists(config_folder + "/history.json"):
-            history_json = open(config_folder + "/history.json")
-        else:
-            history_json = "[]"
-        return history_json
-
-    # Write history.json with new updates
-    def write_history_json(self,result):
-        with open(config_folder + '/history.json', 'w', encoding='utf-8') as f:
-            json.dump(result, f, ensure_ascii=False, indent=4)
-
     # Create the json file from current configuration
     def create_json(self,win,liststore):
         save_configuration = {}

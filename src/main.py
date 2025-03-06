@@ -32,7 +32,6 @@ from urllib.request import urlopen
 from urllib.parse import urlparse
 
 from .library.library import Library
-from .library.historyitem import HistoryItem
 from .library.packageitem import PackageItem
 from .library.preferences import Preferences
 
@@ -51,7 +50,6 @@ class PackagesinstallerApplication(Adw.Application):
 
     # List Stores
     liststore = Gio.ListStore()
-    historystore = Gio.ListStore()
 
     # Preferences
     preferences = Preferences()
@@ -76,10 +74,6 @@ class PackagesinstallerApplication(Adw.Application):
         if not win:
             win = PackagesinstallerWindow(application=self)
 
-        # Setup History
-        self.load_history()
-        self.props.active_window.history_group.bind_model(self.historystore,self.create_history_row)
-
         # Show Load Configuration Page
         self.page_stack = win.page_stack
         self.page_stack.set_visible_child_name("page_load_configuration")
@@ -94,14 +88,6 @@ class PackagesinstallerApplication(Adw.Application):
         self.preferences_dialog.pref_terminal.bind_property("text", self.preferences, "terminal", GObject.BindingFlags.BIDIRECTIONAL)
 
         win.present()
-
-    # -----------------------------------------------------
-    # History
-    # -----------------------------------------------------
-
-    # Load History
-    def load_history(self):
-        history = lib.load_history_json()
 
     # -----------------------------------------------------
     # Configuration
@@ -197,14 +183,6 @@ class PackagesinstallerApplication(Adw.Application):
             item.pkg_installation = i["installationcommand"]
             self.liststore.append(item)
 
-        # Adding Remote Configurations to the History
-        if self.config_type == "remote":
-            history_item = HistoryItem()
-            history_item.title = self.loaded_configuration["title"]
-            history_item.description = self.loaded_configuration["description"]
-            history_item.remote = self.loaded_file
-            self.historystore.append(history_item)
-
         self.page_stack.set_visible_child_name("page_configuration")
         self.props.active_window.btn_run.set_visible(True)
         self.props.active_window.btn_cancel.set_visible(True)
@@ -256,24 +234,6 @@ class PackagesinstallerApplication(Adw.Application):
                     close_response="okay",
                 )
                 dialog.add_response("okay", "Okay")
-
-    # -----------------------------------------------------
-    # History Row
-    # -----------------------------------------------------
-
-    def create_history_row(self,item):
-        row = Adw.ActionRow()
-        row.set_title(item.title)
-        row.set_subtitle(item.description + "\n" + item.remote)
-        btn = Gtk.Button()
-        btn.set_label("Open")
-        btn.connect("clicked",self.open_history_configuration,row)
-        btn.set_valign(3)
-        row.add_suffix(btn)
-        return row
-
-    def open_history_configuration(self, *args):
-        print("Open Configuration from History")
 
     # -----------------------------------------------------
     # Package Row

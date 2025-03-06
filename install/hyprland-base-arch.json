@@ -12,42 +12,7 @@
     ],
     "packages": [
         {
-            "package": "qt6-wayland",
-            "description": "",
-            "command": "{command-pacman}"
-        },
-        {
-            "package": "qt5-wayland",
-            "description": "",
-            "command": "{command-pacman}"
-        },
-        {
-            "package": "wofi",
-            "description": "",
-            "command": "{command-pacman}"
-        },
-        {
-            "package": "kitty",
-            "description": "",
-            "command": "{command-pacman}"
-        },
-        {
-            "package": "dunst",
-            "description": "",
-            "command": "{command-pacman}"
-        },
-        {
-            "package": "libnotify",
-            "description": "",
-            "command": "{command-pacman}"
-        },
-        {
-            "package": "xdg-desktop-portal-hyprland",
-            "description": "",
-            "command": "{command-pacman}"
-        },
-        {
-            "package": "xdg-desktop-portal",
+            "package": "hyprland",
             "description": "",
             "command": "{command-pacman}"
         },
@@ -67,7 +32,42 @@
             "command": "{command-pacman}"
         },
         {
-            "package": "hyprland",
+            "package": "libnotify",
+            "description": "",
+            "command": "{command-pacman}"
+        },
+        {
+            "package": "dunst",
+            "description": "",
+            "command": "{command-pacman}"
+        },
+        {
+            "package": "kitty",
+            "description": "",
+            "command": "{command-pacman}"
+        },
+        {
+            "package": "wofi",
+            "description": "",
+            "command": "{command-pacman}"
+        },
+        {
+            "package": "qt5-wayland",
+            "description": "",
+            "command": "{command-pacman}"
+        },
+        {
+            "package": "qt6-wayland",
+            "description": "",
+            "command": "{command-pacman}"
+        },
+        {
+            "package": "xdg-desktop-portal",
+            "description": "",
+            "command": "{command-pacman}"
+        },
+        {
+            "package": "xdg-desktop-portal-hyprland",
             "description": "",
             "command": "{command-pacman}"
         }

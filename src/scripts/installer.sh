@@ -1,9 +1,11 @@
 #!/bin/bash
 clear
+# Seperator
 _sep() {
 	echo "----------------------------------------------------"
 }
 
+# Spacer
 _space() {
 	echo
 }
@@ -17,7 +19,8 @@ _space
 echo "Generated with Packages Installer Version 1.0"
 _sep
 _space
-
+echo "IMPORTANT: Please make sure that your system is updated before starting the installation."
+_space
 # Confirm Start
 while true; do
     read -p "DO YOU WANT TO START THE INSTALLATION NOW? (Yy/Nn): " yn

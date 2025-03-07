@@ -2,8 +2,8 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <requires lib="Adw" version="1.0"/>
-  <template class="PackagesinstallerAddVariable" parent="AdwDialog">
-    <property name="title" translatable="yes">Add Replacement</property>
+  <template class="PackagesinstallerAddCommand" parent="AdwDialog">
+    <property name="title" translatable="yes">Add Command</property>
     <child>
       <object class="AdwToolbarView">
         <child type="top">
@@ -19,24 +19,24 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwEntryRow" id="add_var_name">
+                  <object class="AdwEntryRow" id="add_cmd_name">
                     <property name="title" translatable="yes">Name</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwEntryRow" id="add_var_value">
-                    <property name="title" translatable="yes">Value</property>
+                  <object class="AdwEntryRow" id="add_cmd_command">
+                    <property name="title" translatable="yes">Command</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwEntryRow" id="add_var_description">
+                  <object class="AdwEntryRow" id="add_cmd_description">
                     <property name="title" translatable="yes">Description</property>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="add_var_btn">
+              <object class="GtkButton" id="add_cmd_btn">
                 <property name="label">Add</property>
                 <property name="sensitive">false</property>
                 <style>

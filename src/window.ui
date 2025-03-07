@@ -32,7 +32,12 @@
             <child type="end">
               <object class="GtkButton" id="btn_run">
                 <property name="name">suggested</property>
-                <property name="label" translatable="yes">Generate</property>
+                <child>
+                  <object class="AdwButtonContent">
+                    <property name="icon-name">media-playback-start-symbolic</property>
+                    <property name="label" translatable="yes">Generate</property>
+                  </object>
+                </child>
                 <property name="action-name">app.generate_script</property>
                 <property name="visible">false</property>
                 <style>
@@ -210,14 +215,19 @@
                     </child>
                     <child>
                       <object class="AdwPreferencesGroup">
-                        <property name="title">Command Variables</property>
-                        <property name="description">Define command variables and use them in your packages list.</property>
+                        <property name="title">Replacements</property>
+                        <property name="description">Define replacements and use them in your commands list with {name}.</property>
                         <child type="header-suffix">
                           <object class="GtkButton">
                             <property name="halign">3</property>
                             <property name="valign">3</property>
-                            <property name="label">Add Variable</property>
                             <property name="action-name">app.add_variable</property>
+                            <child>
+                              <object class="AdwButtonContent">
+                                <property name="label" translatable="yes">New</property>
+                                <property name="icon-name">list-add-symbolic</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -233,14 +243,19 @@
                     </child>
                     <child>
                       <object class="AdwPreferencesGroup">
-                        <property name="title">Packages</property>
-                        <property name="description">Define detailed information to your installation configuration.</property>
+                        <property name="title">Commands</property>
+                        <property name="description">Define all commands to run your your installation configuration.</property>
                         <child type="header-suffix">
-                          <object class="GtkButton">
+                          <object class="GtkMenuButton">
+                            <property name="menu-model">btn_add_command_menu</property>
                             <property name="halign">3</property>
                             <property name="valign">3</property>
-                            <property name="label">Add Package</property>
-                            <property name="action-name">app.add_package</property>
+                            <child>
+                              <object class="AdwButtonContent">
+                                <property name="label" translatable="yes">New</property>
+                                <property name="icon-name">list-add-symbolic</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -275,6 +290,16 @@
         <attribute name="action">app.about</attribute>
       </item>
     </section>
+  </menu>
+  <menu id="btn_add_command_menu">
+    <item>
+      <attribute name="label">New Command</attribute>
+      <attribute name="action">app.add_command</attribute>
+    </item>
+    <item>
+      <attribute name="label">New Package</attribute>
+      <attribute name="action">app.add_package</attribute>
+    </item>
   </menu>
 </interface>
 

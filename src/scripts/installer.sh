@@ -49,7 +49,7 @@ sudo -v
 _space
 
 # Packages
-{packages}
+{commands}
 _space
 
 # Success Message

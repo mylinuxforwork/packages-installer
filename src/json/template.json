@@ -1,29 +1,43 @@
 {
     "title": "ML4W Dotfiles Packages for Arch Linux",
-    "distribution": "arch",
     "description": "Required packages for the ML4W Dotfiles for Hyprland",
-    "successmessage": "Success",
+    "distribution": "Arch Linux",
+    "successmessage": "DONE!",
     "variables": [
         {
-            "name": "var",
-            "description": "Replacement",
-            "value": "value"
+            "name": "command_pacman",
+            "description": "pacman replacement",
+            "value": "sudo pacman -S --needed --noconfirm {name}"
         }
     ],
     "packages": [
         {
-            "package": "kitty",
+            "name": "kitty",
             "description": "Terminal kitty",
-            "command": "sudo pacman -S --noconfirm"
+            "command": "{command_pacman}",
+            "isinstalled": true,
+            "type": "package"
         },
         {
-            "package": "alacritty",
+            "name": "alacritty",
             "description": "Terminal alacritty",
-            "command": "sudo pacman -S --noconfirm"
+            "command": "{command_pacman}",
+            "isinstalled": true,
+            "type": "package"
         },
         {
-            "package": "rsync",
-            "command": "sudo pacman -S --noconfirm"
+            "name": "rsync",
+            "description": "",
+            "command": "{command_pacman}",
+            "isinstalled": false,
+            "type": "package"
+        },
+        {
+            "name": "Custom Message",
+            "description": "",
+            "command": "echo  \"Custom Message\"",
+            "isinstalled": false,
+            "type": "command"
         }
     ]
 }

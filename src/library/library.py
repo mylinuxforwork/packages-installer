@@ -49,17 +49,19 @@ class Library:
 
         save_configuration["variables"] = variables
 
-        packages = []
+        commands = []
 
         for i in range(liststore.get_n_items()):
             item = liststore.get_item(i)
-            package = {}
-            package["package"] = item.pkg_package
-            package["description"] = item.pkg_description
-            package["command"] = item.pkg_command
-            packages.append(package)
+            cmd = {}
+            cmd["name"] = item.cmd_name
+            cmd["description"] = item.cmd_description
+            cmd["command"] = item.cmd_command
+            cmd["isinstalled"] = item.cmd_isinstalled
+            cmd["type"] = item.cmd_type
+            commands.append(cmd)
 
-        save_configuration["packages"] = packages
+        save_configuration["packages"] = commands
 
         return save_configuration
 
@@ -84,10 +86,10 @@ class Library:
 
         for i in range(liststore.get_n_items()):
             item = liststore.get_item(i)
-            pkg_command = item.pkg_command
+            cmd_command = item.cmd_command
 
             for ic in installer_commands:
-                if item.pkg_command.find(ic) != -1 and isInstalled[ic] == False:
+                if item.cmd_command.find(ic) != -1 and isInstalled[ic] == False:
                     with open(path_name + "/scripts/isinstalled_" + ic + ".sh", 'r') as file:
                         s = file.read()
                     isinstalled_scripts = isinstalled_scripts + s + "\n"
@@ -96,32 +98,34 @@ class Library:
         installer = installer.replace("{isinstalled}",isinstalled_scripts)
 
         # Adding package commmands
-        packages = ""
+        commands = ""
 
         with open(path_name + "/scripts/isinstalled_snipped.sh", 'r') as file:
             snipped_script = file.read()
 
         for i in range(liststore.get_n_items()):
             item = liststore.get_item(i)
-            pkg_command = item.pkg_command
+            cmd_command = item.cmd_command
 
             for i in range(variablestore.get_n_items()):
                 variable = variablestore.get_item(i)
-                pkg_command = pkg_command.replace("{" + variable.var_name + "}",variable.var_value)
+                cmd_command = cmd_command.replace("{" + variable.var_name + "}",variable.var_value)
 
-            pkg_command = pkg_command.replace("{package}",item.pkg_package)
+            cmd_command = cmd_command.replace("{name}",item.cmd_name)
+            cmd_command = cmd_command.replace("{package}",item.cmd_name)
 
-            if item.pkg_isinstalled == True:
-                for ic in installer_commands:
-                    if pkg_command.find(ic) != -1:
-                        print(item.pkg_package)
-                        snipped = snipped_script.replace("{package}",item.pkg_package)
-                        snipped = snipped.replace("{manager}",ic)
-                        snipped = snipped.replace("{command}",pkg_command)
-                pkg_command = snipped
+            if item.cmd_type == "package":
+                if item.cmd_isinstalled == True:
+                    for ic in installer_commands:
+                        if cmd_command.find(ic) != -1:
+                            print(item.cmd_name)
+                            snipped = snipped_script.replace("{name}",item.cmd_name)
+                            snipped = snipped.replace("{manager}",ic)
+                            snipped = snipped.replace("{command}",cmd_command)
+                    cmd_command = snipped
 
-            packages = packages + pkg_command + "\n"
+            commands = commands + cmd_command + "\n"
 
-        installer = installer.replace("{packages}",packages)
+        installer = installer.replace("{commands}",commands)
 
         return installer

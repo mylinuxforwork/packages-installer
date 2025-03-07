@@ -22,9 +22,9 @@ from gi.repository import Gtk
 from gi.repository import GObject,Gtk, Gio, Adw
 from .library.commanditem import CommandItem
 
-@Gtk.Template(resource_path='/com/ml4w/packagesinstaller/addpackage.ui')
-class PackagesinstallerAddPackage(Adw.Dialog):
-    __gtype_name__ = 'PackagesinstallerAddPackage'
+@Gtk.Template(resource_path='/com/ml4w/packagesinstaller/addcommand.ui')
+class PackagesinstallerAddCommand(Adw.Dialog):
+    __gtype_name__ = 'PackagesinstallerAddCommand'
 
     add_cmd_name = Gtk.Template.Child()
     add_cmd_command = Gtk.Template.Child()
@@ -46,11 +46,11 @@ class PackagesinstallerAddPackage(Adw.Dialog):
             self.add_cmd_btn.set_sensitive(False)
 
     def on_save(self,*args):
-        item = CommandItem("package")
+        item = CommandItem("command")
         item.cmd_name = self.add_cmd_name.get_text()
         item.cmd_command = self.add_cmd_command.get_text()
         item.cmd_description = self.add_cmd_description.get_text()
         item.cmd_isinstalled = True
-        item.cmd_type = "package"
+        item.cmd_type = "command"
         self.store.insert(0,item)
         self.close()

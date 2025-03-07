@@ -19,24 +19,24 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwEntryRow" id="add_pkg_package">
+                  <object class="AdwEntryRow" id="add_cmd_name">
                     <property name="title" translatable="yes">Package</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwEntryRow" id="add_pkg_command">
+                  <object class="AdwEntryRow" id="add_cmd_command">
                     <property name="title" translatable="yes">Installation Command</property>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwEntryRow" id="add_pkg_description">
+                  <object class="AdwEntryRow" id="add_cmd_description">
                     <property name="title" translatable="yes">Description</property>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="add_pkg_btn">
+              <object class="GtkButton" id="add_cmd_btn">
                 <property name="label">Add</property>
                 <property name="sensitive">false</property>
                 <style>

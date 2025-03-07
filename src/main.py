@@ -32,12 +32,13 @@ from .window import PackagesinstallerWindow
 from .preferences import PackagesinstallerPreferences
 from .addvariable import PackagesinstallerAddVariable
 from .addpackage import PackagesinstallerAddPackage
+from .addcommand import PackagesinstallerAddCommand
 
 from urllib.request import urlopen
 from urllib.parse import urlparse
 
 from .library.library import Library
-from .library.packageitem import PackageItem
+from .library.commanditem import CommandItem
 from .library.variableitem import VariableItem
 from .library.preferences import Preferences
 
@@ -58,7 +59,7 @@ class PackagesinstallerApplication(Adw.Application):
     config_type = ""
 
     # List Stores
-    liststore = Gio.ListStore()
+    commandstore = Gio.ListStore()
 
     # List Stores
     variablestore = Gio.ListStore()
@@ -77,6 +78,7 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('new_file', self.on_new_file)
         self.create_action('saveas_file', self.on_saveas_file)
         self.create_action('open_remote', self.load_remote_dialog)
+        self.create_action('add_command', self.on_add_command)
         self.create_action('add_package', self.on_add_package)
         self.create_action('add_variable', self.on_add_variable)
         self.create_action('generate_script', self.on_generate_script)
@@ -92,8 +94,8 @@ class PackagesinstallerApplication(Adw.Application):
         self.page_stack = win.page_stack
         self.page_stack.set_visible_child_name("page_load_configuration")
 
-        # Bind ListStores
-        self.props.active_window.packages_group.bind_model(self.liststore,self.create_package_row)
+        # Bind commandstores
+        self.props.active_window.packages_group.bind_model(self.commandstore,self.create_command_row)
         self.props.active_window.variables_group.bind_model(self.variablestore,self.create_variable_row)
 
         # Load preferences
@@ -111,7 +113,7 @@ class PackagesinstallerApplication(Adw.Application):
     # Reset configuration
     def reset_configuration(self):
         self.loaded_filename = ""
-        self.liststore.remove_all()
+        self.commandstore.remove_all()
         self.variablestore.remove_all()
         self.props.active_window.config_title.set_text("")
         self.props.active_window.config_description.set_text("")
@@ -151,7 +153,7 @@ class PackagesinstallerApplication(Adw.Application):
     def on_file_saveased(self, dialog, result):
         file = dialog.save_finish(result)
         if file is not None:
-            self.save_configuration = lib.create_json(self.props.active_window,self.variablestore,self.liststore)
+            self.save_configuration = lib.create_json(self.props.active_window,self.variablestore,self.commandstore)
             with open(file, 'w', encoding='utf-8') as f:
                 json.dump(self.save_configuration, f, ensure_ascii=False, indent=4)
 
@@ -206,34 +208,39 @@ class PackagesinstallerApplication(Adw.Application):
             if "description" in i:
                 item.var_description = i["description"]
             else:
-                item.pkg_description = ""
+                item.cmd_description = ""
             item.var_value = i["value"]
             self.variablestore.append(item)
 
         for i in self.loaded_configuration["packages"]:
-            item = PackageItem()
+            item = CommandItem(i["type"])
 
-            if "package" in i:
-                item.pkg_package = i["package"]
+            if "name" in i:
+                item.cmd_name = i["name"]
             else:
-                item.pkg_package = ""
+                item.cmd_name = ""
 
             if "description" in i:
-                item.pkg_description = i["description"]
+                item.cmd_description = i["description"]
             else:
-                item.pkg_description = ""
+                item.cmd_description = ""
 
             if "isinstalled" in i:
-                item.pkg_isinstalled = i["description"]
+                item.cmd_isinstalled = i["description"]
             else:
-                item.pkg_isinstalled = False
+                item.cmd_isinstalled = False
 
             if "command" in i:
-                item.pkg_command = i["command"]
+                item.cmd_command = i["command"]
             else:
-                item.pkg_command = ""
+                item.cmd_command = ""
 
-            self.liststore.append(item)
+            if "type" in i:
+                item.cmd_type = i["type"]
+            else:
+                item.cmd_command = "package"
+
+            self.commandstore.append(item)
 
         self.page_stack.set_visible_child_name("page_configuration")
         self.props.active_window.btn_run.set_visible(True)
@@ -336,86 +343,100 @@ class PackagesinstallerApplication(Adw.Application):
     # Package Row
     # -----------------------------------------------------
 
-    def create_package_row(self,item):
+    def create_command_row(self,item):
         row = Adw.ExpanderRow()
-        row.set_title(item.pkg_package)
+        row.set_title(item.cmd_name)
         btn = Gtk.Button()
         btn.set_label("Delete")
-        btn.connect("clicked",self.delete_package,row)
+        btn.connect("clicked",self.delete_command,row)
         btn.set_valign(3)
         row.add_suffix(btn)
 
         btn = Gtk.Button()
         btn.set_label("Up")
-        btn.connect("clicked",self.move_package,row)
+        btn.connect("clicked",self.move_command,row)
         btn.set_valign(3)
         row.add_prefix(btn)
 
         btn = Gtk.Button()
         btn.set_label("Top")
-        btn.connect("clicked",self.top_package,row)
+        btn.connect("clicked",self.top_command,row)
         btn.set_valign(3)
         row.add_prefix(btn)
 
-        btn_toggle = Gtk.ToggleButton()
-        btn_toggle.set_label("Check")
-        btn_toggle.set_active(item.pkg_isinstalled)
-        btn_toggle.set_valign(3)
-        row.add_prefix(btn_toggle)
+        if item.cmd_type == "package":
+            btn_toggle = Gtk.ToggleButton()
+            btn_toggle.set_label("Check")
+            btn_toggle.set_active(item.cmd_isinstalled)
+            btn_toggle.set_valign(3)
+            row.add_prefix(btn_toggle)
 
         package_row = Adw.EntryRow()
-        package_row.set_title("Package")
-        package_row.set_text(item.pkg_package)
+        if item.cmd_type == "package":
+            package_row.set_title("Package")
+        else:
+            package_row.set_title("Name")
+        package_row.set_text(item.cmd_name)
         package_row.bind_property("text", row, "title", GObject.BindingFlags.BIDIRECTIONAL)
-        package_row.bind_property("text", item, "pkg_package", GObject.BindingFlags.BIDIRECTIONAL)
+        package_row.bind_property("text", item, "cmd_name", GObject.BindingFlags.BIDIRECTIONAL)
         row.add_row(package_row)
 
         package_row = Adw.EntryRow()
         package_row.set_title("Installation Command")
-        package_row.set_text(item.pkg_command)
-        row.set_subtitle(item.pkg_command)
+        package_row.set_text(item.cmd_command)
+        row.set_subtitle(item.cmd_command)
         package_row.bind_property("text", row, "subtitle", GObject.BindingFlags.BIDIRECTIONAL)
-        package_row.bind_property("text", item, "pkg_command", GObject.BindingFlags.BIDIRECTIONAL)
+        package_row.bind_property("text", item, "cmd_command", GObject.BindingFlags.BIDIRECTIONAL)
         row.add_row(package_row)
 
-        package_row = Adw.SwitchRow()
-        package_row.set_title("Check if package is installed")
-        package_row.set_active(item.pkg_isinstalled)
-        package_row.bind_property("active", item, "pkg_isinstalled", GObject.BindingFlags.BIDIRECTIONAL)
-        package_row.bind_property("active", btn_toggle, "active", GObject.BindingFlags.BIDIRECTIONAL)
+        if item.cmd_type == "package":
+            package_row = Adw.SwitchRow()
+            package_row.set_title("Check if package is installed")
+            package_row.set_active(item.cmd_isinstalled)
+            package_row.bind_property("active", item, "cmd_isinstalled", GObject.BindingFlags.BIDIRECTIONAL)
+            if item.cmd_type == "package":
+                package_row.bind_property("active", btn_toggle, "active", GObject.BindingFlags.BIDIRECTIONAL)
+
         row.add_row(package_row)
 
         package_row = Adw.EntryRow()
         package_row.set_title("Description")
-        package_row.set_text(item.pkg_description)
-        package_row.bind_property("text", item, "pkg_description", GObject.BindingFlags.BIDIRECTIONAL)
+        package_row.set_text(item.cmd_description)
+        package_row.bind_property("text", item, "cmd_description", GObject.BindingFlags.BIDIRECTIONAL)
         row.add_row(package_row)
 
         return row
 
-    # Add Package to the liststore
+    # Add Package to the commandstore
+    def on_add_command(self, *args):
+        self.addcommand_dialog = PackagesinstallerAddCommand(self.commandstore)
+        self.addcommand_dialog.set_size_request(400,300)
+        self.addcommand_dialog.present(self.props.active_window)
+
+    # Add Package to the commandstore
     def on_add_package(self, *args):
-        self.addpackage_dialog = PackagesinstallerAddPackage(self.liststore)
+        self.addpackage_dialog = PackagesinstallerAddPackage(self.commandstore)
+        self.addpackage_dialog.set_size_request(400,300)
         self.addpackage_dialog.present(self.props.active_window)
 
-    # Delete a Package from the liststore
-    def delete_package(self, widget, row, *args):
-        self.liststore.remove(row.get_index())
+    # Delete a Package from the commandstore
+    def delete_command(self, widget, row, *args):
+        self.commandstore.remove(row.get_index())
 
-    # Move Package up in the liststore
-    def move_package(self, widget, row, *args):
+    # Move Package up in the commandstore
+    def move_command(self, widget, row, *args):
         pos = row.get_index()
         if pos > 0:
-            c = self.liststore.get_item(pos)
-            self.liststore.insert(pos-1,c)
-            self.liststore.remove(pos+1)
+            c = self.commandstore.get_item(pos)
+            self.commandstore.insert(pos-1,c)
+            self.commandstore.remove(pos+1)
 
-    # Move Package to the top in the liststore
-    def top_package(self, widget, row, *args):
+    # Move Package to the top in the commandstore
+    def top_command(self, widget, row, *args):
         pos = row.get_index()
-        c = self.liststore.get_item(pos)
-        self.liststore.insert(0,c)
-        self.liststore.remove(pos+1)
+        c = self.commandstore.get_item(pos)
+        self.commandstore.insert(0,c)
+        self.commandstore.remove(pos+1)
 
     # -----------------------------------------------------
     # About Dialog
@@ -446,7 +467,7 @@ class PackagesinstallerApplication(Adw.Application):
     # -----------------------------------------------------
 
     def on_generate_script(self,*args):
-        self.installscript = lib.generate_installer(self.props.active_window,self.variablestore,self.liststore)
+        self.installscript = lib.generate_installer(self.props.active_window,self.variablestore,self.commandstore)
         dialog = Gtk.FileDialog(initial_name=self.loaded_filename)
         dialog.save(parent=self.props.active_window, cancellable=None, callback=self.on_script_saveased)
 

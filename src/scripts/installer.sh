@@ -10,6 +10,10 @@ _space() {
 	echo
 }
 
+# Is installed
+{isinstalled}
+_space
+
 # Header
 _sep
 echo "{title}"

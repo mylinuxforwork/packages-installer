@@ -13,6 +13,8 @@ config_folder = home_folder + "/.config/" + script_folder
 
 path_name = str(pathlib.Path(__file__).resolve().parent.parent)
 
+installer_commands = ["apt","dnf","flatpak","pacman","zypper"]
+
 # Library of helper functions
 class Library:
 
@@ -67,12 +69,37 @@ class Library:
         with open(path_name + "/scripts/installer.sh", 'r') as file:
             installer = file.read()
 
+        # Adding installer information
         installer = installer.replace("{title}",win.config_title.get_text())
         installer = installer.replace("{description}",win.config_description.get_text())
         installer = installer.replace("{distribution}",win.config_distribution.get_text())
         installer = installer.replace("{successmessage}",win.config_successmessage.get_text())
 
+        # Adding isinstalled scripts
+        isinstalled_scripts = ""
+        isInstalled = {}
+
+        for ic in installer_commands:
+            isInstalled[ic] = False
+
+        for i in range(liststore.get_n_items()):
+            item = liststore.get_item(i)
+            pkg_command = item.pkg_command
+
+            for ic in installer_commands:
+                if item.pkg_command.find(ic) != -1 and isInstalled[ic] == False:
+                    with open(path_name + "/scripts/isinstalled_" + ic + ".sh", 'r') as file:
+                        s = file.read()
+                    isinstalled_scripts = isinstalled_scripts + s + "\n"
+                    isInstalled[ic] = True
+
+        installer = installer.replace("{isinstalled}",isinstalled_scripts)
+
+        # Adding package commmands
         packages = ""
+
+        with open(path_name + "/scripts/isinstalled_snipped.sh", 'r') as file:
+            snipped_script = file.read()
 
         for i in range(liststore.get_n_items()):
             item = liststore.get_item(i)
@@ -83,6 +110,15 @@ class Library:
                 pkg_command = pkg_command.replace("{" + variable.var_name + "}",variable.var_value)
 
             pkg_command = pkg_command.replace("{package}",item.pkg_package)
+
+            if item.pkg_isinstalled == True:
+                for ic in installer_commands:
+                    if pkg_command.find(ic) != -1:
+                        print(item.pkg_package)
+                        snipped = snipped_script.replace("{package}",item.pkg_package)
+                        snipped = snipped.replace("{manager}",ic)
+                        snipped = snipped.replace("{command}",pkg_command)
+                pkg_command = snipped
 
             packages = packages + pkg_command + "\n"
 

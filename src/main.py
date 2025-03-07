@@ -179,6 +179,10 @@ class PackagesinstallerApplication(Adw.Application):
     # Open File/Remote
     # -----------------------------------------------------
 
+    def on_open_file(self, *args):
+        dialog = Gtk.FileDialog()
+        dialog.open(self.props.active_window, None, self.on_file_opened)
+
     def on_file_opened(self, dialog, result):
         file = dialog.open_finish(result)
         if file is not None:
@@ -186,12 +190,8 @@ class PackagesinstallerApplication(Adw.Application):
                 value = f.read()
             if self.convert_to_json(value):
                 self.config_type = "local"
-                self.set_configuration()
                 self.loaded_filename = lib.get_file_name(file)
-
-    def on_open_file(self, *args):
-        dialog = Gtk.FileDialog()
-        dialog.open(self.props.active_window, None, self.on_file_opened)
+                self.set_configuration()
 
     # Loads configuration from selected source
     def set_configuration(self):
@@ -212,12 +212,27 @@ class PackagesinstallerApplication(Adw.Application):
 
         for i in self.loaded_configuration["packages"]:
             item = PackageItem()
-            item.pkg_package = i["package"]
+
+            if "package" in i:
+                item.pkg_package = i["package"]
+            else:
+                item.pkg_package = ""
+
             if "description" in i:
                 item.pkg_description = i["description"]
             else:
                 item.pkg_description = ""
-            item.pkg_command = i["command"]
+
+            if "isinstalled" in i:
+                item.pkg_isinstalled = i["description"]
+            else:
+                item.pkg_isinstalled = False
+
+            if "command" in i:
+                item.pkg_command = i["command"]
+            else:
+                item.pkg_command = ""
+
             self.liststore.append(item)
 
         self.page_stack.set_visible_child_name("page_configuration")
@@ -337,10 +352,16 @@ class PackagesinstallerApplication(Adw.Application):
         row.add_prefix(btn)
 
         btn = Gtk.Button()
-        btn.set_label("To Top")
+        btn.set_label("Top")
         btn.connect("clicked",self.top_package,row)
         btn.set_valign(3)
         row.add_prefix(btn)
+
+        btn_toggle = Gtk.ToggleButton()
+        btn_toggle.set_label("Check")
+        btn_toggle.set_active(item.pkg_isinstalled)
+        btn_toggle.set_valign(3)
+        row.add_prefix(btn_toggle)
 
         package_row = Adw.EntryRow()
         package_row.set_title("Package")
@@ -350,17 +371,24 @@ class PackagesinstallerApplication(Adw.Application):
         row.add_row(package_row)
 
         package_row = Adw.EntryRow()
-        package_row.set_title("Description")
-        package_row.set_text(item.pkg_description)
-        package_row.bind_property("text", item, "pkg_description", GObject.BindingFlags.BIDIRECTIONAL)
-        row.add_row(package_row)
-
-        package_row = Adw.EntryRow()
         package_row.set_title("Installation Command")
         package_row.set_text(item.pkg_command)
         row.set_subtitle(item.pkg_command)
         package_row.bind_property("text", row, "subtitle", GObject.BindingFlags.BIDIRECTIONAL)
         package_row.bind_property("text", item, "pkg_command", GObject.BindingFlags.BIDIRECTIONAL)
+        row.add_row(package_row)
+
+        package_row = Adw.SwitchRow()
+        package_row.set_title("Check if package is installed")
+        package_row.set_active(item.pkg_isinstalled)
+        package_row.bind_property("active", item, "pkg_isinstalled", GObject.BindingFlags.BIDIRECTIONAL)
+        package_row.bind_property("active", btn_toggle, "active", GObject.BindingFlags.BIDIRECTIONAL)
+        row.add_row(package_row)
+
+        package_row = Adw.EntryRow()
+        package_row.set_title("Description")
+        package_row.set_text(item.pkg_description)
+        package_row.bind_property("text", item, "pkg_description", GObject.BindingFlags.BIDIRECTIONAL)
         row.add_row(package_row)
 
         return row

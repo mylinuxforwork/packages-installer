@@ -50,5 +50,6 @@ class PackagesinstallerAddPackage(Adw.Dialog):
         item.pkg_package = self.add_pkg_package.get_text()
         item.pkg_command = self.add_pkg_command.get_text()
         item.pkg_description = self.add_pkg_description.get_text()
+        item.pkg_isinstalled = True
         self.store.insert(0,item)
         self.close()

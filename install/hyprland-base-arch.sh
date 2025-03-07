@@ -10,6 +10,33 @@ _space() {
 	echo
 }
 
+# Is Package already installed
+_isInstalled() {
+    package="$1"
+    case $install_platform in
+        arch)
+            check="$(sudo pacman -Qs --color always "${package}" | grep "local" | grep "${package} ")"
+            echo "${check}"
+            if [ -n "${check}" ]; then
+                echo 0
+            else
+                echo 1
+            fi
+            ;;
+        fedora)
+            check=$(dnf list --installed | grep $package)
+            if [ -z "$check" ]; then
+                echo 1
+            else
+                echo 0
+            fi
+            ;;
+        *)
+            echo 1
+            ;;
+    esac
+}
+
 # Header
 _sep
 echo "Hyprland Base Installation"
@@ -45,18 +72,13 @@ sudo -v
 _space
 
 # Packages
-sudo pacman -S --needed --noconfirm hyprland
-sudo pacman -S --needed --noconfirm hypridle
-sudo pacman -S --needed --noconfirm hyprlock
-sudo pacman -S --needed --noconfirm hyprpaper
-sudo pacman -S --needed --noconfirm libnotify
-sudo pacman -S --needed --noconfirm dunst
-sudo pacman -S --needed --noconfirm kitty
-sudo pacman -S --needed --noconfirm wofi
-sudo pacman -S --needed --noconfirm qt5-wayland
-sudo pacman -S --needed --noconfirm qt6-wayland
-sudo pacman -S --needed --noconfirm xdg-desktop-portal
-sudo pacman -S --needed --noconfirm xdg-desktop-portal-hyprland
+echo $(_isInstalled "kitty")
+
+# if [[ $(_isInstalled "hyprland") == "1" ]]; then
+#     sudo pacman -S --needed --noconfirm hyprland
+# else
+#     echo ":: hyprland is already installed"
+# fi
 
 _space
 

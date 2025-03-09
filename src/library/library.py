@@ -113,6 +113,7 @@ class Library:
 
             cmd_command = cmd_command.replace("{name}",item.cmd_name)
             cmd_command = cmd_command.replace("{package}",item.cmd_name)
+            cmd_command = cmd_command.replace("&amp;","&")
 
             if item.cmd_type == "package":
                 if item.cmd_isinstalled == True:

@@ -1,4 +1,4 @@
-_isinstalled_flatpak() {
+_isInstalled_flatpak() {
 	package="$1"
 	check=$(flatpak info ${package})
 	if [[ $check == *"ID:"* ]]; then

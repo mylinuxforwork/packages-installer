@@ -25,7 +25,9 @@ class PackagesinstallerPreferences(Adw.PreferencesDialog):
     __gtype_name__ = 'PackagesinstallerPreferences'
 
     pref_terminal = Gtk.Template.Child()
+    pref_download_folder = Gtk.Template.Child()
 
-    def __init__(self, t):
+    def __init__(self, p):
         super().__init__()
-        self.pref_terminal.set_text(t)
+        self.pref_terminal.set_text(p.terminal)
+        self.pref_terminal.set_text(p.download_folder)

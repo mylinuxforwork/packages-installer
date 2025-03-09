@@ -27,17 +27,32 @@ class PackagesinstallerAddCommand(Adw.Dialog):
     __gtype_name__ = 'PackagesinstallerAddCommand'
 
     add_cmd_name = Gtk.Template.Child()
-    add_cmd_command = Gtk.Template.Child()
-    add_cmd_description = Gtk.Template.Child()
     add_cmd_btn = Gtk.Template.Child()
-
+    add_cmd_type = ""
     store = Gio.ListStore()
 
-    def __init__(self, store):
+    def __init__(self, store, cmd_type):
         super().__init__()
         self.add_cmd_name.connect("changed",self.on_activate_add_cmd_name)
         self.add_cmd_btn.connect('clicked', self.on_save)
         self.store = store
+        self.add_cmd_type = cmd_type
+        match self.add_cmd_type:
+            case "command":
+                self.set_title("New Command")
+                self.add_cmd_name.set_title("Command")
+            case "package":
+                self.set_title("New Package")
+                self.add_cmd_name.set_title("Package Name")
+            case "echo":
+                self.set_title("New Echo")
+                self.add_cmd_name.set_title("Output")
+            case "flatpak":
+                self.set_title("New Flatpak")
+                self.add_cmd_name.set_title("Flatpak ID")
+            case "download":
+                self.set_title("New Download")
+                self.add_cmd_name.set_title("Download Url")
 
     def on_activate_add_cmd_name(self,widget,*args):
         if len(self.add_cmd_name.get_text()) != 0:
@@ -48,9 +63,8 @@ class PackagesinstallerAddCommand(Adw.Dialog):
     def on_save(self,*args):
         item = CommandItem("command")
         item.cmd_name = self.add_cmd_name.get_text()
-        item.cmd_command = self.add_cmd_command.get_text()
-        item.cmd_description = self.add_cmd_description.get_text()
+        item.cmd_description = ""
         item.cmd_isinstalled = True
-        item.cmd_type = "command"
-        self.store.insert(0,item)
+        item.cmd_type = self.add_cmd_type
+        self.store.append(item)
         self.close()

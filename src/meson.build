@@ -32,7 +32,6 @@ packagesinstaller_sources = [
   'window.py',
   'preferences.py',
   'addvariable.py',
-  'addpackage.py',
   'addcommand.py'
 ]
 

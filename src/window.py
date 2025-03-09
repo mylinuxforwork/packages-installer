@@ -30,7 +30,6 @@ class PackagesinstallerWindow(Adw.ApplicationWindow):
 
     config_title = Gtk.Template.Child()
     config_description = Gtk.Template.Child()
-    config_distribution = Gtk.Template.Child()
     config_successmessage = Gtk.Template.Child()
 
     packages_group = Gtk.Template.Child()

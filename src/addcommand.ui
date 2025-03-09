@@ -23,16 +23,6 @@
                     <property name="title" translatable="yes">Name</property>
                   </object>
                 </child>
-                <child>
-                  <object class="AdwEntryRow" id="add_cmd_command">
-                    <property name="title" translatable="yes">Command</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwEntryRow" id="add_cmd_description">
-                    <property name="title" translatable="yes">Description</property>
-                  </object>
-                </child>
               </object>
             </child>
             <child>

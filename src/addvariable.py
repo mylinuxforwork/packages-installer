@@ -50,5 +50,5 @@ class PackagesinstallerAddVariable(Adw.Dialog):
         item.var_name = self.add_var_name.get_text()
         item.var_value = self.add_var_value.get_text()
         item.var_description = self.add_var_description.get_text()
-        self.store.insert(0,item)
+        self.store.append(item)
         self.close()

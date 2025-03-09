@@ -183,7 +183,17 @@ class PackagesinstallerApplication(Adw.Application):
     # -----------------------------------------------------
 
     def on_open_file(self, *args):
+
+        FILTER_PKGINST_FILES = Gtk.FileFilter()
+        FILTER_PKGINST_FILES.set_name(name='PackagesInstaller')
+        FILTER_PKGINST_FILES.add_pattern(pattern='*.pkginst')
+        FILTER_PKGINST_FILES.add_mime_type(mime_type='text/json')
+
+        gio_list_store = Gio.ListStore.new(Gtk.FileFilter)
+        gio_list_store.append(item=FILTER_PKGINST_FILES)
+
         dialog = Gtk.FileDialog()
+        dialog.set_filters(filters=gio_list_store)
         dialog.open(self.props.active_window, None, self.on_file_opened)
 
     def on_file_opened(self, dialog, result):

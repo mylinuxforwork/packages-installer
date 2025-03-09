@@ -1,0 +1,1 @@
+flatpak --user -y install ${name} > /dev/null 2>&1

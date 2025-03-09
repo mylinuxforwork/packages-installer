@@ -246,8 +246,8 @@
                     <!-- Replacements Start -->
                     <child>
                       <object class="AdwPreferencesGroup">
-                        <property name="title">Replacements</property>
-                        <property name="description">Define replacements and use them in your commands list with {name}.</property>
+                        <property name="title">Variables</property>
+                        <property name="description">Define variables and use them in your commands list with ${name}.</property>
                         <child type="header-suffix">
                           <object class="GtkButton">
                             <property name="halign">3</property>
@@ -299,26 +299,52 @@
     </section>
   </menu>
   <menu id="btn_add_command_menu">
-    <item>
-      <attribute name="label">Package</attribute>
-      <attribute name="action">app.add_package</attribute>
-    </item>
-    <item>
-      <attribute name="label">Flatpak</attribute>
-      <attribute name="action">app.add_flatpak</attribute>
-    </item>
-    <item>
-      <attribute name="label">Echo</attribute>
-      <attribute name="action">app.add_echo</attribute>
-    </item>
-    <item>
-      <attribute name="label">Download</attribute>
-      <attribute name="action">app.add_download</attribute>
-    </item>
-    <item>
-      <attribute name="label">Command</attribute>
-      <attribute name="action">app.add_command</attribute>
-    </item>
+    <section>
+      <item>
+        <attribute name="label">Package</attribute>
+        <attribute name="action">app.add_package</attribute>
+      </item>
+      <item>
+        <attribute name="label">Flatpak</attribute>
+        <attribute name="action">app.add_flatpak</attribute>
+      </item>
+      <item>
+        <attribute name="label">Echo</attribute>
+        <attribute name="action">app.add_echo</attribute>
+      </item>
+      <item>
+        <attribute name="label">Download</attribute>
+        <attribute name="action">app.add_download</attribute>
+      </item>
+      <item>
+        <attribute name="label">Command</attribute>
+        <attribute name="action">app.add_command</attribute>
+      </item>
+    </section>
+    <section>
+      <submenu>
+        <attribute name="label" translatable="yes">Arch Linux</attribute>
+        <item>
+          <attribute name="label">Package yay</attribute>
+          <attribute name="action">app.add_package_yay</attribute>
+        </item>
+        <item>
+          <attribute name="label">Package paru</attribute>
+          <attribute name="action">app.add_package_paru</attribute>
+        </item>
+      </submenu>
+      <submenu>
+        <attribute name="label" translatable="yes">Fedora</attribute>
+        <item>
+          <attribute name="label">Package yay</attribute>
+          <attribute name="action">app.add_package_yay</attribute>
+        </item>
+        <item>
+          <attribute name="label">Package paru</attribute>
+          <attribute name="action">app.add_package_paru</attribute>
+        </item>
+      </submenu>
+    </section>
   </menu>
 </interface>
 

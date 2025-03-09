@@ -1,0 +1,2 @@
+# Command echo
+echo "{name}"

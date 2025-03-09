@@ -28,7 +28,6 @@ class PackagesinstallerAddVariable(Adw.Dialog):
 
     add_var_name = Gtk.Template.Child()
     add_var_value = Gtk.Template.Child()
-    add_var_description = Gtk.Template.Child()
     add_var_btn = Gtk.Template.Child()
 
     store = Gio.ListStore()
@@ -49,6 +48,6 @@ class PackagesinstallerAddVariable(Adw.Dialog):
         item = VariableItem()
         item.var_name = self.add_var_name.get_text()
         item.var_value = self.add_var_value.get_text()
-        item.var_description = self.add_var_description.get_text()
+        item.var_description = ""
         self.store.append(item)
         self.close()

@@ -3,7 +3,7 @@
   <requires lib="gtk" version="4.0"/>
   <requires lib="Adw" version="1.0"/>
   <template class="PackagesinstallerAddVariable" parent="AdwDialog">
-    <property name="title" translatable="yes">Add Replacement</property>
+    <property name="title" translatable="yes">Add Variable</property>
     <child>
       <object class="AdwToolbarView">
         <child type="top">
@@ -26,11 +26,6 @@
                 <child>
                   <object class="AdwEntryRow" id="add_var_value">
                     <property name="title" translatable="yes">Value</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwEntryRow" id="add_var_description">
-                    <property name="title" translatable="yes">Description</property>
                   </object>
                 </child>
               </object>

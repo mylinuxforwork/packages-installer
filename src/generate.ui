@@ -43,6 +43,11 @@
                     <property name="title" translatable="yes">OpenSuse (with zypper package manager)</property>
                   </object>
                 </child>
+                <child>
+                  <object class="AdwSwitchRow" id="generate_flatpak">
+                    <property name="title" translatable="yes">Flatpak only script</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>

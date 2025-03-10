@@ -23,7 +23,7 @@ _sep
 echo "{title}"
 echo "{description}"
 _space
-echo "Generated with Packages Installer Version {version}"
+echo "{greeting}"
 _sep
 _space
 echo "IMPORTANT: Please make sure that your system is updated before starting the installation."

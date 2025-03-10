@@ -31,6 +31,7 @@ class PackagesinstallerGenerate(Adw.PreferencesDialog):
     generate_dnf = Gtk.Template.Child()
     generate_pacman = Gtk.Template.Child()
     generate_zypper = Gtk.Template.Child()
+    generate_flatpak = Gtk.Template.Child()
 
     save_ok = GObject.property(type = bool, default = False)
 
@@ -38,25 +39,34 @@ class PackagesinstallerGenerate(Adw.PreferencesDialog):
 
     lib = Library()
 
-    def __init__(self,win,commandstore,variablestore):
+    def __init__(self,win,commandstore,variablestore,preferences):
         super().__init__()
         self.win = win
 
         self.commandstore = commandstore
         self.variablestore = variablestore
+        self.preferences = preferences
 
         self.generate_scriptname.set_text(self.win.config_scriptname.get_text())
         self.generate_scriptname.connect("changed",self.on_activate_scriptname)
+
         self.generate_apt.connect("notify::active",self.on_activate_scriptname)
         self.generate_dnf.connect("notify::active",self.on_activate_scriptname)
         self.generate_pacman.connect("notify::active",self.on_activate_scriptname)
         self.generate_zypper.connect("notify::active",self.on_activate_scriptname)
+        self.generate_flatpak.connect("notify::active",self.on_activate_scriptname)
+
         self.generate_now_btn.bind_property("sensitive", self, "save_ok", GObject.BindingFlags.BIDIRECTIONAL)
 
         self.generate_now_btn.connect('clicked', self.on_generate)
 
     def on_activate_scriptname(self,widget,*args):
-        if len(self.generate_scriptname.get_text()) != 0 and (self.generate_apt.get_active() == True or self.generate_dnf.get_active() == True or self.generate_pacman.get_active() == True or self.generate_zypper.get_active() == True):
+        if self.generate_flatpak.get_active() == True:
+            self.generate_apt.set_active(False)
+            self.generate_dnf.set_active(False)
+            self.generate_pacman.set_active(False)
+            self.generate_zypper.set_active(False)
+        if len(self.generate_scriptname.get_text()) != 0 and (self.generate_apt.get_active() == True or self.generate_dnf.get_active() == True or self.generate_pacman.get_active() == True or self.generate_zypper.get_active() == True or self.generate_flatpak.get_active() == True):
             self.save_ok = True
         else:
             self.save_ok = False
@@ -80,7 +90,10 @@ class PackagesinstallerGenerate(Adw.PreferencesDialog):
             sel_manager.append("pacman")
         if self.generate_zypper.get_active():
             sel_manager.append("zypper")
+        if self.generate_flatpak.get_active():
+            sel_manager.append("flatpak")
 
-        self.lib.generate_installer(self.win,folder_path,self.generate_scriptname.get_text(),sel_manager,self.commandstore,self.variablestore)
+        self.lib.generate_installer(self.win,folder_path,self.generate_scriptname.get_text(),sel_manager,self.commandstore,self.variablestore,self.preferences)
 
         self.close()
+

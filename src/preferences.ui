@@ -12,8 +12,8 @@
             <property name="title" translatable="yes">Settings</property>
             <property name="description" translatable="yes">Define default settings.</property>
             <child>
-              <object class="AdwEntryRow" id="pref_download_folder">
-                <property name="title" translatable="yes">Download Folder</property>
+              <object class="AdwEntryRow" id="pref_greeting">
+                <property name="title" translatable="yes">Greeting</property>
               </object>
             </child>
             <child>

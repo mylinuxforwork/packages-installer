@@ -68,6 +68,7 @@ class PackagesinstallerApplication(Adw.Application):
     # Preferences
     preferences = Preferences()
 
+
     # Init Application
     def __init__(self):
         super().__init__(application_id='com.ml4w.packagesinstaller',
@@ -77,7 +78,7 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('preferences', self.on_preferences_action)
         self.create_action('open_file', self.on_open_file)
         self.create_action('new_file', self.on_new_file)
-        self.create_action('saveas_file', self.on_saveas_file)
+        self.create_action('saveas_file', self.on_check_save)
         self.create_action('open_remote', self.load_remote_dialog)
         self.create_action('add_command', self.on_add_command)
         self.create_action('add_package', self.on_add_package)
@@ -111,6 +112,7 @@ class PackagesinstallerApplication(Adw.Application):
         self.preferences_dialog = PackagesinstallerPreferences(self.preferences)
         self.preferences_dialog.connect("closed",self.on_save_preferences)
         self.preferences_dialog.pref_terminal.bind_property("text", self.preferences, "terminal", GObject.BindingFlags.BIDIRECTIONAL)
+        self.preferences_dialog.pref_greeting.bind_property("text", self.preferences, "greeting", GObject.BindingFlags.BIDIRECTIONAL)
 
         win.present()
 
@@ -153,6 +155,18 @@ class PackagesinstallerApplication(Adw.Application):
     # Save/Save As file
     # -----------------------------------------------------
 
+    def on_check_save(self, *args):
+        if len(self.props.active_window.config_title.get_text()) > 1 and len(self.props.active_window.config_description.get_text()) > 1 and len(self.props.active_window.config_successmessage.get_text()) > 1 and len(self.props.active_window.config_scriptname.get_text()) > 1:
+            self.on_saveas_file()
+        else:
+            dialog = Adw.AlertDialog(
+                heading="Error",
+                body="Please fill out all fields to save your configuration",
+                close_response="cancel",
+            )
+            dialog.add_response("okay", "Okay")
+            dialog.choose(self.props.active_window, None)
+
     def on_saveas_file(self, *args):
 
         FILTER_PKGINST_FILES = Gtk.FileFilter()
@@ -162,6 +176,9 @@ class PackagesinstallerApplication(Adw.Application):
 
         gio_list_store = Gio.ListStore.new(Gtk.FileFilter)
         gio_list_store.append(item=FILTER_PKGINST_FILES)
+
+        if len(self.loaded_filename) == 0:
+            self.loaded_filename = "packages.pkginst"
 
         dialog = Gtk.FileDialog(initial_name=self.loaded_filename)
         dialog.set_filters(filters=gio_list_store)
@@ -531,7 +548,7 @@ class PackagesinstallerApplication(Adw.Application):
         about = Adw.AboutDialog(application_name='Packages Installer',
                                 application_icon='com.ml4w.packagesinstaller',
                                 developer_name='Stephan Raabe',
-                                version='0.1',
+                                version=self.preferences.version,
                                 copyright='© 2025 Stephan Raabe')
         # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
         about.set_translator_credits(_('translator-credits'))
@@ -552,7 +569,7 @@ class PackagesinstallerApplication(Adw.Application):
     # -----------------------------------------------------
 
     def on_generate_script(self,*args):
-        self.generate_dialog = PackagesinstallerGenerate(self.props.active_window,self.commandstore,self.variablestore)
+        self.generate_dialog = PackagesinstallerGenerate(self.props.active_window,self.commandstore,self.variablestore,self.preferences)
         self.generate_dialog.set_size_request(400,100)
         self.generate_dialog.present(self.props.active_window)
 

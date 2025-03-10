@@ -92,7 +92,7 @@
                         <!-- ML4W Headline -->
                         <child>
                           <object class="GtkLabel" id="ml4w_version">
-                            <property name="label">Create and edit installation configurations for the Packages Installer script.</property>
+                            <property name="label">Create portable bash installation scripts for your favorite packages collection. </property>
                             <property name="margin-bottom">2</property>
                           </object>
                         </child>

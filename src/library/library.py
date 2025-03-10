@@ -68,10 +68,7 @@ class Library:
         return save_configuration
 
     # Generates the installation script content based on the template
-    def generate_installer(self,win,folder,scriptname,managers,commandstore,variablestore):
-
-        if scriptname.find("{manager}") == -1:
-            scriptname = "{manager}-" + scriptname
+    def generate_installer(self,win,folder,scriptname,managers,commandstore,variablestore,preferences):
 
         for mng in managers:
 
@@ -82,8 +79,15 @@ class Library:
             installer = installer.replace("{title}",win.config_title.get_text())
             installer = installer.replace("{description}",win.config_description.get_text())
             installer = installer.replace("{successmessage}",win.config_successmessage.get_text())
+            installer = installer.replace("{greeting}",preferences.greeting)
+            installer = installer.replace("{version}",preferences.version)
 
-            scriptname_tmp = scriptname.replace("{manager}",mng)
+            if mng != "flatpak":
+                if scriptname.find("{manager}") == -1:
+                    scriptname = "{manager}-" + scriptname
+                scriptname_tmp = scriptname.replace("{manager}",mng)
+            else:
+                scriptname_tmp = scriptname
 
             # Write Variables
             variables = ""
@@ -112,22 +116,23 @@ class Library:
 
                 match c.cmd_type:
                     case "package":
-                        template_arr = template.split("[COMMAND]")
-                        match mng:
-                            case "apt":
-                                template = template_arr[1]
-                            case "dnf":
-                                template = template_arr[2]
-                            case "pacman":
-                                template = template_arr[3]
-                            case "zypper":
-                                template = template_arr[4]
-                        template = template.replace("{isinstalled}",str(c.cmd_isinstalled))
-                        if mng in c.cmd_packagenames and len(c.cmd_packagenames[mng]) > 0:
-                            template = template.replace("{name}",c.cmd_packagenames[mng])
-                        else:
-                            template = template.replace("{name}",c.cmd_name)
-                        commands = commands + template + "\n"
+                        if mng != "flatpak":
+                            template_arr = template.split("[COMMAND]")
+                            match mng:
+                                case "apt":
+                                    template = template_arr[1]
+                                case "dnf":
+                                    template = template_arr[2]
+                                case "pacman":
+                                    template = template_arr[3]
+                                case "zypper":
+                                    template = template_arr[4]
+                            template = template.replace("{isinstalled}",str(c.cmd_isinstalled))
+                            if mng in c.cmd_packagenames and len(c.cmd_packagenames[mng]) > 0:
+                                template = template.replace("{name}",c.cmd_packagenames[mng])
+                            else:
+                                template = template.replace("{name}",c.cmd_name)
+                            commands = commands + template + "\n"
                     case "flatpak-flathub":
                         template = template.replace("{isinstalled}",str(c.cmd_isinstalled))
                         template = template.replace("{name}",c.cmd_name)

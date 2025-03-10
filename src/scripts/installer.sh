@@ -10,17 +10,20 @@ _space() {
 	echo
 }
 
+# Variables
+{variables}
+
 # Is installed
 {isinstalled}
-_space
+
+
 
 # Header
 _sep
 echo "{title}"
 echo "{description}"
-echo "{distribution}"
 _space
-echo "Generated with Packages Installer Version 1.0"
+echo "Generated with Packages Installer Version {version}"
 _sep
 _space
 echo "IMPORTANT: Please make sure that your system is updated before starting the installation."

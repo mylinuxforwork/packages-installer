@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+  <template class="PackagesinstallerGenerate" parent="AdwPreferencesDialog">
+    <property name="title" translatable="yes">Generate Installation Scripts</property>
+    <child>
+      <object class="AdwPreferencesPage">
+        <property name="title" translatable="yes">Generate Installation Scripts</property>
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title" translatable="yes">Settings</property>
+            <property name="description" translatable="yes">Define alternative package names per package manager. Leave it empty to use the default package name.</property>
+            <child>
+              <object class="GtkListBox" id="packagereplacements_group">
+                <property name="selection-mode">0</property>
+                <property name="margin-bottom">20</property>
+                <style>
+                  <class name="boxed-list"/>
+                </style>
+                <child>
+                  <object class="AdwEntryRow" id="generate_scriptname">
+                    <property name="title" translatable="yes">Script Name (use {manager} as placeholder)</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSwitchRow" id="generate_apt">
+                    <property name="title" translatable="yes">Ubuntu (and distros with apt package manager)</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSwitchRow" id="generate_dnf">
+                    <property name="title" translatable="yes">Fedora (and distros with dnf package manager)</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSwitchRow" id="generate_pacman">
+                    <property name="title" translatable="yes">Arch Linux (and distros with pacman package manager)</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSwitchRow" id="generate_zypper">
+                    <property name="title" translatable="yes">OpenSuse (with zypper package manager)</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="generate_now_btn">
+                <property name="label" translatable="yes">Generate Now</property>
+                <property name="sensitive">false</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

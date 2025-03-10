@@ -32,6 +32,8 @@ from .window import PackagesinstallerWindow
 from .preferences import PackagesinstallerPreferences
 from .addvariable import PackagesinstallerAddVariable
 from .addcommand import PackagesinstallerAddCommand
+from .packagenames import PackagesinstallerPackagenames
+from .generate import PackagesinstallerGenerate
 
 from urllib.request import urlopen
 from urllib.parse import urlparse
@@ -79,9 +81,13 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('open_remote', self.load_remote_dialog)
         self.create_action('add_command', self.on_add_command)
         self.create_action('add_package', self.on_add_package)
+        self.create_action('add_package_yay', self.on_add_package_yay)
+        self.create_action('add_package_paru', self.on_add_package_paru)
         self.create_action('add_echo', self.on_add_echo)
-        self.create_action('add_flatpak', self.on_add_flatpak)
-        self.create_action('add_download', self.on_add_download)
+        self.create_action('add_flatpak_flathub', self.on_add_flatpak_flathub)
+        self.create_action('add_flatpak_remote', self.on_add_flatpak_remote)
+        self.create_action('add_flatpak_local', self.on_add_flatpak_local)
+        self.create_action('add_copr_repository', self.on_add_copr_repository)
         self.create_action('add_variable', self.on_add_variable)
         self.create_action('generate_script', self.on_generate_script)
         self.create_action('cancel', self.on_cancel)
@@ -148,7 +154,17 @@ class PackagesinstallerApplication(Adw.Application):
     # -----------------------------------------------------
 
     def on_saveas_file(self, *args):
+
+        FILTER_PKGINST_FILES = Gtk.FileFilter()
+        FILTER_PKGINST_FILES.set_name(name='PackagesInstaller')
+        FILTER_PKGINST_FILES.add_pattern(pattern='*.pkginst')
+        FILTER_PKGINST_FILES.add_mime_type(mime_type='text/json')
+
+        gio_list_store = Gio.ListStore.new(Gtk.FileFilter)
+        gio_list_store.append(item=FILTER_PKGINST_FILES)
+
         dialog = Gtk.FileDialog(initial_name=self.loaded_filename)
+        dialog.set_filters(filters=gio_list_store)
         dialog.save(parent=self.props.active_window, cancellable=None, callback=self.on_file_saveased)
 
     def on_file_saveased(self, dialog, result):
@@ -157,17 +173,6 @@ class PackagesinstallerApplication(Adw.Application):
             self.save_configuration = lib.create_json(self.props.active_window,self.variablestore,self.commandstore)
             with open(file, 'w', encoding='utf-8') as f:
                 json.dump(self.save_configuration, f, ensure_ascii=False, indent=4)
-
-    # -----------------------------------------------------
-    # Save/Save As installation script
-    # -----------------------------------------------------
-
-    def on_script_saveased(self, dialog, result):
-        file = dialog.save_finish(result)
-        if file is not None:
-            with open(file, 'w', encoding='utf-8') as f:
-                f.write(self.installscript)
-            f.close()
 
     # -----------------------------------------------------
     # New configuration
@@ -211,6 +216,7 @@ class PackagesinstallerApplication(Adw.Application):
         self.props.active_window.config_title.set_text(self.loaded_configuration["title"])
         self.props.active_window.config_description.set_text(self.loaded_configuration["description"])
         self.props.active_window.config_successmessage.set_text(self.loaded_configuration["successmessage"])
+        self.props.active_window.config_scriptname.set_text(self.loaded_configuration["scriptname"])
 
         for i in self.loaded_configuration["variables"]:
             item = VariableItem()
@@ -229,6 +235,11 @@ class PackagesinstallerApplication(Adw.Application):
                 item.cmd_name = i["name"]
             else:
                 item.cmd_name = ""
+
+            if "packagenames" in i:
+                item.cmd_packagenames = i["packagenames"]
+            else:
+                item.cmd_packagenames = {}
 
             if "description" in i:
                 item.cmd_description = i["description"]
@@ -389,14 +400,32 @@ class PackagesinstallerApplication(Adw.Application):
                 package_row.set_title("Package Name")
             case "echo":
                 package_row.set_title("Echo")
-            case "flatpak":
-                package_row.set_title("Flatpak ID")
-            case "download":
-                package_row.set_title("Download Url")
+            case "flatpak-flathub":
+                package_row.set_title("Flatpak ID from Flathub")
+            case "flatpak-remote":
+                package_row.set_title("Flatpak Remote Url")
+            case "flatpak-local":
+                package_row.set_title("Absolute Path to Flatpak package")
+            case "package-yay":
+                package_row.set_title("Package Name")
+            case "package-paru":
+                package_row.set_title("Package Name")
+            case "copr-repository":
+                package_row.set_title("Copr Repository")
 
         package_row.set_text(item.cmd_name)
         package_row.bind_property("text", row, "title", GObject.BindingFlags.BIDIRECTIONAL)
         package_row.bind_property("text", item, "cmd_name", GObject.BindingFlags.BIDIRECTIONAL)
+
+        btn = Gtk.Button()
+        btn.set_icon_name("view-list-bullet-rtl-symbolic")
+        btn.connect("clicked",self.open_packagenames,item.cmd_packagenames)
+        btn.set_valign(3)
+        btn.set_visible(False)
+        if item.cmd_type == "package":
+            btn.set_visible(True)
+        package_row.add_prefix(btn)
+
         row.add_row(package_row)
 
         package_row = Adw.SwitchRow()
@@ -425,7 +454,10 @@ class PackagesinstallerApplication(Adw.Application):
 
         return row
 
+    # -----------------------------------------------------
     # Add Commands
+    # -----------------------------------------------------
+
     def on_add_command(self, *args):
         self.open_add_command_dialog("command")
 
@@ -435,11 +467,23 @@ class PackagesinstallerApplication(Adw.Application):
     def on_add_echo(self, *args):
         self.open_add_command_dialog("echo")
 
-    def on_add_flatpak(self, *args):
-        self.open_add_command_dialog("flatpak")
+    def on_add_flatpak_flathub(self, *args):
+        self.open_add_command_dialog("flatpak-flathub")
 
-    def on_add_download(self, *args):
-        self.open_add_command_dialog("download")
+    def on_add_flatpak_remote(self, *args):
+        self.open_add_command_dialog("flatpak-remote")
+
+    def on_add_flatpak_local(self, *args):
+        self.open_add_command_dialog("flatpak-local")
+
+    def on_add_copr_repository(self, *args):
+        self.open_add_command_dialog("copr-repository")
+
+    def on_add_package_yay(self, *args):
+        self.open_add_command_dialog("package-yay")
+
+    def on_add_package_paru(self, *args):
+        self.open_add_command_dialog("package-paru")
 
     # Open Add Dialog
     def open_add_command_dialog(self,add_cmd_type):
@@ -474,6 +518,11 @@ class PackagesinstallerApplication(Adw.Application):
         self.commandstore.insert(0,c)
         self.commandstore.remove(pos+1)
 
+    def open_packagenames(self, widget, item, *args):
+        self.packagenames_dialog = PackagesinstallerPackagenames(item)
+        self.packagenames_dialog.set_size_request(400,100)
+        self.packagenames_dialog.present(self.props.active_window)
+
     # -----------------------------------------------------
     # About Dialog
     # -----------------------------------------------------
@@ -503,9 +552,9 @@ class PackagesinstallerApplication(Adw.Application):
     # -----------------------------------------------------
 
     def on_generate_script(self,*args):
-        self.installscript = lib.generate_installer(self.props.active_window,self.variablestore,self.commandstore)
-        dialog = Gtk.FileDialog(initial_name=self.loaded_filename)
-        dialog.save(parent=self.props.active_window, cancellable=None, callback=self.on_script_saveased)
+        self.generate_dialog = PackagesinstallerGenerate(self.props.active_window,self.commandstore,self.variablestore)
+        self.generate_dialog.set_size_request(400,100)
+        self.generate_dialog.present(self.props.active_window)
 
     # -----------------------------------------------------
     # Helpers

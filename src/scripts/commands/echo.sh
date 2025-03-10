@@ -1,2 +1,1 @@
-# Command echo
 echo "{name}"

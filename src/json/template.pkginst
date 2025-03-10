@@ -1,8 +1,8 @@
 {
     "title": "ML4W Dotfiles Packages for Arch Linux",
     "description": "Required packages for the ML4W Dotfiles for Hyprland",
-    "distribution": "Arch Linux",
     "successmessage": "DONE!",
+    "scriptname": "setup.sh",
     "variables": [
         {
             "name": "command_pacman",
@@ -16,28 +16,35 @@
             "description": "Terminal kitty",
             "command": "{command_pacman}",
             "isinstalled": true,
-            "type": "package"
+            "type": "package",
+            "packagenames": {
+                "apt": "Test Apt",
+                "pacman": "Test Pacman"
+            }
         },
         {
             "name": "alacritty",
             "description": "Terminal alacritty",
             "command": "{command_pacman}",
             "isinstalled": true,
-            "type": "package"
+            "type": "package",
+            "packagenames": {}
         },
         {
             "name": "rsync",
             "description": "",
             "command": "{command_pacman}",
             "isinstalled": false,
-            "type": "package"
+            "type": "package",
+            "packagenames": {}
         },
         {
             "name": "Custom Message",
             "description": "",
             "command": "echo  \"Custom Message\"",
             "isinstalled": false,
-            "type": "command"
+            "type": "command",
+            "packagenames": {}
         }
     ]
 }

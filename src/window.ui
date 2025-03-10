@@ -197,6 +197,12 @@
                         </child>
 
                         <child>
+                          <object class="AdwEntryRow" id="config_scriptname">
+                            <property name="title">Script Name (use {manager} as placeholder)</property>
+                          </object>
+                        </child>
+
+                        <child>
                           <object class="AdwEntryRow" id="config_description">
                             <property name="title">Description</property>
                           </object>
@@ -304,17 +310,24 @@
         <attribute name="label">Package</attribute>
         <attribute name="action">app.add_package</attribute>
       </item>
-      <item>
-        <attribute name="label">Flatpak</attribute>
-        <attribute name="action">app.add_flatpak</attribute>
-      </item>
+      <submenu>
+        <attribute name="label" translatable="yes">Flatpak</attribute>
+        <item>
+          <attribute name="label">Flatpak from Flathub</attribute>
+          <attribute name="action">app.add_flatpak_flathub</attribute>
+        </item>
+        <item>
+          <attribute name="label">Flatpak from Remote</attribute>
+          <attribute name="action">app.add_flatpak_remote</attribute>
+        </item>
+        <item>
+          <attribute name="label">Flatpak from Local</attribute>
+          <attribute name="action">app.add_flatpak_local</attribute>
+        </item>
+      </submenu>
       <item>
         <attribute name="label">Echo</attribute>
         <attribute name="action">app.add_echo</attribute>
-      </item>
-      <item>
-        <attribute name="label">Download</attribute>
-        <attribute name="action">app.add_download</attribute>
       </item>
       <item>
         <attribute name="label">Command</attribute>
@@ -336,12 +349,8 @@
       <submenu>
         <attribute name="label" translatable="yes">Fedora</attribute>
         <item>
-          <attribute name="label">Package yay</attribute>
-          <attribute name="action">app.add_package_yay</attribute>
-        </item>
-        <item>
-          <attribute name="label">Package paru</attribute>
-          <attribute name="action">app.add_package_paru</attribute>
+          <attribute name="label">Add Copr Repository</attribute>
+          <attribute name="action">app.add_copr_repository</attribute>
         </item>
       </submenu>
     </section>

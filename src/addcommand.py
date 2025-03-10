@@ -47,12 +47,24 @@ class PackagesinstallerAddCommand(Adw.Dialog):
             case "echo":
                 self.set_title("New Echo")
                 self.add_cmd_name.set_title("Output")
-            case "flatpak":
-                self.set_title("New Flatpak")
-                self.add_cmd_name.set_title("Flatpak ID")
-            case "download":
-                self.set_title("New Download")
-                self.add_cmd_name.set_title("Download Url")
+            case "flatpak-flathub":
+                self.set_title("New Flatpak from Flathub")
+                self.add_cmd_name.set_title("Flatpak ID from Flathub")
+            case "flatpak-remote":
+                self.set_title("New Flatpak from Remote")
+                self.add_cmd_name.set_title("Flatpak Remote Url")
+            case "flatpak-local":
+                self.set_title("New Flatpak from Local")
+                self.add_cmd_name.set_title("Absolute Path to Flatpak package")
+            case "package-yay":
+                self.set_title("New Yay Package")
+                self.add_cmd_name.set_title("Package Name")
+            case "package-paru":
+                self.set_title("New Paru Package")
+                self.add_cmd_name.set_title("Package Name")
+            case "copr-repository":
+                self.set_title("New Copr Repository")
+                self.add_cmd_name.set_title("Repository Name")
 
     def on_activate_add_cmd_name(self,widget,*args):
         if len(self.add_cmd_name.get_text()) != 0:

@@ -32,7 +32,9 @@ packagesinstaller_sources = [
   'window.py',
   'preferences.py',
   'addvariable.py',
-  'addcommand.py'
+  'addcommand.py',
+  'packagenames.py',
+  'generate.py'
 ]
 
 install_data(packagesinstaller_sources, install_dir: moduledir)

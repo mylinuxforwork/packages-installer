@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+  <template class="PackagesinstallerPackagenames" parent="AdwPreferencesDialog">
+    <property name="title" translatable="yes">Package Names</property>
+    <child>
+      <object class="AdwPreferencesPage">
+        <property name="title" translatable="yes">Package Names</property>
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title" translatable="yes">Package Names</property>
+            <property name="description" translatable="yes">Define alternative package names per package manager. Leave it empty to use the default package name.</property>
+            <child>
+              <object class="GtkListBox" id="packagereplacements_group">
+                <property name="selection-mode">0</property>
+                <property name="margin-bottom">20</property>
+                <style>
+                  <class name="boxed-list"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="save_packagenames_btn">
+                <property name="label" translatable="yes">Save</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

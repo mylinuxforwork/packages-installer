@@ -5,6 +5,8 @@
     <file preprocess="xml-stripblanks">preferences.ui</file>
     <file preprocess="xml-stripblanks">addvariable.ui</file>
     <file preprocess="xml-stripblanks">addcommand.ui</file>
+    <file preprocess="xml-stripblanks">packagenames.ui</file>
+    <file preprocess="xml-stripblanks">generate.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
   </gresource>
 </gresources>

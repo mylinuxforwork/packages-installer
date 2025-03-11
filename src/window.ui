@@ -193,13 +193,13 @@
 
                         <child>
                           <object class="AdwEntryRow" id="config_title">
-                            <property name="title">Title</property>
+                            <property name="title">Title*</property>
                           </object>
                         </child>
 
                         <child>
                           <object class="AdwEntryRow" id="config_scriptname">
-                            <property name="title">Script Name (use {manager} as placeholder)</property>
+                            <property name="title">Script Name (use {manager} as placeholder)*</property>
                           </object>
                         </child>
 
@@ -348,10 +348,33 @@
         <attribute name="label">Echo</attribute>
         <attribute name="action">app.add_echo</attribute>
       </item>
-      <item>
-        <attribute name="label">Command</attribute>
-        <attribute name="action">app.add_command</attribute>
-      </item>
+      <submenu>
+        <attribute name="label" translatable="yes">Command for</attribute>
+        <section>
+          <item>
+            <attribute name="label">All Profiles</attribute>
+            <attribute name="action">app.add_command</attribute>
+          </item>
+        </section>
+        <section>
+          <item>
+            <attribute name="label">apt Profile</attribute>
+            <attribute name="action">app.add_command_apt</attribute>
+          </item>
+          <item>
+            <attribute name="label">dnf Profile</attribute>
+            <attribute name="action">app.add_command_dnf</attribute>
+          </item>
+          <item>
+            <attribute name="label">pacman Profile</attribute>
+            <attribute name="action">app.add_command_pacman</attribute>
+          </item>
+          <item>
+            <attribute name="label">zypper Profile</attribute>
+            <attribute name="action">app.add_command_zypper</attribute>
+          </item>
+        </section>
+      </submenu>
     </section>
     <section>
       <submenu>

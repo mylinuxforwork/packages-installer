@@ -85,6 +85,10 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('saveas_file', self.on_check_save)
         self.create_action('open_remote', self.load_remote_dialog)
         self.create_action('add_command', self.on_add_command)
+        self.create_action('add_command_apt', self.on_add_command_apt)
+        self.create_action('add_command_dnf', self.on_add_command_dnf)
+        self.create_action('add_command_pacman', self.on_add_command_pacman)
+        self.create_action('add_command_zypper', self.on_add_command_zypper)
         self.create_action('add_package', self.on_add_package)
         self.create_action('add_package_yay', self.on_add_package_yay)
         self.create_action('add_package_paru', self.on_add_package_paru)
@@ -160,7 +164,7 @@ class PackagesinstallerApplication(Adw.Application):
     # -----------------------------------------------------
 
     def on_check_save(self, *args):
-        if len(self.props.active_window.config_title.get_text()) > 1 and len(self.props.active_window.config_description.get_text()) > 1 and len(self.props.active_window.config_successmessage.get_text()) > 1 and len(self.props.active_window.config_scriptname.get_text()) > 1:
+        if len(self.props.active_window.config_title.get_text()) > 1 and len(self.props.active_window.config_scriptname.get_text()) > 1:
             self.on_saveas_file()
         else:
             dialog = Adw.AlertDialog(
@@ -427,6 +431,14 @@ class PackagesinstallerApplication(Adw.Application):
         match item.cmd_type:
             case "command":
                 package_row.set_title("Command")
+            case "command-apt":
+                package_row.set_title("Command for apt")
+            case "command-dnf":
+                package_row.set_title("Command for dnf")
+            case "command-pacman":
+                package_row.set_title("Command for pacman")
+            case "command-zypper":
+                package_row.set_title("Command for zypper")
             case "package":
                 package_row.set_title("Package Name")
             case "echo":
@@ -491,6 +503,18 @@ class PackagesinstallerApplication(Adw.Application):
 
     def on_add_command(self, *args):
         self.open_add_command_dialog("command")
+
+    def on_add_command_apt(self, *args):
+        self.open_add_command_dialog("command-apt")
+
+    def on_add_command_dnf(self, *args):
+        self.open_add_command_dialog("command-dnf")
+
+    def on_add_command_pacman(self, *args):
+        self.open_add_command_dialog("command-pacman")
+
+    def on_add_command_zypper(self, *args):
+        self.open_add_command_dialog("command-zypper")
 
     def on_add_package(self, *args):
         self.open_add_command_dialog("package")

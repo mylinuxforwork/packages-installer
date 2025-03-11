@@ -12,12 +12,7 @@ home_folder = os.path.expanduser('~')
 script_folder = "com.ml4w.packagesinstaller"
 config_folder = home_folder + "/.config/" + script_folder
 templates_folder = "templates"
-
 path_name = str(pathlib.Path(__file__).resolve().parent.parent)
-
-installer_commands = ["apt","dnf","flatpak","pacman","zypper"]
-
-
 
 # Library of helper functions
 class Library:
@@ -169,6 +164,26 @@ class Library:
                         template = self.load_template("commands/" + c.cmd_type + ".sh")
                         template = template.replace("{name}",c.cmd_name)
                         commands = commands + template + "\n"
+                    case "command-apt":
+                        if mng == "apt":
+                            template = self.load_template("commands/command.sh")
+                            template = template.replace("{name}",c.cmd_name)
+                            commands = commands + template + "\n"
+                    case "command-dnf":
+                        if mng == "dnf":
+                            template = self.load_template("commands/command.sh")
+                            template = template.replace("{name}",c.cmd_name)
+                            commands = commands + template + "\n"
+                    case "command-pacman":
+                        if mng == "pacman":
+                            template = self.load_template("commands/command.sh")
+                            template = template.replace("{name}",c.cmd_name)
+                            commands = commands + template + "\n"
+                    case "command-zypper":
+                        if mng == "zypper":
+                            template = self.load_template("commands/command.sh")
+                            template = template.replace("{name}",c.cmd_name)
+                            commands = commands + template + "\n"
                     case "package-yay":
                         if mng == "pacman":
                             template = self.load_template("commands/" + c.cmd_type + ".sh")

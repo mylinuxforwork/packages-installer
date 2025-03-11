@@ -41,6 +41,18 @@ class PackagesinstallerAddCommand(Adw.Dialog):
             case "command":
                 self.set_title("New Command")
                 self.add_cmd_name.set_title("Command")
+            case "command-apt":
+                self.set_title("New Command for apt")
+                self.add_cmd_name.set_title("Command for apt")
+            case "command-dnf":
+                self.set_title("New Command for dnf")
+                self.add_cmd_name.set_title("Command for dnf")
+            case "command-pacman":
+                self.set_title("New Command for pacman")
+                self.add_cmd_name.set_title("Command for pacman")
+            case "command-zypper":
+                self.set_title("New Command for zypper")
+                self.add_cmd_name.set_title("Command for zypper")
             case "package":
                 self.set_title("New Package")
                 self.add_cmd_name.set_title("Package Name")

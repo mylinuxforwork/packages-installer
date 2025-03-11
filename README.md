@@ -2,7 +2,7 @@
 
 Create portable bash installation scripts for your favorite packages collection.
 
-# Installation & Update
+## Installation & Update
 
 ```
 bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/packages-installer/master/setup.sh)
@@ -10,7 +10,7 @@ bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/packages-install
 
 Please check the Wiki for more information how to use the app: https://github.com/mylinuxforwork/packages-installer/wiki
 
-# Resources
+## Resources
 
 ## Test is package is installed
 

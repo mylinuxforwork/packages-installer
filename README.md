@@ -1,6 +1,6 @@
 # Packages Installer
 
-A description of this project.
+Create portable bash installation scripts for your favorite packages collection.
 
 # Installation & Update
 

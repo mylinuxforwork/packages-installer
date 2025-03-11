@@ -5,16 +5,16 @@ if [ $check_isinstalled == "True" ]; then
 	else
 		echo ":: Installing {name}..."
 		if [ $cmdoutput == 1 ]; then
-			sudo zypper install --non-interactive "{name}" > /dev/null 2>&1
+			sudo zypper -n install "{name}" > /dev/null 2>&1
 		else
-			sudo zypper install --non-interactive "{name}"
+			sudo zypper -n install "{name}"
 		fi
 	fi
 else
 	echo ":: Installing {name}..."
 	if [ $cmdoutput == 1 ]; then
-		sudo zypper install --non-interactive "{name}" > /dev/null 2>&1
+		sudo zypper -n install "{name}" > /dev/null 2>&1
 	else
-		sudo zypper install --non-interactive "{name}"
+		sudo zypper -n install "{name}"
 	fi
 fi

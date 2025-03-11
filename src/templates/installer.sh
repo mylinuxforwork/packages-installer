@@ -15,7 +15,7 @@ _space() {
 
 # Default
 assumeyes=1
-cmdoutput="/dev/null 2>&1"
+cmdoutput=1
 
 # Options
 while getopts y?h?o? option
@@ -26,7 +26,7 @@ do
 	        assumeyes=0
         	;;
         o|\?)
-	        cmdoutput="echo"
+	        cmdoutput=0
         	;;
         h|\?)
 		echo "{greeting}"

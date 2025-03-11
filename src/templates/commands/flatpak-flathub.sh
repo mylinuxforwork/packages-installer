@@ -4,9 +4,17 @@ if [ $check_isinstalled == "true" ]; then
 		echo ":: {name} is already installed"
 	else
 		echo ":: Installing {name}..."
-		eval 'flatpak -y install flathub {name} > $cmdoutput'
+		if [ $cmdoutput == 1 ]; then
+			flatpak -y install flathub "{name}" > /dev/null 2>&1
+		else
+			flatpak -y install flathub "{name}"
+		fi
 	fi
 else
 	echo ":: Installing {name}..."
-	eval 'flatpak -y install flathub {name} > $cmdoutput'
+	if [ $cmdoutput == 1 ]; then
+		flatpak -y install flathub "{name}" > /dev/null 2>&1
+	else
+		flatpak -y install flathub "{name}"
+	fi
 fi

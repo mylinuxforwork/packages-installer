@@ -4,5 +4,5 @@ fi
 wget -q -P "$HOME/.cache" "{url}"
 cd "$HOME/.cache"
 echo ":: Installing {name}"
-flatpak --user -y --reinstall install {name} > /dev/null 2>&1
+eval 'flatpak --user -y --reinstall install {name} > $cmdoutput'
 rm "$HOME/.cache/{name}"

@@ -6,6 +6,7 @@
     <property name="title" translatable="yes">Packages Installer</property>
     <property name="default-width">800</property>
     <property name="default-height">600</property>
+    <property name="resizable">true</property>
     <property name="content">
       <object class="AdwToolbarView">
         <child type="top">
@@ -299,8 +300,26 @@
         <attribute name="action">app.preferences</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">_Help</attribute>
+        <attribute name="action">app.help</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Report an issue</attribute>
+        <attribute name="action">app.report_issue</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Check for Updates</attribute>
+        <attribute name="action">app.check_updates</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">_About Packages Installer</attribute>
         <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Quit</attribute>
+        <attribute name="action">app.quit</attribute>
       </item>
     </section>
   </menu>

@@ -39,5 +39,5 @@ packagesinstaller_sources = [
 
 install_data(packagesinstaller_sources, install_dir: moduledir)
 install_subdir('library', install_dir: moduledir)
-install_subdir('scripts', install_dir: moduledir)
+install_subdir('templates', install_dir: moduledir)
 install_subdir('json', install_dir: moduledir)

@@ -21,6 +21,7 @@ import sys
 import gi
 import json
 import os
+import subprocess
 import pathlib
 
 gi.require_version('Gtk', '4.0')
@@ -76,6 +77,9 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('quit', lambda *_: self.quit(), ['<primary>q'])
         self.create_action('about', self.on_about_action)
         self.create_action('preferences', self.on_preferences_action)
+        self.create_action('report_issue', self.on_report_issue)
+        self.create_action('help', self.on_help)
+        self.create_action('check_updates', self.on_check_updates)
         self.create_action('open_file', self.on_open_file)
         self.create_action('new_file', self.on_new_file)
         self.create_action('saveas_file', self.on_check_save)
@@ -548,21 +552,18 @@ class PackagesinstallerApplication(Adw.Application):
         about = Adw.AboutDialog(application_name='Packages Installer',
                                 application_icon='com.ml4w.packagesinstaller',
                                 developer_name='Stephan Raabe',
+                                comments=(
+                                    'Create portable bash installation scripts for your favorite packages collection.'
+                                    'The following package managers and related Linux distributions are supported: apt, dnf, pacman (+ yay and paru), zypper'
+                                ),
                                 version=self.preferences.version,
+                                website="https://github.com/mylinuxforwork/packages-installer",
+                                issue_url="https://github.com/mylinuxforwork/packages-installer/issues",
+                                support_url="https://github.com/mylinuxforwork/packages-installer/issues",
                                 copyright='© 2025 Stephan Raabe')
         # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
         about.set_translator_credits(_('translator-credits'))
         about.present(self.props.active_window)
-
-    # -----------------------------------------------------
-    # Preferences
-    # -----------------------------------------------------
-
-    def on_preferences_action(self, widget, _):
-        self.preferences_dialog.present(self.props.active_window)
-
-    def on_save_preferences(self, dialog, *args):
-        self.preferences.write_json()
 
     # -----------------------------------------------------
     # Generate Script
@@ -572,6 +573,26 @@ class PackagesinstallerApplication(Adw.Application):
         self.generate_dialog = PackagesinstallerGenerate(self.props.active_window,self.commandstore,self.variablestore,self.preferences)
         self.generate_dialog.set_size_request(400,100)
         self.generate_dialog.present(self.props.active_window)
+
+    # -----------------------------------------------------
+    # Main Menu
+    # -----------------------------------------------------
+
+    def on_preferences_action(self, widget, _):
+        self.preferences_dialog.present(self.props.active_window)
+
+    def on_save_preferences(self, dialog, *args):
+        self.preferences.write_json()
+
+    def on_help(self, widget, _):
+        subprocess.Popen(["flatpak-spawn", "--host", "xdg-open", "https://github.com/mylinuxforwork/packages-installer/wiki"])
+
+    def on_check_updates(self, widget, _):
+        subprocess.Popen(["flatpak-spawn", "--host", "xdg-open", "https://github.com/mylinuxforwork/packages-installer/releases/latest"])
+
+    def on_report_issue(self, widget, _):
+        subprocess.Popen(["flatpak-spawn", "--host", "xdg-open", "https://github.com/mylinuxforwork/packages-installer/issues"])
+
 
     # -----------------------------------------------------
     # Helpers

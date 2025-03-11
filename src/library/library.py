@@ -11,10 +11,13 @@ from urllib.parse import urlparse
 home_folder = os.path.expanduser('~')
 script_folder = "com.ml4w.packagesinstaller"
 config_folder = home_folder + "/.config/" + script_folder
+templates_folder = "templates"
 
 path_name = str(pathlib.Path(__file__).resolve().parent.parent)
 
 installer_commands = ["apt","dnf","flatpak","pacman","zypper"]
+
+
 
 # Library of helper functions
 class Library:
@@ -67,13 +70,25 @@ class Library:
 
         return save_configuration
 
+    # Load template from the app or from the config folder
+    def load_template(self,template_file):
+
+        if os.path.exists(config_folder + "/" + templates_folder + "/" + template_file):
+            with open(config_folder + "/" + templates_folder + "/" + template_file, 'r') as file:
+                template = file.read()
+        else:
+            with open(path_name + "/" + templates_folder + "/" + template_file, 'r') as file:
+                template = file.read()
+
+        return template
+
     # Generates the installation script content based on the template
     def generate_installer(self,win,folder,scriptname,managers,commandstore,variablestore,preferences):
 
         for mng in managers:
 
-            with open(path_name + "/scripts/installer.sh", 'r') as file:
-                installer = file.read()
+            # Load main template
+            installer = self.load_template("installer.sh")
 
             # Adding installer information
             installer = installer.replace("{title}",win.config_title.get_text())
@@ -99,34 +114,28 @@ class Library:
 
             # Write Is Installed
             isinstalled = ""
-            with open(path_name + "/scripts/isinstalled/isinstalled_" + mng + ".sh", 'r') as file:
-                is_m = file.read()
-            with open(path_name + "/scripts/isinstalled/isinstalled_flatpak.sh", 'r') as file:
-                is_f = file.read()
+            is_m = self.load_template("isinstalled/isinstalled_" + mng + ".sh")
+            is_f = self.load_template("isinstalled/isinstalled_flatpak.sh")
             isinstalled = isinstalled + is_m + "\n\n" + is_f
-
             installer = installer.replace("{isinstalled}",isinstalled)
 
             # Write Commands
             commands = ""
             for i in range(commandstore.get_n_items()):
                 c = commandstore.get_item(i)
-                with open(path_name + "/scripts/commands/" + c.cmd_type + ".sh", 'r') as file:
-                    template = file.read()
 
                 match c.cmd_type:
                     case "package":
                         if mng != "flatpak":
-                            template_arr = template.split("[COMMAND]")
                             match mng:
                                 case "apt":
-                                    template = template_arr[1]
+                                    template = self.load_template("commands/" + c.cmd_type + "-apt.sh")
                                 case "dnf":
-                                    template = template_arr[2]
+                                    template = self.load_template("commands/" + c.cmd_type + "-dnf.sh")
                                 case "pacman":
-                                    template = template_arr[3]
+                                    template = self.load_template("commands/" + c.cmd_type + "-pacman.sh")
                                 case "zypper":
-                                    template = template_arr[4]
+                                    template = self.load_template("commands/" + c.cmd_type + "-zypper.sh")
                             template = template.replace("{isinstalled}",str(c.cmd_isinstalled))
                             if mng in c.cmd_packagenames and len(c.cmd_packagenames[mng]) > 0:
                                 template = template.replace("{name}",c.cmd_packagenames[mng])
@@ -134,37 +143,45 @@ class Library:
                                 template = template.replace("{name}",c.cmd_name)
                             commands = commands + template + "\n"
                     case "flatpak-flathub":
+                        template = self.load_template("commands/" + c.cmd_type + ".sh")
                         template = template.replace("{isinstalled}",str(c.cmd_isinstalled))
                         template = template.replace("{name}",c.cmd_name)
                         commands = commands + template + "\n"
                     case "flatpak-remote":
                         a = urlparse(c.cmd_name)
                         flatpak_name = os.path.basename(a.path)
+                        template = self.load_template("commands/" + c.cmd_type + ".sh")
                         template = template.replace("{url}",c.cmd_name)
                         template = template.replace("{name}",flatpak_name)
                         commands = commands + template + "\n"
                     case "flatpak-local":
                         flatpak_name = os.path.basename(c.cmd_name)
                         flatpak_dir = c.cmd_name.replace(flatpak_name,"")
+                        template = self.load_template("commands/" + c.cmd_type + ".sh")
                         template = template.replace("{name}",flatpak_name)
                         template = template.replace("{dir}",flatpak_dir)
                         commands = commands + template + "\n"
                     case "echo":
+                        template = self.load_template("commands/" + c.cmd_type + ".sh")
                         template = template.replace("{name}",c.cmd_name)
                         commands = commands + template + "\n"
                     case "command":
+                        template = self.load_template("commands/" + c.cmd_type + ".sh")
                         template = template.replace("{name}",c.cmd_name)
                         commands = commands + template + "\n"
                     case "package-yay":
                         if mng == "pacman":
+                            template = self.load_template("commands/" + c.cmd_type + ".sh")
                             template = template.replace("{name}",c.cmd_name)
                             commands = commands + template + "\n"
                     case "package-paru":
                         if mng == "pacman":
+                            template = self.load_template("commands/" + c.cmd_type + ".sh")
                             template = template.replace("{name}",c.cmd_name)
                             commands = commands + template + "\n"
                     case "copr-remote":
                         if mng == "dnf":
+                            template = self.load_template("commands/" + c.cmd_type + ".sh")
                             template = template.replace("{name}",c.cmd_name)
                             commands = commands + template + "\n"
 

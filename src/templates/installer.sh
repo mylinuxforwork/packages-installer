@@ -1,5 +1,5 @@
 #!/bin/bash
-# Created with Packages Installer 0.1
+# Created with Packages Installer {version}
 # https://github.com/mylinuxforwork/packages-installer
 
 clear
@@ -29,7 +29,7 @@ do
 	        cmdoutput="echo"
         	;;
         h|\?)
-		echo "Created with Packages Manager 0.1"
+		echo "{greeting}"
 		echo
 		echo "Usage:"
 		echo "-y Skip confirmation"
@@ -41,43 +41,17 @@ do
 done
 
 # Variables
-
+{variables}
 
 # Is installed
-_isInstalled_flatpak() {
-	package="$1"
-	check=$(flatpak info ${package})
-	if [[ $check == *"ID:"* ]]; then
-	  	echo 0
-	else
-		echo 1
-	fi
-}
-
-# Add flathub remote
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-
-
-_isInstalled_flatpak() {
-	package="$1"
-	check=$(flatpak info ${package})
-	if [[ $check == *"ID:"* ]]; then
-	  	echo 0
-	else
-		echo 1
-	fi
-}
-
-# Add flathub remote
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-
+{isinstalled}
 
 # Header
 _sep
-echo "Setup Packages Installer"
-echo "Remote Installation of Flatpak"
+echo "{title}"
+echo "{description}"
 _space
-echo "Created with Packages Manager 0.1"
+echo "{greeting}"
 _sep
 _space
 echo "IMPORTANT: Please make sure that your system is updated before starting the installation."
@@ -108,19 +82,10 @@ sudo -v
 _space
 
 # Packages
-if [ ! -d $HOME/.cache ]; then
-	mkdir -p $HOME/.cache
-fi
-wget -q -P "$HOME/.cache" "https://github.com/mylinuxforwork/packages-installer/releases/latest/download/com.ml4w.packagesinstaller.flatpak"
-cd "$HOME/.cache"
-echo ":: Installing com.ml4w.packagesinstaller.flatpak"
-eval "flatpak --user -y --reinstall install com.ml4w.packagesinstaller.flatpak > $cmdoutput"
-rm "$HOME/.cache/com.ml4w.packagesinstaller.flatpak"
-
-
+{commands}
 _space
 
 # Success Message
 _sep
-echo "DONE!"
+echo "{successmessage}"
 _sep

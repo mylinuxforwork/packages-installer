@@ -1,0 +1,17 @@
+{
+    "title": "Setup Packages Installer",
+    "description": "Remote Installation of Flatpak",
+    "successmessage": "DONE!",
+    "scriptname": "setup.sh",
+    "variables": [],
+    "packages": [
+        {
+            "name": "https://github.com/mylinuxforwork/packages-installer/releases/latest/download/com.ml4w.packagesinstaller.flatpak",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "flatpak-remote",
+            "packagenames": []
+        }
+    ]
+}

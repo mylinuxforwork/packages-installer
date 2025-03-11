@@ -4,9 +4,9 @@ A description of this project.
 
 # Installation & Update
 
-'''
+```
 bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/packages-installer/master/setup.sh)
-'''
+```
 
 # Resources
 

@@ -178,8 +178,13 @@ class PackagesinstallerApplication(Adw.Application):
         FILTER_PKGINST_FILES.add_pattern(pattern='*.pkginst')
         FILTER_PKGINST_FILES.add_mime_type(mime_type='text/json')
 
+        FILTER_ALL_FILES = Gtk.FileFilter()
+        FILTER_ALL_FILES.set_name(name='All')
+        FILTER_ALL_FILES.add_pattern(pattern='*')
+
         gio_list_store = Gio.ListStore.new(Gtk.FileFilter)
         gio_list_store.append(item=FILTER_PKGINST_FILES)
+        gio_list_store.append(item=FILTER_ALL_FILES)
 
         if len(self.loaded_filename) == 0:
             self.loaded_filename = "packages.pkginst"
@@ -215,8 +220,13 @@ class PackagesinstallerApplication(Adw.Application):
         FILTER_PKGINST_FILES.add_pattern(pattern='*.pkginst')
         FILTER_PKGINST_FILES.add_mime_type(mime_type='text/json')
 
+        FILTER_ALL_FILES = Gtk.FileFilter()
+        FILTER_ALL_FILES.set_name(name='All')
+        FILTER_ALL_FILES.add_pattern(pattern='*')
+
         gio_list_store = Gio.ListStore.new(Gtk.FileFilter)
         gio_list_store.append(item=FILTER_PKGINST_FILES)
+        gio_list_store.append(item=FILTER_ALL_FILES)
 
         dialog = Gtk.FileDialog()
         dialog.set_filters(filters=gio_list_store)

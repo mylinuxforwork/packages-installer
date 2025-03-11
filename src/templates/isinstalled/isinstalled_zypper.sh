@@ -1,9 +1,13 @@
 _isInstalled_zypper() {
     package="$1"
-    check="$(sudo zypper search --installed-only "${package}")"
-    if [ -n "${check}" ]; then
-        echo 0
-    else
-        echo 1
-    fi
+    package_info=$(zypper se -i "$package" 2>/dev/null | grep "^i" | awk '{print $3}')
+    ret=1
+    for pkg in $package_info
+    do
+	if [ "$package" == "$pkg" ]; then
+		ret=0
+		break
+	fi
+	done
+	echo $ret
 }

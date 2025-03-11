@@ -20,7 +20,7 @@ class Preferences(GObject.Object):
 
     def __init__(self):
         super().__init__()
-        self.version = "0.3"
+        self.version = "0.4"
 
         try:
             pref_json = json.load(open(self.config_folder + "/preferences.json"))

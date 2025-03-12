@@ -16,6 +16,8 @@ Please check the Wiki for more information how to use the app: https://github.co
 
 ## Demonstration
 
+The following installation scripts haven been created with the Packages Installer.
+
 ### Hyprland Base Installation
 
 The script will install the core packages for Hyprland on pacman (Arch), dnf (Fedora) and zypper (openSuse) distributions.

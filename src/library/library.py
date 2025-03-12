@@ -110,8 +110,10 @@ class Library:
             # Write Is Installed
             isinstalled = ""
             is_m = self.load_template("isinstalled/isinstalled_" + mng + ".sh")
-            is_f = self.load_template("isinstalled/isinstalled_flatpak.sh")
-            isinstalled = isinstalled + is_m + "\n\n" + is_f
+            isinstalled = isinstalled + is_m
+            if mng != "flatpak":
+                is_f = self.load_template("isinstalled/isinstalled_flatpak.sh")
+                isinstalled = isinstalled + is_f
             installer = installer.replace("{isinstalled}",isinstalled)
 
             # Write Commands
@@ -137,6 +139,11 @@ class Library:
                             else:
                                 template = template.replace("{name}",c.cmd_name)
                             commands = commands + template + "\n"
+                    case "flatpak-flathub":
+                        template = self.load_template("commands/" + c.cmd_type + ".sh")
+                        template = template.replace("{isinstalled}",str(c.cmd_isinstalled))
+                        template = template.replace("{name}",c.cmd_name)
+                        commands = commands + template + "\n"
                     case "flatpak-flathub":
                         template = self.load_template("commands/" + c.cmd_type + ".sh")
                         template = template.replace("{isinstalled}",str(c.cmd_isinstalled))

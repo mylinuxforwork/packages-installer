@@ -332,6 +332,10 @@
       <submenu>
         <attribute name="label" translatable="yes">Flatpak</attribute>
         <item>
+          <attribute name="label">Flatpak App</attribute>
+          <attribute name="action">app.add_flatpak_app</attribute>
+        </item>
+        <item>
           <attribute name="label">Flatpak from Flathub</attribute>
           <attribute name="action">app.add_flatpak_flathub</attribute>
         </item>

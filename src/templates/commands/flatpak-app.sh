@@ -5,16 +5,16 @@ if [ $check_isinstalled == "true" ]; then
 	else
 		echo ":: Installing {name}..."
 		if [ $cmdoutput == 1 ]; then
-			flatpak -y install flathub "{name}" > /dev/null 2>&1
+			flatpak -y install "{name}" > /dev/null 2>&1
 		else
-			flatpak -y install flathub "{name}"
+			flatpak -y install "{name}"
 		fi
 	fi
 else
 	echo ":: Installing {name}..."
 	if [ $cmdoutput == 1 ]; then
-		flatpak -y --reinstall install flathub "{name}" > /dev/null 2>&1
+		flatpak -y --reinstall install "{name}" > /dev/null 2>&1
 	else
-		flatpak -y --reinstall install flathub "{name}"
+		flatpak -y --reinstall install "{name}"
 	fi
 fi

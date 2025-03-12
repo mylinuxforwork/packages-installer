@@ -93,6 +93,7 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('add_package_yay', self.on_add_package_yay)
         self.create_action('add_package_paru', self.on_add_package_paru)
         self.create_action('add_echo', self.on_add_echo)
+        self.create_action('add_flatpak_app', self.on_add_flatpak_app)
         self.create_action('add_flatpak_flathub', self.on_add_flatpak_flathub)
         self.create_action('add_flatpak_remote', self.on_add_flatpak_remote)
         self.create_action('add_flatpak_local', self.on_add_flatpak_local)
@@ -521,6 +522,9 @@ class PackagesinstallerApplication(Adw.Application):
 
     def on_add_echo(self, *args):
         self.open_add_command_dialog("echo")
+
+    def on_add_flatpak_app(self, *args):
+        self.open_add_command_dialog("flatpak-app")
 
     def on_add_flatpak_flathub(self, *args):
         self.open_add_command_dialog("flatpak-flathub")

@@ -6,6 +6,11 @@ Create portable bash installation scripts for your favorite packages collection.
 
 ![image](https://github.com/user-attachments/assets/9781a097-e0a5-4c37-ad27-7e6502e4bbba)
 
+The installtion scripts can be generated in one export and then executed on the supported target platforms.
+
+![image](https://github.com/user-attachments/assets/08987021-1fec-4a52-bd69-bc019c9865cb)
+
+
 ## Installation & Update
 
 ```

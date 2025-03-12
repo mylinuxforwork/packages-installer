@@ -124,19 +124,6 @@ fi
 
 check_isinstalled="True"
 if [ $check_isinstalled == "True" ]; then
-	if [[ $(_isInstalled_dnf "hyprland-qtutils") == 0 ]]; then
-		echo ":: hyprland-qtutils is already installed"
-	else
-		echo ":: Installing hyprland-qtutils..."
-		sudo dnf install --assumeyes "hyprland-qtutils" > /dev/null 2>&1
-	fi
-else
-	echo ":: Installing hyprland-qtutils..."
-	sudo dnf install --assumeyes "hyprland-qtutils" > /dev/null 2>&1
-fi
-
-check_isinstalled="True"
-if [ $check_isinstalled == "True" ]; then
 	if [[ $(_isInstalled_dnf "hyprpaper") == 0 ]]; then
 		echo ":: hyprpaper is already installed"
 	else

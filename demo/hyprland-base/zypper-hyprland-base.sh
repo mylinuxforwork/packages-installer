@@ -130,27 +130,6 @@ fi
 
 check_isinstalled="True"
 if [ $check_isinstalled == "True" ]; then
-	if [[ $(_isInstalled_zypper "hyprland-qtutils") == 0 ]]; then
-		echo ":: hyprland-qtutils is already installed"
-	else
-		echo ":: Installing hyprland-qtutils..."
-		if [ $cmdoutput == 1 ]; then
-			sudo zypper -n install "hyprland-qtutils" > /dev/null 2>&1
-		else
-			sudo zypper -n install "hyprland-qtutils"
-		fi
-	fi
-else
-	echo ":: Installing hyprland-qtutils..."
-	if [ $cmdoutput == 1 ]; then
-		sudo zypper -n install "hyprland-qtutils" > /dev/null 2>&1
-	else
-		sudo zypper -n install "hyprland-qtutils"
-	fi
-fi
-
-check_isinstalled="True"
-if [ $check_isinstalled == "True" ]; then
 	if [[ $(_isInstalled_zypper "hyprpaper") == 0 ]]; then
 		echo ":: hyprpaper is already installed"
 	else

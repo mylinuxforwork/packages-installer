@@ -1,5 +1,5 @@
 #!/bin/bash
-# Created with Packages Installer 0.4
+# Created with Packages Installer 0.5
 # https://github.com/mylinuxforwork/packages-installer
 
 clear
@@ -29,7 +29,7 @@ do
 	        cmdoutput=0
         	;;
         h|\?)
-		echo "Created with Packages Manager 0.4"
+		echo "Created with Packages Installer"
 		echo
 		echo "Usage:"
 		echo "-y Skip confirmation"
@@ -63,7 +63,7 @@ _sep
 echo "Setup Packages Installer"
 echo "Remote Installation of Flatpak"
 _space
-echo "Created with Packages Manager 0.4"
+echo "Created with Packages Installer"
 _sep
 _space
 echo "IMPORTANT: Please make sure that your system is updated before starting the installation."

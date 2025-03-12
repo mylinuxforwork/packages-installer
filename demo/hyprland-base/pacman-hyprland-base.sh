@@ -126,27 +126,6 @@ fi
 
 check_isinstalled="True"
 if [ $check_isinstalled == "True" ]; then
-	if [[ $(_isInstalled_pacman "hyprland-qtutils") == 0 ]]; then
-		echo ":: hyprland-qtutils is already installed"
-	else
-		echo ":: Installing hyprland-qtutils..."
-		if [ $cmdoutput == 1 ]; then
-			sudo pacman -S --needed --noconfirm "hyprland-qtutils" > /dev/null 2>&1
-		else
-			sudo pacman -S --needed --noconfirm "hyprland-qtutils"
-		fi
-	fi
-else
-	echo ":: Installing hyprland-qtutils..."
-	if [ $cmdoutput == 1 ]; then
-		sudo pacman -S --needed --noconfirm "hyprland-qtutils" > /dev/null 2>&1
-	else
-		sudo pacman -S --needed --noconfirm "hyprland-qtutils"
-	fi
-fi
-
-check_isinstalled="True"
-if [ $check_isinstalled == "True" ]; then
 	if [[ $(_isInstalled_pacman "hyprpaper") == 0 ]]; then
 		echo ":: hyprpaper is already installed"
 	else

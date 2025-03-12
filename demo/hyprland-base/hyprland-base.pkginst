@@ -22,14 +22,6 @@
             "packagenames": []
         },
         {
-            "name": "hyprland-qtutils",
-            "description": "",
-            "command": "",
-            "isinstalled": true,
-            "type": "package",
-            "packagenames": []
-        },
-        {
             "name": "hyprpaper",
             "description": "",
             "command": "",

@@ -235,27 +235,6 @@ fi
 
 check_isinstalled="True"
 if [ $check_isinstalled == "True" ]; then
-	if [[ $(_isInstalled_zypper "libnotify") == 0 ]]; then
-		echo ":: libnotify is already installed"
-	else
-		echo ":: Installing libnotify..."
-		if [ $cmdoutput == 1 ]; then
-			sudo zypper -n install "libnotify" > /dev/null 2>&1
-		else
-			sudo zypper -n install "libnotify"
-		fi
-	fi
-else
-	echo ":: Installing libnotify..."
-	if [ $cmdoutput == 1 ]; then
-		sudo zypper -n install "libnotify" > /dev/null 2>&1
-	else
-		sudo zypper -n install "libnotify"
-	fi
-fi
-
-check_isinstalled="True"
-if [ $check_isinstalled == "True" ]; then
 	if [[ $(_isInstalled_zypper "dunst") == 0 ]]; then
 		echo ":: dunst is already installed"
 	else

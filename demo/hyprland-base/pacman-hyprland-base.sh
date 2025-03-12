@@ -231,27 +231,6 @@ fi
 
 check_isinstalled="True"
 if [ $check_isinstalled == "True" ]; then
-	if [[ $(_isInstalled_pacman "libnotify") == 0 ]]; then
-		echo ":: libnotify is already installed"
-	else
-		echo ":: Installing libnotify..."
-		if [ $cmdoutput == 1 ]; then
-			sudo pacman -S --needed --noconfirm "libnotify" > /dev/null 2>&1
-		else
-			sudo pacman -S --needed --noconfirm "libnotify"
-		fi
-	fi
-else
-	echo ":: Installing libnotify..."
-	if [ $cmdoutput == 1 ]; then
-		sudo pacman -S --needed --noconfirm "libnotify" > /dev/null 2>&1
-	else
-		sudo pacman -S --needed --noconfirm "libnotify"
-	fi
-fi
-
-check_isinstalled="True"
-if [ $check_isinstalled == "True" ]; then
 	if [[ $(_isInstalled_pacman "dunst") == 0 ]]; then
 		echo ":: dunst is already installed"
 	else

@@ -62,14 +62,6 @@
             "packagenames": []
         },
         {
-            "name": "libnotify",
-            "description": "",
-            "command": "",
-            "isinstalled": true,
-            "type": "package",
-            "packagenames": []
-        },
-        {
             "name": "dunst",
             "description": "",
             "command": "",

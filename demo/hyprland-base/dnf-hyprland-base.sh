@@ -189,19 +189,6 @@ fi
 
 check_isinstalled="True"
 if [ $check_isinstalled == "True" ]; then
-	if [[ $(_isInstalled_dnf "libnotify") == 0 ]]; then
-		echo ":: libnotify is already installed"
-	else
-		echo ":: Installing libnotify..."
-		sudo dnf install --assumeyes "libnotify" > /dev/null 2>&1
-	fi
-else
-	echo ":: Installing libnotify..."
-	sudo dnf install --assumeyes "libnotify" > /dev/null 2>&1
-fi
-
-check_isinstalled="True"
-if [ $check_isinstalled == "True" ]; then
 	if [[ $(_isInstalled_dnf "dunst") == 0 ]]; then
 		echo ":: dunst is already installed"
 	else

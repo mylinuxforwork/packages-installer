@@ -94,6 +94,27 @@ sudo -v
 _space
 
 # Packages
+check_isinstalled="True"
+if [ $check_isinstalled == "true" ]; then
+	if [[ $(_isInstalled_apt "org.gnome.Platform/x86_64/47") == 0 ]]; then
+		echo ":: org.gnome.Platform/x86_64/47 is already installed"
+	else
+		echo ":: Installing org.gnome.Platform/x86_64/47..."
+		if [ $cmdoutput == 1 ]; then
+			flatpak -y install "org.gnome.Platform/x86_64/47" > /dev/null 2>&1
+		else
+			flatpak -y install "org.gnome.Platform/x86_64/47"
+		fi
+	fi
+else
+	echo ":: Installing org.gnome.Platform/x86_64/47..."
+	if [ $cmdoutput == 1 ]; then
+		flatpak -y --reinstall install "org.gnome.Platform/x86_64/47" > /dev/null 2>&1
+	else
+		flatpak -y --reinstall install "org.gnome.Platform/x86_64/47"
+	fi
+fi
+
 if [ ! -d $HOME/.cache ]; then
 	mkdir -p $HOME/.cache
 fi

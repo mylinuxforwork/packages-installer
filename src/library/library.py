@@ -139,7 +139,7 @@ class Library:
                             else:
                                 template = template.replace("{name}",c.cmd_name)
                             commands = commands + template + "\n"
-                    case "flatpak-flathub":
+                    case "flatpak-app":
                         template = self.load_template("commands/" + c.cmd_type + ".sh")
                         template = template.replace("{isinstalled}",str(c.cmd_isinstalled))
                         template = template.replace("{name}",c.cmd_name)

@@ -2,6 +2,8 @@
 
 Create portable bash installation scripts for your favorite packages collection.
 
+![image](https://github.com/user-attachments/assets/9781a097-e0a5-4c37-ad27-7e6502e4bbba)
+
 ## Installation & Update
 
 ```

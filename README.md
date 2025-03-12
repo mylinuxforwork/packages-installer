@@ -31,19 +31,19 @@ https://github.com/mylinuxforwork/packages-installer/tree/main/demo/hyprland-bas
 
 You can execute it directly on your system with:
 
-pacman:
+pacman (e.g., Arch Linux):
 
 ```
 bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/packages-installer/master/demo/hyprland-base/pacman-hyprland-base.sh)
 ```
 
-dnf:
+dnf (e.g., Fedora):
 
 ```
 bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/packages-installer/master/demo/hyprland-base/pacman-hyprland-base.sh)
 ```
 
-zypper:
+zypper (openSuse):
 
 ```
 bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/packages-installer/master/demo/hyprland-base/pacman-hyprland-base.sh)

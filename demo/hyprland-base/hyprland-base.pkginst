@@ -1,0 +1,113 @@
+{
+    "title": "Hyprland Base Installation",
+    "description": "Installation of the recommended base packages for Hyprland.",
+    "successmessage": "DONE. Installation completed.",
+    "scriptname": "hyprland-base.sh",
+    "variables": [],
+    "packages": [
+        {
+            "name": "solopasha/hyprland",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "copr-repository",
+            "packagenames": []
+        },
+        {
+            "name": "hyprland",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        },
+        {
+            "name": "hyprland-qtutils",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        },
+        {
+            "name": "hyprpaper",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        },
+        {
+            "name": "hyprlock",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        },
+        {
+            "name": "hypridle",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        },
+        {
+            "name": "xdg-desktop-portal",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        },
+        {
+            "name": "libnotify",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        },
+        {
+            "name": "dunst",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        },
+        {
+            "name": "wofi",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        },
+        {
+            "name": "kitty",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        },
+        {
+            "name": "qt5-wayland",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        },
+        {
+            "name": "qt6-wayland",
+            "description": "",
+            "command": "",
+            "isinstalled": true,
+            "type": "package",
+            "packagenames": []
+        }
+    ]
+}

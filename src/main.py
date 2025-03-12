@@ -444,6 +444,8 @@ class PackagesinstallerApplication(Adw.Application):
                 package_row.set_title("Package Name")
             case "echo":
                 package_row.set_title("Echo")
+            case "flatpak-app":
+                package_row.set_title("Flatpak ID")
             case "flatpak-flathub":
                 package_row.set_title("Flatpak ID from Flathub")
             case "flatpak-remote":

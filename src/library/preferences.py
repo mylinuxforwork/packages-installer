@@ -16,11 +16,11 @@ class Preferences(GObject.Object):
     terminal = GObject.Property(type=str)
     greeting = GObject.Property(type=str)
 
-    default_greeting = "Created with Packages Manager {version}"
+    default_greeting = "Created with Packages Installer"
 
     def __init__(self):
         super().__init__()
-        self.version = "0.4"
+        self.version = "0.5"
 
         try:
             pref_json = json.load(open(self.config_folder + "/preferences.json"))

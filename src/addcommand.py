@@ -89,7 +89,8 @@ class PackagesinstallerAddCommand(Adw.Dialog):
 
     def on_save(self,*args):
         item = CommandItem("command")
-        item.cmd_name = self.add_cmd_name.get_text()
+        cmd_name = self.add_cmd_name.get_text().replace("&","[amp]")
+        item.cmd_name = cmd_name.replace("[amp]","&amp;")
         item.cmd_description = ""
         item.cmd_isinstalled = True
         item.cmd_type = self.add_cmd_type

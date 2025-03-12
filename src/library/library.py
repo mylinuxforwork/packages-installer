@@ -201,7 +201,7 @@ class Library:
                             template = self.load_template("commands/" + c.cmd_type + ".sh")
                             template = template.replace("{name}",c.cmd_name)
                             commands = commands + template + "\n"
-                    case "copr-remote":
+                    case "copr-repository":
                         if mng == "dnf":
                             template = self.load_template("commands/" + c.cmd_type + ".sh")
                             template = template.replace("{name}",c.cmd_name)

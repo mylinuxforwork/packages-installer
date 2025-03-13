@@ -129,6 +129,7 @@ class PackagesinstallerApplication(Adw.Application):
         self.preferences_dialog.connect("closed",self.on_save_preferences)
         self.preferences_dialog.pref_terminal.bind_property("text", self.preferences, "terminal", GObject.BindingFlags.BIDIRECTIONAL)
         self.preferences_dialog.pref_greeting.bind_property("text", self.preferences, "greeting", GObject.BindingFlags.BIDIRECTIONAL)
+
         win.present()
 
     # -----------------------------------------------------

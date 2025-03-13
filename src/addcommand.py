@@ -59,6 +59,9 @@ class PackagesinstallerAddCommand(Adw.Dialog):
             case "echo":
                 self.set_title("New Echo")
                 self.add_cmd_name.set_title("Output")
+            case "comment":
+                self.set_title("New Comment")
+                self.add_cmd_name.set_title("Comment")
             case "flatpak-app":
                 self.set_title("New Flatpak App")
                 self.add_cmd_name.set_title("Flatpak ID")

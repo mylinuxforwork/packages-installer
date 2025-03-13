@@ -27,7 +27,7 @@ import pathlib
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import GObject,Gtk, Gio, Adw
+from gi.repository import GObject,Gtk,Gdk, Gio, Adw
 
 from .window import PackagesinstallerWindow
 from .preferences import PackagesinstallerPreferences
@@ -84,6 +84,7 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('new_file', self.on_new_file)
         self.create_action('saveas_file', self.on_check_save)
         self.create_action('open_remote', self.load_remote_dialog)
+
         self.create_action('add_command', self.on_add_command)
         self.create_action('add_command_apt', self.on_add_command_apt)
         self.create_action('add_command_dnf', self.on_add_command_dnf)
@@ -93,12 +94,14 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('add_package_yay', self.on_add_package_yay)
         self.create_action('add_package_paru', self.on_add_package_paru)
         self.create_action('add_echo', self.on_add_echo)
+        self.create_action('add_comment', self.on_add_comment)
         self.create_action('add_flatpak_app', self.on_add_flatpak_app)
         self.create_action('add_flatpak_flathub', self.on_add_flatpak_flathub)
         self.create_action('add_flatpak_remote', self.on_add_flatpak_remote)
         self.create_action('add_flatpak_local', self.on_add_flatpak_local)
         self.create_action('add_copr_repository', self.on_add_copr_repository)
         self.create_action('add_variable', self.on_add_variable)
+
         self.create_action('generate_script', self.on_generate_script)
         self.create_action('cancel', self.on_cancel)
 
@@ -107,6 +110,10 @@ class PackagesinstallerApplication(Adw.Application):
         win = self.props.active_window
         if not win:
             win = PackagesinstallerWindow(application=self)
+
+        path_name = str(pathlib.Path(__file__).resolve().parent)
+        self.css_provider = Gtk.CssProvider()
+        self.css_provider.load_from_path(path_name + "/style/style.css")
 
         # Show Load Configuration Page
         self.page_stack = win.page_stack
@@ -122,7 +129,6 @@ class PackagesinstallerApplication(Adw.Application):
         self.preferences_dialog.connect("closed",self.on_save_preferences)
         self.preferences_dialog.pref_terminal.bind_property("text", self.preferences, "terminal", GObject.BindingFlags.BIDIRECTIONAL)
         self.preferences_dialog.pref_greeting.bind_property("text", self.preferences, "greeting", GObject.BindingFlags.BIDIRECTIONAL)
-
         win.present()
 
     # -----------------------------------------------------
@@ -402,6 +408,8 @@ class PackagesinstallerApplication(Adw.Application):
 
     def create_command_row(self,item):
         row = Adw.ExpanderRow()
+        row.get_style_context().add_provider(self.css_provider,Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
         row.set_title(item.cmd_name)
         row.set_subtitle(item.cmd_type)
         btn = Gtk.Button()
@@ -444,6 +452,8 @@ class PackagesinstallerApplication(Adw.Application):
                 package_row.set_title("Package Name")
             case "echo":
                 package_row.set_title("Echo")
+            case "comment":
+                package_row.set_title("Comment")
             case "flatpak-app":
                 package_row.set_title("Flatpak ID")
             case "flatpak-flathub":
@@ -524,6 +534,9 @@ class PackagesinstallerApplication(Adw.Application):
 
     def on_add_echo(self, *args):
         self.open_add_command_dialog("echo")
+
+    def on_add_comment(self, *args):
+        self.open_add_command_dialog("comment")
 
     def on_add_flatpak_app(self, *args):
         self.open_add_command_dialog("flatpak-app")
@@ -667,5 +680,6 @@ class PackagesinstallerApplication(Adw.Application):
 
 def main(version):
     lib.setupConfigFolder()
+    path_name = str(pathlib.Path(__file__).resolve().parent)
     app = PackagesinstallerApplication()
     return app.run(sys.argv)

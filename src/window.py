@@ -18,7 +18,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from gi.repository import Adw
-from gi.repository import Gtk
+from gi.repository import Gtk,Gdk
+import pathlib
 
 @Gtk.Template(resource_path='/com/ml4w/packagesinstaller/window.ui')
 class PackagesinstallerWindow(Adw.ApplicationWindow):
@@ -38,3 +39,4 @@ class PackagesinstallerWindow(Adw.ApplicationWindow):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+

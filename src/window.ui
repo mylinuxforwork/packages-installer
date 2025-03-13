@@ -352,6 +352,10 @@
         <attribute name="label">Echo</attribute>
         <attribute name="action">app.add_echo</attribute>
       </item>
+      <item>
+        <attribute name="label">Comment</attribute>
+        <attribute name="action">app.add_comment</attribute>
+      </item>
       <submenu>
         <attribute name="label" translatable="yes">Command for</attribute>
         <section>

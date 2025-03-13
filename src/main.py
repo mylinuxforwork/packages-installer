@@ -69,6 +69,10 @@ class PackagesinstallerApplication(Adw.Application):
     # Preferences
     preferences = Preferences()
 
+    path_name = str(pathlib.Path(__file__).resolve().parent)
+    css_provider = Gtk.CssProvider()
+    css_provider.load_from_path(path_name + "/style/style.css")
+    Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
     # Init Application
     def __init__(self):
@@ -110,10 +114,6 @@ class PackagesinstallerApplication(Adw.Application):
         win = self.props.active_window
         if not win:
             win = PackagesinstallerWindow(application=self)
-
-        path_name = str(pathlib.Path(__file__).resolve().parent)
-        self.css_provider = Gtk.CssProvider()
-        self.css_provider.load_from_path(path_name + "/style/style.css")
 
         # Show Load Configuration Page
         self.page_stack = win.page_stack
@@ -408,8 +408,6 @@ class PackagesinstallerApplication(Adw.Application):
 
     def create_command_row(self,item):
         row = Adw.ExpanderRow()
-        row.get_style_context().add_provider(self.css_provider,Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-
         row.set_title(item.cmd_name)
         row.set_subtitle(item.cmd_type)
         btn = Gtk.Button()

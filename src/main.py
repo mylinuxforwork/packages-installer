@@ -69,11 +69,6 @@ class PackagesinstallerApplication(Adw.Application):
     # Preferences
     preferences = Preferences()
 
-    path_name = str(pathlib.Path(__file__).resolve().parent)
-    css_provider = Gtk.CssProvider()
-    css_provider.load_from_path(path_name + "/style/style.css")
-    Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-
     # Init Application
     def __init__(self):
         super().__init__(application_id='com.ml4w.packagesinstaller',
@@ -88,6 +83,11 @@ class PackagesinstallerApplication(Adw.Application):
         self.create_action('new_file', self.on_new_file)
         self.create_action('saveas_file', self.on_check_save)
         self.create_action('open_remote', self.load_remote_dialog)
+
+        self.create_action('arch_packages', self.on_arch_packages)
+        self.create_action('ubuntu_packages', self.on_ubuntu_packages)
+        self.create_action('fedora_packages', self.on_fedora_packages)
+        self.create_action('opensuse_packages', self.on_opensuse_packages)
 
         self.create_action('add_command', self.on_add_command)
         self.create_action('add_command_apt', self.on_add_command_apt)
@@ -408,6 +408,11 @@ class PackagesinstallerApplication(Adw.Application):
 
     def create_command_row(self,item):
         row = Adw.ExpanderRow()
+
+        if item.cmd_type == "comment":
+                row.set_margin_start(0)
+        else:
+                row.set_margin_start(20)
         row.set_title(item.cmd_name)
         row.set_subtitle(item.cmd_type)
         btn = Gtk.Button()
@@ -644,6 +649,17 @@ class PackagesinstallerApplication(Adw.Application):
     def on_report_issue(self, widget, _):
         subprocess.Popen(["flatpak-spawn", "--host", "xdg-open", "https://github.com/mylinuxforwork/packages-installer/issues"])
 
+    def on_arch_packages(self, widget, _):
+        subprocess.Popen(["flatpak-spawn", "--host", "xdg-open", "https://archlinux.org/"])
+
+    def on_ubuntu_packages(self, widget, _):
+        subprocess.Popen(["flatpak-spawn", "--host", "xdg-open", "https://packages.ubuntu.com/"])
+
+    def on_fedora_packages(self, widget, _):
+        subprocess.Popen(["flatpak-spawn", "--host", "xdg-open", "https://packages.fedoraproject.org/"])
+
+    def on_opensuse_packages(self, widget, _):
+        subprocess.Popen(["flatpak-spawn", "--host", "xdg-open", "https://software.opensuse.org/find"])
 
     # -----------------------------------------------------
     # Helpers

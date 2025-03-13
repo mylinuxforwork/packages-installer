@@ -7,6 +7,9 @@
     <property name="default-width">800</property>
     <property name="default-height">600</property>
     <property name="resizable">true</property>
+    <style>
+      <class name="devel"/>
+    </style>
     <property name="content">
       <object class="AdwToolbarView">
         <child type="top">
@@ -244,7 +247,7 @@
                         <property name="selection-mode">0</property>
                         <property name="margin-bottom">20</property>
                         <style>
-                          <class name="boxed-list"/>
+                          <class name="boxed-list-separate"/>
                         </style>
                       </object>
                     </child>
@@ -275,7 +278,7 @@
                         <property name="selection-mode">0</property>
                         <property name="margin-bottom">20</property>
                         <style>
-                          <class name="boxed-list"/>
+                          <class name="boxed-list-separate"/>
                         </style>
                       </object>
                     </child>
@@ -299,6 +302,26 @@
         <attribute name="label" translatable="yes">_Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
       </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Arch Linux Packages</attribute>
+        <attribute name="action">app.arch_packages</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Ubuntu Packages</attribute>
+        <attribute name="action">app.ubuntu_packages</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Fedora Packages</attribute>
+        <attribute name="action">app.fedora_packages</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_openSuse Packages</attribute>
+        <attribute name="action">app.opensuse_packages</attribute>
+      </item>
+    </section>
+    <section>
       <item>
         <attribute name="label" translatable="yes">_Help</attribute>
         <attribute name="action">app.help</attribute>

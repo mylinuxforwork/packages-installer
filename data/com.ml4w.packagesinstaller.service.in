@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.ml4w.packagesinstaller
+Exec=@bindir@/packagesinstaller --gapplication-service

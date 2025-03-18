@@ -1,0 +1,6 @@
+conf_name="ML4W Dotfiles Packages Installer"
+conf_description="The script will install the required packages for the ML4W Dotfiles for Hyprland"
+conf_homepage="https://github.com/mylinuxforwork/dotfiles"
+conf_author="Stephan Raabe"
+conf_copyright="2025"
+conf_source="https://github.com/mylinuxforwork/dotfiles/packages.pkginst"

@@ -3,7 +3,7 @@
   <requires lib="gtk" version="4.0"/>
   <requires lib="Adw" version="1.0"/>
   <template class="PackagesinstallerWindow" parent="AdwApplicationWindow">
-    <property name="title" translatable="yes">Packagesinstaller</property>
+    <property name="title" translatable="yes">Packages Installer</property>
     <property name="default-width">800</property>
     <property name="default-height">600</property>
     <property name="content">
@@ -21,17 +21,101 @@
           </object>
         </child>
         <property name="content">
-          <object class="GtkLabel" id="label">
-            <property name="label" translatable="yes">Hello, World!</property>
-            <style>
-              <class name="title-1"/>
-            </style>
+          <object class="AdwViewStack" id="page_stack">
+            <property name="vexpand">true</property>
+            <child>
+              <object class="AdwViewStackPage">
+                <property name="name">page_load_configuration</property>
+                <property name="title" translatable="yes">Load Configuration</property>
+                <property name="child">
+                  <object class="AdwStatusPage">
+                    <property name="valign">1</property>
+                    <property name="margin-start">15</property>
+                    <property name="margin-end">15</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">1</property>
+                        <property name="margin-end">60</property>
+                        <property name="margin-start">60</property>
+                        <property name="spacing">20</property>
+
+                        <!-- ML4W Logo -->
+                        <child>
+                          <object class="GtkImage">
+                            <property name="name">logo</property>
+                            <property name="icon-name">com.ml4w.packagesinstaller</property>
+                            <property name="pixel-size">196</property>
+                            <property name="margin-bottom">30</property>
+                            <style>
+                              <class name="icon-dropshadow"/>
+                            </style>
+                          </object>
+                        </child>
+                        <!-- ML4W Logo -->
+
+                        <!-- ML4W Headline -->
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Packages Installer</property>
+                            <style>
+                              <class name="title-1"/>
+                            </style>
+                          </object>
+                        </child>
+                        <!-- ML4W Headline -->
+
+                        <!-- ML4W Headline -->
+                        <child>
+                          <object class="GtkLabel" id="ml4w_version">
+                            <property name="label">Create and run portable bash installation scripts for your favorite packages collection. </property>
+                            <property name="margin-bottom">2</property>
+                          </object>
+                        </child>
+                        <!-- ML4W Headline -->
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
           </object>
         </property>
       </object>
     </property>
   </template>
   <menu id="primary_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Pacman Packages</attribute>
+        <attribute name="action">app.pacman_packages</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Apt Packages</attribute>
+        <attribute name="action">app.apt_packages</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Dnf Packages</attribute>
+        <attribute name="action">app.dnf_packages</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Zypper Packages</attribute>
+        <attribute name="action">app.zypper_packages</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Help</attribute>
+        <attribute name="action">app.help</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Report an Issue</attribute>
+        <attribute name="action">app.issue</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Check for Update</attribute>
+        <attribute name="action">app.update</attribute>
+      </item>
+    </section>
     <section>
       <item>
         <attribute name="label" translatable="yes">_Preferences</attribute>
@@ -42,8 +126,14 @@
         <attribute name="action">win.show-help-overlay</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_About Packagesinstaller</attribute>
+        <attribute name="label" translatable="yes">_About Packages Installer</attribute>
         <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Quit</attribute>
+        <attribute name="action">app.quit</attribute>
       </item>
     </section>
   </menu>

@@ -35,3 +35,4 @@ packagesinstaller_sources = [
 
 install_data(packagesinstaller_sources, install_dir: moduledir)
 install_subdir('script', install_dir: moduledir)
+install_subdir('lib', install_dir: moduledir)

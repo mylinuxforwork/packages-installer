@@ -15,9 +15,9 @@ _installPackage() {
     package="$1"
 	testcommand="$2"
 	if [[ $(_isInstalled "${package}") == 0 ]]; then
-		echo "${package} ${pkginst_lang["package_already_installed"]}"
+		_echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
-		echo "${pkginst_lang["install_package"]} ${package}"
+		_echo_success "${pkginst_lang["install_package"]} ${package}"
         sudo apt-get -y install "${package}" > /dev/null 2>&1
         if [ ! -z $testcommand ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then

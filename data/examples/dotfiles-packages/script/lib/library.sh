@@ -5,9 +5,15 @@ _echo() {
 }
 
 # _echo_error {output}
-_echo() {
+_echo_error() {
     output="$1"
     echo "${echo_prefix_error}${output}"
+}
+
+_echo_success() {
+    output="$1"
+    printf '\u2714\ufe0e' 
+    echo " ${output}"
 }
 
 # _sourceFilesInFolder {folder}
@@ -83,4 +89,11 @@ _checkCommandExists() {
     else
         echo 0
     fi
+}
+
+# _installPip {package}
+_installPip() {
+    package="$1"
+    _echo_success "${pkginst_lang["install_package"]} ${package}"
+    pip install "${package}" > /dev/null 2>&1
 }

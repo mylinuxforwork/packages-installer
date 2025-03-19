@@ -1,0 +1,2 @@
+_addCoprRepository "tofik/nwg-shell"
+_installPackage "nwg-look"

@@ -1,0 +1,2 @@
+_installPip "pywalfox"
+sudo pywalfox install

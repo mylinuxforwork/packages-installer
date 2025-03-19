@@ -1,0 +1,2 @@
+_addCoprRepository "solopasha/hyprland"
+_installPackage "hyprland"

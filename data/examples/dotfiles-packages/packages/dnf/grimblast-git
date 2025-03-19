@@ -1,0 +1,1 @@
+sudo cp packages/dnf/grimblast /usr/bin

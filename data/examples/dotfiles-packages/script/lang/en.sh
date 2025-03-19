@@ -1,0 +1,16 @@
+declare -A pkginst_lang=(
+    [package_already_installed]='is already installed.'
+    [install_package]='Installing Package'
+    [add_copr_repository]='Add Copr Repository'
+    [installing_dependencies]='Checking Dependencies'
+    [installing_packages]='Installing Packages'
+    [confirm_installation]='Do you want to start the installation now?'
+    [installation_started]='Installation started'
+    [installation_cancelled]='Installation cancelled'
+    [installation_completed]='Installation completed'
+    [reboot_question]='Do you want to reboot now?'
+    [errors_detected]='Errors detected'
+    [commands_validated]='The following commands could not be validated successfully:'
+    [commands_recommendation]='Please install the related packages manually.'
+    [commands_check_failed]='check failed.'
+)

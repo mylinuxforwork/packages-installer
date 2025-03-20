@@ -50,35 +50,97 @@ _writeModuleHeadline() {
     echo "$headline_tmp"
 }
 
+# _showAllPackages
+_showAllPackages() {
+    _echo "${pkginst_lang["show_all_packages_message"]}"
+    echo
+    _echo "Dependencies ($(jq -r '.packages | length' $pkginst_script_dependencies/packages.json)):"
+    for pkg in $(jq -r '.packages[] | .package' $pkginst_script_dependencies/packages.json); do
+        _echo_success ${pkg}
+    done
+    echo    
+    _echo "Packages ($(jq -r '.packages | length' $pkginst_data_folder/packages.json)):"
+    for pkg in $(jq -r '.packages[] | .package' $pkginst_data_folder/packages.json); do
+        _echo_success ${pkg}
+    done    
+    echo
+    _echo "Flatpaks ($(jq -r '.flatpaks | length' $pkginst_data_folder/packages.json)):"
+    for pkg in $(jq -r '.flatpaks[] | .package' $pkginst_data_folder/packages.json); do
+        _echo_success ${pkg}
+    done    
+}
+
+# _showAllPackagesDialog
+_showAllPackagesDialog() {
+    _showAllPackages
+    echo
+    _selectManager
+}
+
 # _selectManager
 _selectManager() {
     if [ $(jq -r '.managers | length' $pkginst_data_folder/config.json) == 0 ]; then
-        _echo "No package manager(s) defined in config.json"
+        _echo_error ${pkginst_lang["error_no_package_manager_defined"]}
         exit
     fi
     if [ $(jq -r '.managers | length' $pkginst_data_folder/config.json) == 1 ]; then
-        _echo "Using $(jq -r .managers[0] $pkginst_data_folder/config.json)"
+        _echo "${pkginst_lang["message_using"]} $(jq -r .managers[0] $pkginst_data_folder/config.json)"
         pkginst_manager=$(jq -r .managers[0] $pkginst_data_folder/config.json)
     else
-
-        _echo "Please select one of the following supported Package Manager that is available on your system:"
         echo
+        _echo "${pkginst_lang["select_package_manager"]}"
         counter=1
         for mng in $(jq -r .managers[] $pkginst_data_folder/config.json); do
             echo "   $counter: $mng"
             ((counter++))
         done
         echo
+        if [ $(_getConfiguration "show_all_packages") == "true" ]; then
+            _echo "${pkginst_lang["package_manager_not_supported"]}"
+            echo "   $counter: ${pkginst_lang["show_all_packages"]}"
+            show_all_packages_counter=$counter
+            echo
+        fi
         while true; do
-            read -p "PLEASE SELECT: " yn
-            if (($yn > 0 && $yn < $counter)); then
-                pkginst_manager=$(jq -r .managers[$yn-1] $pkginst_data_folder/config.json)
-                break
+            read -p "${pkginst_lang["please_select"]}: " yn
+            if [ $(_getConfiguration "show_all_packages") == "true" ]; then
+                if [ $yn == $show_all_packages_counter ]; then
+                    _showAllPackagesDialog
+                    break
+                elif (($yn > 0 && $yn < $counter-1)); then
+                    pkginst_manager=$(jq -r .managers[$yn-1] $pkginst_data_folder/config.json)
+                    break
+                else
+                    _echo_error "${pkginst_lang["please_select_an_option"]}"              
+                fi
             else
-                _echo "Please select a package manager."                
+                if (($yn > 0 && $yn < $counter)); then
+                    pkginst_manager=$(jq -r .managers[$yn-1] $pkginst_data_folder/config.json)
+                    break
+                else
+                    _echo_error "${pkginst_lang["please_select_an_option"]}"                
+                fi
             fi
         done
     fi
+}
+
+# _installPackages {json_file}
+_installPackages() {
+    json_file="$1"
+    json_array="packages"
+    json_node="package"
+    counter=0
+    for pkg in $(jq -r '.'$json_array'[] | .'$json_node $json_file); do
+        pkg=${pkg}
+        pkg_test=$(jq -r '.'$json_array'['$counter'] | .test' $json_file)
+        if [ -f "$pkginst_data_folder/$pkginst_manager/$pkg" ]; then
+            source "$pkginst_data_folder/$pkginst_manager/$pkg"
+        else
+            _installPackage "${pkg}" "${pkg_test}"
+        fi
+        ((counter++))
+    done    
 }
 
 # _checkCommandExists {command}
@@ -95,5 +157,11 @@ _checkCommandExists() {
 _installPip() {
     package="$1"
     _echo_success "${pkginst_lang["install_package"]} ${package}"
-    pip install "${package}" > /dev/null 2>&1
+    pip install "${package}" &>>$(_getLogFile)
+}
+
+# Define log file extension
+_getLogFile() {
+    log_filename="-log.txt"
+    echo "$pkginst_log_folder/$(date '+%Y%m%d%H%M%S')$log_filename"
 }

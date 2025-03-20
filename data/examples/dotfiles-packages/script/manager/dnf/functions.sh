@@ -13,7 +13,7 @@ _isInstalled() {
 _addCoprRepository() {
     repository="$1"
     _echo_success "${pkginst_lang["add_copr_repository"]} ${repository}"
-    sudo dnf copr enable --assumeyes "${repository}" > /dev/null 2>&1
+    sudo dnf copr enable --assumeyes "${repository}" &>>$(_getLogFile)
 }
 
 # _installPackage {package}
@@ -24,7 +24,7 @@ _installPackage() {
 		_echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
 		_echo_success "${pkginst_lang["install_package"]} ${package}"
-        sudo dnf install --assumeyes "${package}" > /dev/null 2>&1
+        sudo dnf install --assumeyes "${package}" &>>$(_getLogFile)
         if [ ! -z $testcommand ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
                 _echo_error "$testcommand ${pkginst_lang["command_check_failed"]}"

@@ -17,7 +17,7 @@ _installPackage() {
 		_echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
 		_echo_success "${pkginst_lang["install_package"]} ${package}"
-        sudo pacman -S --needed --noconfirm "${package}" > /dev/null 2>&1
+        sudo pacman -S --needed --noconfirm "${package}" &>>$(_getLogFile)
         if [ ! -z $testcommand ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
                 _echo_error "$testcommand ${pkginst_lang["command_check_failed"]}"
@@ -35,7 +35,7 @@ _installPackageAur() {
 		_echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
 		_echo_success "${pkginst_lang["install_package"]} ${package}"
-        ${aur_helper} -S --noconfirm "${package}" > /dev/null 2>&1
+        ${aur_helper} -S --noconfirm "${package}" &>>$(_getLogFile)
         if [ ! -z $testcommand ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
                 _echo_error "$testcommand ${pkginst_lang["command_check_failed"]}"
@@ -43,4 +43,28 @@ _installPackageAur() {
             fi
         fi           
 	fi
+}
+
+# _installYay
+_installYay() {
+    _installPackages "base-devel"
+    SCRIPT=$(realpath "$0")
+    temp_path=$(dirname "$SCRIPT")
+    git clone https://aur.archlinux.org/yay.git $pkginst_download_folder/yay
+    cd $pkginst_download_folder/yay
+    makepkg -si
+    cd $temp_path
+    _echo_success "${pkginst_lang["yay_installed"]}"
+}
+
+# _installParu
+_installParu() {
+    _installPackages "base-devel"
+    SCRIPT=$(realpath "$0")
+    temp_path=$(dirname "$SCRIPT")
+    git clone https://aur.archlinux.org/paru.git $pkginst_download_folder/paru
+    cd $pkginst_download_folder/paru
+    makepkg -si
+    cd $temp_path
+    _echo_success "${pkginst_lang["paru_installed"]}"
 }

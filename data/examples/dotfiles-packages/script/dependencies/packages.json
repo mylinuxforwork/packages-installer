@@ -25,8 +25,8 @@
             "test":"jq"
         },
         {
-            "package":"alacritty",
-            "test":"alacritty123"
+            "package":"python-pip",
+            "test":""
         }
     ]
 }

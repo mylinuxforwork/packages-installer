@@ -16,7 +16,7 @@ _installFlatpak() {
         _echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
         _echo_success "${pkginst_lang["install_package"]} ${package}"
-        flatpak -y install "${package}" > /dev/null 2>&1
+        flatpak -y install "${package}" &>>$(_getLogFile)
     fi
 }
 
@@ -30,7 +30,7 @@ _installFlatpakRemote() {
     wget -q -P "$HOME/.cache" "${url}"
     cd "$HOME/.cache"
     _echo_success "${pkginst_lang["install_package"]} ${package}"
-    flatpak --user -y --reinstall install ${package} > /dev/null 2>&1
+    flatpak --user -y --reinstall install ${package} &>>$(_getLogFile)
     rm "$HOME/.cache/{name}"    
 }
 
@@ -39,7 +39,7 @@ _installFlatpakLocal() {
     dir="$1"
     package="$2"
     _echo_success "${pkginst_lang["install_package"]} ${package}"
-    flatpak --user -y --reinstall install ${package}.flatpak > /dev/null 2>&1
+    flatpak --user -y --reinstall install ${package}.flatpak &>>$(_getLogFile)
 }
 
 # _installFlatpakFlathub {package}
@@ -49,6 +49,6 @@ _installFlatpakFlathub() {
         _echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
         _echo_success "${pkginst_lang["install_package"]} ${package}"
-        flatpak -y install flathub "${package}" > /dev/null 2>&1
+        flatpak -y install flathub "${package}" &>>$(_getLogFile)
     fi
 }

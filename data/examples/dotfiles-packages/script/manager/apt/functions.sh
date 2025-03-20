@@ -18,7 +18,7 @@ _installPackage() {
 		_echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
 		_echo_success "${pkginst_lang["install_package"]} ${package}"
-        sudo apt-get -y install "${package}" > /dev/null 2>&1
+        sudo apt-get -y install "${package}" &>>$(_getLogFile)
         if [ ! -z $testcommand ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
                 _echo_error "$testcommand ${pkginst_lang["command_check_failed"]}"

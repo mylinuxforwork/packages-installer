@@ -24,8 +24,18 @@ if [ ! -d $pkginst_download_folder ]; then
     mkdir -p $pkginst_download_folder
 fi
 
-while getopts "a:p:yvh" opt; do
+if [ ! -d $pkginst_log_folder ]; then
+    mkdir -p $pkginst_log_folder
+fi
+
+
+
+while getopts "a:p:iyvh" opt; do
     case $opt in
+        i)
+            _showAllPackages
+            exit
+            ;;
         a)
             aur_helper=${OPTARG}
             ;;
@@ -50,6 +60,7 @@ while getopts "a:p:yvh" opt; do
             echo "-p Package Manager (supported are apt,dnf,pacman+aurhelper,zypper)"
             echo "-y Assume yes for confirmation of the installation"
             echo "-a Aur Helper for Arch only"
+            echo "-i Show packages to be installed"
             echo "-h Help"
             exit
             ;;

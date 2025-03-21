@@ -275,33 +275,36 @@
         {
             "package":"power-profiles-daemon",
             "test":""
-        }
-    ],
-    "flatpaks":[
+        },
         {
             "package":"com.ml4w.welcome",
             "test":"",
-            "type":"remote"
+            "type":"flatpak-remote",
+            "url":"https://github.com/mylinuxforwork/dotfiles-welcome/releases/download/2.9.8.3/com.ml4w.welcome.flatpak"
         },
         {
             "package":"com.ml4w.sidebar",
             "test":"",
-            "type":"remote"
+            "type":"flatpak-remote",
+            "url":""
         },
         {
             "package":"com.ml4w.calendar",
             "test":"",
-            "type":"remote"
+            "type":"flatpak-remote",
+            "url":""
         },
         {
             "package":"com.ml4w.settings",
             "test":"",
-            "type":"remote"
+            "type":"flatpak-remote",
+            "url":""
         },
         {
             "package":"com.ml4w.hyprlandsettings",
             "test":"",
-            "type":"remote"
+            "type":"flatpak-remote",
+            "url":""
         }
     ],
     "options":[

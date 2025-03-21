@@ -22,16 +22,16 @@ _installFlatpak() {
 
 # _installFlatpakRemote {url} {package}
 _installFlatpakRemote() {
-    url="$1"
-    package="$2"
+    package="$1"
+    url="$2"
     if [ ! -d $HOME/.cache ]; then
         mkdir -p $HOME/.cache
     fi
     wget -q -P "$HOME/.cache" "${url}"
     cd "$HOME/.cache"
-    _echo_success "${pkginst_lang["install_package"]} ${package}"
     flatpak --user -y --reinstall install ${package} &>>$(_getLogFile)
     rm "$HOME/.cache/{name}"    
+    _echo_success "${pkginst_lang["install_package"]} ${package}"
 }
 
 # _installFlatpakLocal {dir} {package}

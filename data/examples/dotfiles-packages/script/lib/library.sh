@@ -64,10 +64,6 @@ _showAllPackages() {
         _echo_success ${pkg}
     done    
     echo
-    _echo "Flatpaks ($(jq -r '.flatpaks | length' $pkginst_data_folder/packages.json)):"
-    for pkg in $(jq -r '.flatpaks[] | .package' $pkginst_data_folder/packages.json); do
-        _echo_success ${pkg}
-    done    
 }
 
 # _showAllPackagesDialog
@@ -131,13 +127,42 @@ _installPackages() {
     json_array="packages"
     json_node="package"
     counter=0
+    pkg_test=""
+    pkg_type=""
+    flatpak_url=""
     for pkg in $(jq -r '.'$json_array'[] | .'$json_node $json_file); do
         pkg=${pkg}
         pkg_test=$(jq -r '.'$json_array'['$counter'] | .test' $json_file)
+        pkg_type=$(jq -r '.'$json_array'['$counter'] | .type' $json_file)
         if [ -f "$pkginst_data_folder/$pkginst_manager/$pkg" ]; then
             source "$pkginst_data_folder/$pkginst_manager/$pkg"
         else
-            _installPackage "${pkg}" "${pkg_test}"
+            case "$pkg_type" in
+                "null")
+                    _installPackage "${pkg}" "${pkg_test}"
+                ;;
+                "package")
+                    _installPackage "${pkg}" "${pkg_test}"
+                ;;
+                "flatpak-remote")
+                    flatpak_url=$(jq -r '.'$json_array'['$counter'] | .url' $json_file)
+                    if [[ ! "$flatpak_url" == "null" ]]; then
+                        _installFlatpakRemote "${pkg}" "${flatpak_url}"
+                    fi
+                ;;
+                "flatpak-local")
+                    _installFlatpakLocak "${pkg}" "${pkg_test}"
+                ;;
+                "flatpak-flathub")
+                    _installFlatpakFlathub "${pkg}" "${pkg_test}"
+                ;;
+                "flatpak")
+                    _installFlatpak "${pkg}" "${pkg_test}"
+                ;;
+                *)
+                    _echo_error "$pkg_type not supported"
+                ;;
+            esac        
         fi
         ((counter++))
     done    

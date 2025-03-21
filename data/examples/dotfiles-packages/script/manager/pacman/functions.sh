@@ -13,11 +13,12 @@ _isInstalled() {
 _installPackage() {
     package="$1"
     testcommand="$2"
+    install_type="$3"
 	if [[ $(_isInstalled "${package}") == 0 ]]; then
 		_echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
-		_echo_success "${pkginst_lang["install_package"]} ${package}"
         sudo pacman -S --needed --noconfirm "${package}" &>>$(_getLogFile)
+		_echo_success "${pkginst_lang["install_package"]} ${package}"
         if [ ! -z $testcommand ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
                 _echo_error "$testcommand ${pkginst_lang["command_check_failed"]}"

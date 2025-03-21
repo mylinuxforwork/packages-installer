@@ -28,8 +28,7 @@ if [ ! -d $pkginst_log_folder ]; then
     mkdir -p $pkginst_log_folder
 fi
 
-
-
+# Command Options
 while getopts "a:p:iyvh" opt; do
     case $opt in
         i)

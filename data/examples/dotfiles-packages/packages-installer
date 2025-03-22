@@ -13,7 +13,7 @@
 # ------------------------------------------------
 pkginst_version="0.5"
 pkginst_script_folder="script"
-pkginst_data_folder="packages"
+pkginst_data_folder="pkginst"
 pkginst_script_dependencies="script/dependencies"
 pkginst_download_folder="$HOME/.cache/download"
 pkginst_log_folder="$HOME/.local/share/com.ml4w.packagesinstaller/log"
@@ -62,6 +62,11 @@ source "$pkginst_script_folder/modules/aur.sh"
 # Installation of Packages
 # ------------------------------------------------
 source "$pkginst_script_folder/modules/packages.sh"
+
+# ------------------------------------------------
+# Installation Options
+# ------------------------------------------------
+source "$pkginst_script_folder/modules/options.sh"
 
 # ------------------------------------------------
 # Post Script

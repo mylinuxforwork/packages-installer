@@ -25,4 +25,8 @@ declare -A pkginst_lang=(
     [paru_installed]='Please select an option.'
     [select_aur_helper]='Please select your preferred AUR Helper'
     [aur_helper_selected]='selected as AUR Helper'
+    [choose_available_options]='Please choose from available installation options:'
+    [choose_available_packages]='Please choose the packages that you want to install:'
+    [selected_packages]='Selected packages:'
+    [install_seleced_packages]='Do you want to install the selected packages'
 )

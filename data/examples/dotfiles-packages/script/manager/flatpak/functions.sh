@@ -20,24 +20,25 @@ _installFlatpak() {
     fi
 }
 
-# _installFlatpakRemote {url} {package}
+# _installFlatpakRemote {package} {url} 
 _installFlatpakRemote() {
     package="$1"
     url="$2"
+    _echo_success "${pkginst_lang["install_package"]} ${package}"
     if [ ! -d $HOME/.cache ]; then
         mkdir -p $HOME/.cache
     fi
     wget -q -P "$HOME/.cache" "${url}"
     cd "$HOME/.cache"
     flatpak --user -y --reinstall install ${package} &>>$(_getLogFile)
-    rm "$HOME/.cache/{name}"    
-    _echo_success "${pkginst_lang["install_package"]} ${package}"
+    rm "$HOME/.cache/${package}.flatpak"    
+    cd "$pkginst_script_directory"
 }
 
 # _installFlatpakLocal {dir} {package}
 _installFlatpakLocal() {
-    dir="$1"
-    package="$2"
+    package="$1"
+    dir="$2"
     _echo_success "${pkginst_lang["install_package"]} ${package}"
     flatpak --user -y --reinstall install ${package}.flatpak &>>$(_getLogFile)
 }
@@ -45,6 +46,7 @@ _installFlatpakLocal() {
 # _installFlatpakFlathub {package}
 _installFlatpakFlathub() {
     package="$1"
+    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo &>>$(_getLogFile)
     if [[ $(_isInstalledFlatpak "${package}") == 0 ]]; then
         _echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else

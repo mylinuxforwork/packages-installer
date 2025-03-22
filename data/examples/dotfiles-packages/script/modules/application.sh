@@ -1,3 +1,6 @@
+# Current Directory
+pkginst_script_directory=$(pwd)
+
 # Source Library
 source "$pkginst_script_folder/lib/library.sh"
 

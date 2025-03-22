@@ -129,43 +129,94 @@ _installPackages() {
     counter=0
     pkg_test=""
     pkg_type=""
-    flatpak_url=""
     for pkg in $(jq -r '.'$json_array'[] | .'$json_node $json_file); do
         pkg=${pkg}
         pkg_test=$(jq -r '.'$json_array'['$counter'] | .test' $json_file)
         pkg_type=$(jq -r '.'$json_array'['$counter'] | .type' $json_file)
         if [ -f "$pkginst_data_folder/$pkginst_manager/$pkg" ]; then
             source "$pkginst_data_folder/$pkginst_manager/$pkg"
+        elif [ -f "$pkginst_data_folder/$pkg_type/$pkg" ]; then 
+            source "$pkginst_data_folder/$pkg_type/$pkg"
         else
-            case "$pkg_type" in
-                "null")
-                    _installPackage "${pkg}" "${pkg_test}"
-                ;;
-                "package")
-                    _installPackage "${pkg}" "${pkg_test}"
-                ;;
-                "flatpak-remote")
-                    flatpak_url=$(jq -r '.'$json_array'['$counter'] | .url' $json_file)
-                    if [[ ! "$flatpak_url" == "null" ]]; then
-                        _installFlatpakRemote "${pkg}" "${flatpak_url}"
-                    fi
-                ;;
-                "flatpak-local")
-                    _installFlatpakLocak "${pkg}" "${pkg_test}"
-                ;;
-                "flatpak-flathub")
-                    _installFlatpakFlathub "${pkg}" "${pkg_test}"
-                ;;
-                "flatpak")
-                    _installFlatpak "${pkg}" "${pkg_test}"
-                ;;
-                *)
-                    _echo_error "$pkg_type not supported"
-                ;;
-            esac        
+            if [ $pkg_type == "flatpak" ]; then
+                _installFlatpakFlathub "$pkg"
+            else
+                _installPackage "${pkg}" "${pkg_test}"
+            fi
         fi
         ((counter++))
     done    
+}
+
+# _getInstallationOptions {json_file}
+_getInstallationOptions() {
+    json_file="$1"
+    options_arr=""
+    for option in $(jq -r '.options[] | .name' $json_file); do
+        options_arr+="${option} "
+    done
+    options_arr+="Cancel"
+    _echo "${pkginst_lang["choose_available_options"]}"
+    echo
+    selected_option=$(gum choose $options_arr)
+    if [ ! $selected_option == "Cancel" ]; then
+        counter=0
+        for i in ${options_arr[@]}; do
+            if [[ "$selected_option" == "$i" ]]; then
+                selected_index=$counter
+                break
+            fi
+            ((counter++))
+        done
+        _getInstallationOption "$json_file" "$selected_index" "$i"
+    fi
+}
+
+_getInstallationOption() {
+    json_file="$1"
+    index="$2"
+    option_name="$3"
+    packages_arr=""
+    _echo "$i"
+    _echo "${pkginst_lang["choose_available_packages"]}"
+    echo
+    for package in $(jq -r '.options['$index'] | .packages[] | .package' $json_file); do
+        packages_arr+="${package} "
+    done
+    selected_packages=$(gum choose --no-limit $packages_arr)
+    if [ -z $selected_packages ]; then
+        _getInstallationOptions "$json_file"
+    else
+        _echo "${pkginst_lang["selected_packages"]} $selected_packages"
+        echo
+        if gum confirm "${pkginst_lang["install_seleced_packages"]}"; then
+            for i in ${selected_packages[@]}; do
+                counter=0
+                for pkg in $(jq -r '.options['$index'] | .packages[] | .package' $json_file); do
+                    if [[ $pkg == $i ]]; then
+                        pkg=${pkg}
+                        pkg_test=$(jq -r '.options['$index'] | .packages['$counter'] | .test' $json_file)
+                        pkg_type=$(jq -r '.options['$index'] | .packages['$counter'] | .type' $json_file)                    
+                        if [ -f "$pkginst_data_folder/$pkginst_manager/$pkg" ]; then
+                            source "$pkginst_data_folder/$pkginst_manager/$pkg"
+                        elif [ -f "$pkginst_data_folder/$pkg_type/$pkg" ]; then 
+                            source "$pkginst_data_folder/$pkg_type/$pkg"
+                        else
+                            if [ $pkg_type == "flatpak" ]; then
+                                _installFlatpakFlathub "$pkg"
+                            else
+                                _installPackage "${pkg}" "${pkg_test}"
+                            fi
+                        fi
+                    fi
+                    ((counter++))
+                done
+            done
+            _getInstallationOptions "$json_file"                
+        else
+            _getInstallationOptions "$json_file"                
+        fi
+    fi
 }
 
 # _checkCommandExists {command}

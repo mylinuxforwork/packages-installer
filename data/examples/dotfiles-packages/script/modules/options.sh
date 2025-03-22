@@ -1,0 +1,1 @@
+_getInstallationOptions "$pkginst_data_folder/packages.json"

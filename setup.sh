@@ -31,13 +31,13 @@ if [ ! -d $HOME/.cache ]; then
 fi
 
 # Download latest version
-wget -c "https://github.com/mylinuxforwork/packages-installer/releases/latest/download/packages-installer.zip" -O "$HOME/.cache/packages-installer.zip"
+wget -q -c "https://github.com/mylinuxforwork/packages-installer/releases/latest/download/packages-installer.zip" -O "$HOME/.cache/packages-installer.zip"
 
 # Unzip
-unzip -o $HOME/.cache/packages-installer.zip -d $HOME/.cache/
+unzip -q -o $HOME/.cache/packages-installer.zip -d $HOME/.cache/
 
 # Copy to .local
 cp -rf $HOME/.cache/packages-installer/. $HOME/.local/
 
 # Run packages-installer
-# $HOME/.local/com.ml4w.packagesinstaller/bin/packagesinstaller $1
+$HOME/.local/bin/packages-installer $1

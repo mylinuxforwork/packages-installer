@@ -1,0 +1,32 @@
+{
+    "packages":[
+        {
+            "package":"gum",
+            "test":"gum"
+        },
+        {
+            "package":"wget",
+            "test":"wget"
+        },
+        {
+            "package":"git",
+            "test":"git"
+        },
+        {
+            "package":"unzip",
+            "test":"unzip"
+        },
+        {
+            "package":"rsync",
+            "test":"rsync"
+        },
+        {
+            "package":"jq",
+            "test":"jq"
+        },
+        {
+            "package":"python-pip",
+            "test":""
+        }
+    ]
+}

@@ -50,4 +50,4 @@ cp -rf $HOME/.cache/packages-installer/bin/. $HOME/.local/bin
 cp -rf $HOME/.cache/packages-installer/share/. $HOME/.local/share
 
 # Run packages-installer
-$HOME/.local/bin/packages-installer $1
+$HOME/.local/bin/packages-installer $@

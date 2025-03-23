@@ -12,7 +12,7 @@ _checkCommandExists() {
 
 # Download latest version
 if [[ $(_checkCommandExists "unzip") == 1 ]] || [[ $(_checkCommandExists "wget") == 1 ]]; then
-    _echo_error "For remote sources you need to have wget and unzip installed on your system."
+    _echo_error "For remote sources please install wget and unzip installed on your system."
     exit
 fi
 

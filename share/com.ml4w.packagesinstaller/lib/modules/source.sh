@@ -55,3 +55,8 @@ if [ ! -d "$pkginst_data_folder" ]; then
     _echo_error "Cannot find the pkginst package $pkginst_package in $HOME/.local/share/com.ml4w.packagesinstaller/pkginst/"
     exit
 fi
+
+# Set Log Folder
+if [ ! -d "$pkginst_log_folder/$pkginst_package" ]; then
+    mkdir -p "$pkginst_log_folder/$pkginst_package"
+fi

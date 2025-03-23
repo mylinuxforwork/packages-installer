@@ -238,6 +238,6 @@ _installPip() {
 
 # Define log file extension
 _getLogFile() {
-    log_filename="-log.txt"
-    echo "$pkginst_log_folder/$(date '+%Y%m%d%H%M%S')$log_filename"
+    log_filename="log.txt"
+    echo "$pkginst_log_folder/$pkginst_package/$pkginst_log_file-$log_filename"
 }

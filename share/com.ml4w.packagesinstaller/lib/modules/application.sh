@@ -26,6 +26,9 @@ aur_helper="yay"
 # CommandErrorList
 pkginst_commanderrors=()
 
+# Log File
+pkginst_log_file=$(date '+%Y%m%d%H%M%S')
+
 if [ ! -d $pkginst_download_folder ]; then
     mkdir -p $pkginst_download_folder
 fi

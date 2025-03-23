@@ -28,9 +28,13 @@ _installFlatpakRemote() {
     if [ ! -d $HOME/.cache ]; then
         mkdir -p $HOME/.cache
     fi
+    if [ -f "$HOME/.cache/${package}.flatpak" ]; then
+        rm "$HOME/.cache/${package}.flatpak"
+    fi
     wget -q -P "$HOME/.cache" "${url}"
     cd "$HOME/.cache"
-    flatpak --user -y --reinstall install ${package} &>>$(_getLogFile)
+    flatpak --user -y --reinstall install ${package}.flatpak &>>$(_getLogFile)
+    exit
     rm "$HOME/.cache/${package}.flatpak"    
     cd "$pkginst_script_directory"
 }

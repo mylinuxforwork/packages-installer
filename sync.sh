@@ -10,6 +10,5 @@ if [ ! -f "$HOME/.local/share" ]; then
 fi
 
 # Copy to .local
-echo "drin"
 cp -rf $HOME/Projects/packages-installer/bin/. $HOME/.local/bin
 cp -rf $HOME/Projects/packages-installer/share/. $HOME/.local/share

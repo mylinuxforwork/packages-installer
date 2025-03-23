@@ -1,4 +1,4 @@
 # Read Dependencies
-_writeModuleHeadline "${pkginst_lang['installing_dependencies']}"
-_installPackages "$pkginst_script_dependencies/packages.json"
-echo
+if [ ! "$pkginst_manager" == "flatpak" ]; then
+    _installPackages "$pkginst_script_dependencies/packages.json"
+fi

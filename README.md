@@ -8,6 +8,17 @@ In addition, you can offer an optional set of packages where the user can choose
 
 You can provide installation configurations with compressed .pkginst file on your webserver or remote Git Repository like GitHub or GitLab or can install and test a local configuration.
 
+The following package managers are currently supported:
+- apt (e.g. for Ubuntu)
+- dnf (e.g. for Fedora)
+- pacman (e.g. for Arch Linux)
+- zypper (e.g. for openSuse)
+- flatpak
+
+> With custom installations you can also use yay, paru, add repos for dnf, etc.
+
+Is your package manager currently not supported, your can export a list of packages from the configuration and suggest to install the packages manually.
+
 You can find more information in the Wiki. https://github.com/mylinuxforwork/packages-installer/wiki
 
 > The Packages Installer Editor will support you with an UI to create your installation configurations even faster. The Packages Installer Editor is currently in development and a first BETA will be available soon.

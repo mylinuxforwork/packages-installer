@@ -83,41 +83,16 @@ _selectManager() {
         _echo "${pkginst_lang["message_using"]} $(jq -r .managers[0] $pkginst_data_folder/config.json)"
         pkginst_manager=$(jq -r .managers[0] $pkginst_data_folder/config.json)
     else
-        echo
-        _echo "${pkginst_lang["select_package_manager"]}"
-        counter=1
+        supported="1"
         for mng in $(jq -r .managers[] $pkginst_data_folder/config.json); do
-            echo "   $counter: $mng"
-            ((counter++))
-        done
-        echo
-        if [ $(_getConfiguration "show_all_packages") == "true" ]; then
-            _echo "${pkginst_lang["package_manager_not_supported"]}"
-            echo "   $counter: ${pkginst_lang["show_all_packages"]}"
-            show_all_packages_counter=$counter
-            echo
-        fi
-        while true; do
-            read -p "${pkginst_lang["please_select"]}: " yn
-            if [ $(_getConfiguration "show_all_packages") == "true" ]; then
-                if [ $yn == $show_all_packages_counter ]; then
-                    _showAllPackagesDialog
-                    break
-                elif (($yn > 0 && $yn < $counter-1)); then
-                    pkginst_manager=$(jq -r .managers[$yn-1] $pkginst_data_folder/config.json)
-                    break
-                else
-                    _echo_error "${pkginst_lang["please_select_an_option"]}"              
-                fi
-            else
-                if (($yn > 0 && $yn < $counter)); then
-                    pkginst_manager=$(jq -r .managers[$yn-1] $pkginst_data_folder/config.json)
-                    break
-                else
-                    _echo_error "${pkginst_lang["please_select_an_option"]}"                
-                fi
+            if [[ "$mng" == "$pkginst_manager" ]]; then
+                supported=0
             fi
         done
+        if [ $supported == "1" ]; then
+            _echo "${pkginst_lang["package_manager_not_supported"]}"
+            exit
+        fi
     fi
 }
 

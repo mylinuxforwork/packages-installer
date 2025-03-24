@@ -9,16 +9,8 @@
             "test":"wget"
         },
         {
-            "package":"git",
-            "test":"git"
-        },
-        {
             "package":"unzip",
             "test":"unzip"
-        },
-        {
-            "package":"rsync",
-            "test":"rsync"
         },
         {
             "package":"jq",

@@ -34,7 +34,6 @@ _installFlatpakRemote() {
     wget -q -P "$HOME/.cache" "${url}"
     cd "$HOME/.cache"
     flatpak --user -y --reinstall install ${package}.flatpak &>>$(_getLogFile)
-    exit
     rm "$HOME/.cache/${package}.flatpak"    
     cd "$pkginst_script_directory"
 }

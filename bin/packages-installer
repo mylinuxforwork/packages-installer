@@ -23,16 +23,6 @@ pkginst_log_folder="$HOME/.local/share/com.ml4w.packagesinstaller/log"
 source "$pkginst_script_folder/modules/application.sh"
 
 # ------------------------------------------------
-# Install Source
-# ------------------------------------------------
-source "$pkginst_script_folder/modules/source.sh"
-
-# ------------------------------------------------
-# Set Package Manager
-# ------------------------------------------------
-source "$pkginst_script_folder/modules/manager.sh"
-
-# ------------------------------------------------
 # Sudo Login
 # ------------------------------------------------
 source "$pkginst_script_folder/modules/sudo.sh"
@@ -41,6 +31,16 @@ source "$pkginst_script_folder/modules/sudo.sh"
 # Install Dependencies
 # ------------------------------------------------
 source "$pkginst_script_folder/modules/dependencies.sh"
+
+# ------------------------------------------------
+# Set Package Manager
+# ------------------------------------------------
+source "$pkginst_script_folder/modules/manager.sh"
+
+# ------------------------------------------------
+# Install Source
+# ------------------------------------------------
+source "$pkginst_script_folder/modules/source.sh"
 
 # ------------------------------------------------
 # Load Package Configuration

@@ -11,8 +11,8 @@ _checkCommandExists() {
 }
 
 # Download latest version
-if [[ $(_checkCommandExists "unzip") == 1 ]] || [[ $(_checkCommandExists "wget") == 1 ]]; then
-    _echo_error "For remote sources you need to have wget and unzip installed on your system."
+if [[ $(_checkCommandExists "git") == 1 ]]; then
+    echo "ERROR: Please install 'git' on your system first."
     exit
 fi
 
@@ -30,11 +30,14 @@ if [ ! -d $HOME/.cache ]; then
     mkdir -p $HOME/.cache
 fi
 
-# Download latest version
-wget -q -c "https://github.com/mylinuxforwork/packages-installer/releases/latest/download/packages-installer.zip" -O "$HOME/.cache/packages-installer.zip"
+# Create .cache folder if not exists
+if [ -d $HOME/.cache/packages-installer ]; then
+    rm -rf $HOME/.cache/packages-installer
+fi
 
-# Unzip
-unzip -q -o $HOME/.cache/packages-installer.zip -d $HOME/.cache/
+# Clone latest version
+echo ":: Downloading latest version of packages-installer..."
+git clone --quiet --depth 1 https://github.com/mylinuxforwork/packages-installer.git $HOME/.cache/packages-installer  > /dev/null
 
 # Create folders id not exists
 if [ ! -f "$HOME/.local/bin" ]; then

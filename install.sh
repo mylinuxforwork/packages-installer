@@ -50,4 +50,8 @@ fi
 
 # Copy to .local
 cp -rf $HOME/.cache/packages-installer/bin/. $HOME/.local/bin
+echo ":: packages-installer installed in $HOME/.local/bin"
 cp -rf $HOME/.cache/packages-installer/share/. $HOME/.local/share
+echo ":: packages-installer library installed in $HOME/.local/share"
+echo 
+echo ":: Please follow the Packages Installer Wiki to learn how to setup your first project."

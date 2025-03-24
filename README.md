@@ -1,8 +1,8 @@
 # Packages Installer
 
-Create an enhanced and multiplatform installation script for your favorite package collection, dependencies for your personal desktop configuration or single flatpak app.
+Create an enhanced and multiplatform installation script for your favorite package collection, dependencies for your dotfiles configuration or for a single flatpak app. This is possible with the Packges Installer script.
 
-The packages-installer script will detect automatically your available Linux package manager and will install the packages with the package manager or with a custom installation command.
+The script will detect automatically your available Linux package manager and will install the packages directly or with a custom installation command for full flexibility.
 
 ![image](https://github.com/user-attachments/assets/36af17fe-f597-4c4e-a263-635a42c44408)
 

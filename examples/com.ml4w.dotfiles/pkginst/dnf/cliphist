@@ -1,0 +1,2 @@
+_addCoprRepository "wef/cliphist"
+_installPackage "cliphist"

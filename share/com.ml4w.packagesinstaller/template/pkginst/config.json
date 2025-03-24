@@ -1,0 +1,13 @@
+{
+    "name": "Configuration Name",
+    "description": "A short description",
+    "homepage": "https://yourhomepage.com",
+    "author": "Your Name",
+    "copyright": "2025",
+    "managers": [
+        "apt",
+        "dnf",
+        "pacman",
+        "zypper"
+    ]
+}

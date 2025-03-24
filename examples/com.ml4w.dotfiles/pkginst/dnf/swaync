@@ -1,0 +1,2 @@
+_addCoprRepository "erikreider/SwayNotificationCenter"
+_installPackage "SwayNotificationCenter"

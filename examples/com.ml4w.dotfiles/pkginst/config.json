@@ -1,0 +1,16 @@
+{
+    "id": "ml4w-dotfiles-packages",
+    "name": "ML4W Dotfiles Packages Installer",
+    "description": "The script will install the required packages for the ML4W Dotfiles for Hyprland",
+    "homepage": "https://github.com/mylinuxforwork/dotfiles",
+    "author": "Stephan Raabe",
+    "copyright": "2025",
+    "flatpak_only": false,
+    "show_all_packages": true,
+    "managers": [
+        "apt",
+        "dnf",
+        "pacman",
+        "zypper"
+    ]
+}

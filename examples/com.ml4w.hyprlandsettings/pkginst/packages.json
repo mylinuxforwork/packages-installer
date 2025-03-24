@@ -1,0 +1,12 @@
+{
+    "packages":[
+        {
+            "package":"org.gnome.Platform",
+            "type":"flatpak"
+        },
+        {
+            "package":"com.ml4w.hyprlandsettings",
+            "type":"flatpak"
+        }
+    ]
+}

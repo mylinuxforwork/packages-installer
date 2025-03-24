@@ -1,0 +1,1 @@
+sudo cp $pkginst_data_folder/dnf/grimblast /usr/bin

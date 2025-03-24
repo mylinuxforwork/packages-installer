@@ -1,5 +1,7 @@
 # Packages Installer
 
+> Please note: The script is currently in BETA. Several tests are running on different Linux distributions.
+
 Create an enhanced and multiplatform installation script for your favorite package collection, dependencies for your dotfiles configuration or for a single flatpak app. This is possible with the Packges Installer script.
 
 The script will detect automatically your available Linux package manager and will install the packages directly or with a custom installation command for full flexibility.
@@ -9,6 +11,8 @@ The script will detect automatically your available Linux package manager and wi
 In addition, you can offer an optional set of packages where the user can choose from, e.g. browsers, terminals, file managers, etc.
 
 You can provide installation configurations with compressed .pkginst file on your webserver or remote Git Repository like GitHub or GitLab or can install and test a local configuration.
+
+You can find examples here: https://github.com/mylinuxforwork/packages-installer/tree/main/examples
 
 The following package managers are currently supported:
 - apt (e.g. for Ubuntu)

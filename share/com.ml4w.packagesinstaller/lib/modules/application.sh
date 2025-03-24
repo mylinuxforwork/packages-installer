@@ -117,9 +117,8 @@ if [ "$HELP" = true ]; then
     echo
     echo "Options:"
     echo "  -s, --source SOURCE                 Path to a local project folder or an url to a remote .pkginst file"
-    echo "  -p, --packagemanager PACKAGEMANAGER Choose between apt, dnf, pacman, zypper"
+    echo "  -p, --packagemanager PACKAGEMANAGER Set the package manager directly instead of the autodetection. Choose from apt, dnf, pacman, zypper, flatpak"
     echo "  -a, --aurhelper AURHELPER           Define the Aur Helper in case of pacman for Arch based distributions"
-    echo "  -i, --installed                     Shows all main packages that will be installed"
     echo "  -i, --installed                     Shows all main packages that will be installed"
     echo "  -y, --assumeyes                     Assume yes for all confirmation dialogs"
     echo "  -h, --help                          Display this help message"

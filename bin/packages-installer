@@ -11,7 +11,7 @@
 # ------------------------------------------------
 # GLOBALS
 # ------------------------------------------------
-pkginst_version="0.5"
+pkginst_version="0.6"
 pkginst_script_folder="$HOME/.local/share/com.ml4w.packagesinstaller/lib"
 pkginst_script_dependencies="$HOME/.local/share/com.ml4w.packagesinstaller/lib/dependencies"
 pkginst_download_folder="$HOME/.cache/download"

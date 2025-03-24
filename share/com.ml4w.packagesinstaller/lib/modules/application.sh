@@ -85,7 +85,7 @@ while true; do
             if [ "$2" = "apt" ] || [ "$2" = "dnf" ] || [ "$2" = "pacman" ] || [ "$2" = "zypper" ] || [ "$2" = "flatpak" ]; then
                 pkginst_manager="$2"
             else
-                _echo_error "Invalid mode '$2'. Must be 'apt','dnf','pacman' or 'zypper'." >&2
+                _echo_error "Invalid mode '$2'. Must be 'apt','dnf','pacman','flatpak' or 'zypper'." >&2
                 exit
             fi
             shift 2

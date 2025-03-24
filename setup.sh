@@ -36,7 +36,8 @@ if [ -d $HOME/.cache/packages-installer ]; then
 fi
 
 # Clone latest version
-git clone --depth 1 https://github.com/mylinuxforwork/packages-installer.git $HOME/.cache/packages-installer
+echo ":: Downloading latest version of packages-installer..."
+git clone --quiet --depth 1 https://github.com/mylinuxforwork/packages-installer.git $HOME/.cache/packages-installer  > /dev/null
 
 # Create folders id not exists
 if [ ! -f "$HOME/.local/bin" ]; then

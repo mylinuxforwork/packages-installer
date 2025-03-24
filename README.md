@@ -4,6 +4,8 @@ Create an enhanced and multiplatform installation script for your favorite packa
 
 The packages-installer script will detect automatically your available Linux package manager and will install the packages with the package manager or with a custom installation command.
 
+![image](https://github.com/user-attachments/assets/36af17fe-f597-4c4e-a263-635a42c44408)
+
 In addition, you can offer an optional set of packages where the user can choose from, e.g. browsers, terminals, file managers, etc.
 
 You can provide installation configurations with compressed .pkginst file on your webserver or remote Git Repository like GitHub or GitLab or can install and test a local configuration.

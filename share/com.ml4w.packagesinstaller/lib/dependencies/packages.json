@@ -5,6 +5,10 @@
             "test":"gum"
         },
         {
+            "package":"figlet",
+            "test":"figlet"
+        },
+        {
             "package":"wget",
             "test":"wget"
         },

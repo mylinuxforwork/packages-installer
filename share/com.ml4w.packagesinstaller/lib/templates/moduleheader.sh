@@ -1,0 +1,1 @@
+figlet -f smslant "$headline"

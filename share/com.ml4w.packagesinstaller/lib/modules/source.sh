@@ -6,6 +6,11 @@ if [ -z $pkginst_package ]; then
     exit
 fi
 
+# Remove Old Package
+if [ -d "$HOME/.local/share/com.ml4w.packagesinstaller/pkginst/$pkginst_package" ]; then
+    rm -rf "$HOME/.local/share/com.ml4w.packagesinstaller/pkginst/$pkginst_package"
+fi
+
 # Install Source
 if [ ! -z "$pkginst_source" ]; then
     if [[ $pkginst_source == *"https://"* ]]; then

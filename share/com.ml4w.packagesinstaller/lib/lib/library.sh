@@ -46,8 +46,12 @@ _getConfiguration() {
 
 # _writeModuleHeadline {headline}
 _writeModuleHeadline() {
-    headline_tmp="$1"
-    echo "$headline_tmp"
+    headline="$1"
+    if [ -f "$pkginst_data_folder/templates/moduleheader.sh" ]; then
+        source "$pkginst_data_folder/templates/moduleheader.sh"
+    else
+        source "$pkginst_script_folder/templates/moduleheader.sh"
+    fi    
 }
 
 # _showAllPackages
@@ -71,6 +75,10 @@ _showAllPackagesDialog() {
     _showAllPackages
     echo
     _selectManager
+}
+
+_getNumberOfPackages() {
+    echo "$(jq -r '.packages | length' $pkginst_data_folder/packages.json)"
 }
 
 # _selectManager
@@ -123,6 +131,31 @@ _installPackages() {
     done    
 }
 
+# _checkInstalledOptions {json_file}
+_checkInstalledOptions() {
+    json_file="$1"
+    package_arr=""
+    type_arr=()
+    for type in $(jq -r '.options[] | .packages[] | .type' $json_file); do
+        type_arr+=("${type}" )
+    done
+
+    counter=0
+    for package in $(jq -r '.options[] | .packages[] | .package' $json_file); do
+        if [[ "${type_arr[$counter]}" == "flatpak" ]]; then
+            if [[ $(_isInstalledFlatpak "${package}") == 0 ]]; then
+		        _echo_success "${package} ${pkginst_lang["package_already_installed"]}"
+            fi
+        else
+            if [[ $(_isInstalled "${package}") == 0 ]]; then
+		        _echo_success "${package} ${pkginst_lang["package_already_installed"]}"
+            fi
+        fi
+        ((counter++))
+    done
+    echo
+}
+
 # _getInstallationOptions {json_file}
 _getInstallationOptions() {
     json_file="$1"
@@ -152,7 +185,7 @@ _getInstallationOption() {
     index="$2"
     option_name="$3"
     packages_arr=""
-    _echo "$i"
+    _writeModuleHeadline "$i"
     _echo "${pkginst_lang["choose_available_packages"]}"
     echo
     for package in $(jq -r '.options['$index'] | .packages[] | .package' $json_file); do

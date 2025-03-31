@@ -10,9 +10,15 @@ _checkCommandExists() {
     fi
 }
 
-# Download latest version
+# Check for git
 if [[ $(_checkCommandExists "git") == 1 ]]; then
-    echo "ERROR: Please install 'git' on your system first."
+    echo "ERROR: Please install 'git' and 'jq' on your system first."
+    exit
+fi
+
+# Check for jq
+if [[ $(_checkCommandExists "jq") == 1 ]]; then
+    echo "ERROR: Please install 'git' and 'jq' on your system first."
     exit
 fi
 

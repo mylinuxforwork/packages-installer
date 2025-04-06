@@ -1,6 +1,3 @@
-# Set pkginst package
-pkginst_package="$@"
-
 if [ -z $pkginst_package ]; then
     _echo_error "Please specify the name of the pkginst package: package-installer pkginstpackage"
     exit

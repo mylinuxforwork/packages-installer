@@ -169,3 +169,5 @@ if [ "$INSTALLED" = true ]; then
     _showAllPackages
     exit
 fi
+
+pkginst_package="$@"

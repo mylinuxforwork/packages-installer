@@ -41,9 +41,17 @@ if [ -d $HOME/.cache/packages-installer ]; then
     rm -rf $HOME/.cache/packages-installer
 fi
 
-# Clone latest version
+# Get latest version
 echo ":: Downloading latest version of packages-installer..."
-git clone --quiet --depth 1 https://github.com/mylinuxforwork/packages-installer.git $HOME/.cache/packages-installer  > /dev/null
+
+# Clone latest commit
+# git clone --quiet --depth 1 https://github.com/mylinuxforwork/packages-installer.git $HOME/.cache/packages-installer > /dev/null
+
+# Download latest release
+wget -q -c "https://github.com/mylinuxforwork/packages-installer/releases/latest/download/packages-installer.zip" -O "$HOME/.cache/packages-installer.zip"
+
+# Unzip
+unzip -o -q $HOME/.cache/packages-installer.zip -d $HOME/.cache
 
 # Create folders id not exists
 if [ ! -f "$HOME/.local/bin" ]; then

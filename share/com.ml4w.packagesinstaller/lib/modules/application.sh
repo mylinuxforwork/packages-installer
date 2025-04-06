@@ -1,3 +1,7 @@
+# ----------------------------------------------------------
+# Load Library
+# ----------------------------------------------------------
+
 # Current Directory
 pkginst_script_directory=$(pwd)
 
@@ -7,9 +11,9 @@ source "$pkginst_script_folder/lib/library.sh"
 # Source Global Variables
 _sourceFilesInFolder "$pkginst_script_folder/global"
 
-# Load Language File
-pkginst_language="en"
-source "$pkginst_script_folder/lang/$pkginst_language.sh"
+# ----------------------------------------------------------
+# Set Variables
+# ----------------------------------------------------------
 
 # Package Manager
 pkginst_manager=""
@@ -26,19 +30,43 @@ aur_helper="yay"
 # CommandErrorList
 pkginst_commanderrors=()
 
-# Log File
-pkginst_log_file=$(date '+%Y%m%d%H%M%S')
+# ----------------------------------------------------------
+# Set Language
+# ----------------------------------------------------------
+pkginst_language="en"
+source "$pkginst_script_folder/lang/$pkginst_language.sh"
 
+# ----------------------------------------------------------
+# Set Download Folder
+# ----------------------------------------------------------
 if [ ! -d $pkginst_download_folder ]; then
     mkdir -p $pkginst_download_folder
 fi
 
+# ----------------------------------------------------------
+# Set Log File and Folder
+# ----------------------------------------------------------
+pkginst_log_file=$(date '+%Y%m%d%H%M%S')
 if [ ! -d $pkginst_log_folder ]; then
     mkdir -p $pkginst_log_folder
 fi
 
+# ----------------------------------------------------------
+# Set Package Manager
+# ----------------------------------------------------------
+if [ $(_checkCommandExists "pacman") == "0" ]; then
+    pkginst_manager="pacman"
+elif [ $(_checkCommandExists "apt") == "0" ]; then
+    pkginst_manager="apt"
+elif [ $(_checkCommandExists "zypper") == "0" ]; then
+    pkginst_manager="zypper"
+elif [ $(_checkCommandExists "dnf") == "0" ]; then
+    pkginst_manager="dnf"
+fi   
 
+# ----------------------------------------------------------
 # Parse command-line options
+# ----------------------------------------------------------
 OPTS=$(getopt -o s:p:a:hyi --long packagemanager:,aurhelper:,help,assumeyes,installed -- "$@")
 
 if [ $? -ne 0 ]; then
@@ -49,7 +77,7 @@ fi
 # Reset the positional parameters to the parsed options
 eval set -- "$OPTS"
 
-## Initialize variables
+# Initialize variables
 HELP=false
 AURHELPER=false
 PACKAGEMANAGER=false
@@ -136,6 +164,8 @@ fi
 
 # INSTALLED
 if [ "$INSTALLED" = true ]; then
+    pkginst_package="$@"
+    pkginst_data_folder="$pkginst_source/$pkginst_package/pkginst"    
     _showAllPackages
     exit
 fi

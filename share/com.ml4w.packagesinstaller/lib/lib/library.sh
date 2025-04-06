@@ -107,51 +107,41 @@ _selectManager() {
 # _installPackages {json_file}
 _installPackages() {
     json_file="$1"
-    json_array="packages"
-    json_node="package"
     counter=0
-    pkg_test=""
-    pkg_type=""
-    for pkg in $(jq -r '.'$json_array'[] | .'$json_node $json_file); do
-        pkg=${pkg}
-        pkg_test=$(jq -r '.'$json_array'['$counter'] | .test' $json_file)
-        pkg_type=$(jq -r '.'$json_array'['$counter'] | .type' $json_file)
-        if [ -f "$pkginst_data_folder/$pkginst_manager/$pkg" ]; then
-            source "$pkginst_data_folder/$pkginst_manager/$pkg"
-        elif [ -f "$pkginst_data_folder/$pkg_type/$pkg" ]; then 
-            source "$pkginst_data_folder/$pkg_type/$pkg"
+    for pkg in $(jq -c '.packages[]' $json_file); do
+        pkg_package=$(echo $pkg | jq -r '.package')
+        pkg_test=$(echo $pkg | jq -r '.test')
+        pkg_type=$(echo $pkg | jq -r '.type')
+        if [ -f "$pkginst_data_folder/$pkginst_manager/$pkg_package" ]; then
+            source "$pkginst_data_folder/$pkginst_manager/$pkg_package"
+        elif [ -f "$pkginst_data_folder/$pkg_type/$pkg_package" ]; then 
+            source "$pkginst_data_folder/$pkg_type/$pkg_package"
         else
             if [ $pkg_type == "flatpak" ]; then
-                _installFlatpakFlathub "$pkg"
+                _installFlatpakFlathub "$pkg_package"
             else
-                _installPackage "${pkg}" "${pkg_test}"
+                _installPackage "$pkg_package" "$pkg_test"
             fi
         fi
-        ((counter++))
     done    
 }
 
 # _checkInstalledOptions {json_file}
 _checkInstalledOptions() {
     json_file="$1"
-    package_arr=""
     type_arr=()
-    for type in $(jq -r '.options[] | .packages[] | .type' $json_file); do
-        type_arr+=("${type}" )
-    done
-
-    counter=0
-    for package in $(jq -r '.options[] | .packages[] | .package' $json_file); do
-        if [[ "${type_arr[$counter]}" == "flatpak" ]]; then
-            if [[ $(_isInstalledFlatpak "${package}") == 0 ]]; then
-		        _echo_success "${package} ${pkginst_lang["package_already_installed"]}"
+    for pkg in $(jq -c '.options[] | .packages[]' $json_file); do
+        pkg_package=$(echo $pkg | jq -r '.package')
+        pkg_type=$(echo $pkg | jq -r '.type')
+        if [[ "$pkg_type" == "flatpak" ]]; then
+            if [[ $(_isInstalledFlatpak "$pkg_package") == 0 ]]; then
+		        _echo_success "$pkg_package ${pkginst_lang["package_already_installed"]}"
             fi
         else
-            if [[ $(_isInstalled "${package}") == 0 ]]; then
-		        _echo_success "${package} ${pkginst_lang["package_already_installed"]}"
+            if [[ $(_isInstalled "$pkg_package") == 0 ]]; then
+		        _echo_success "$pkg_package ${pkginst_lang["package_already_installed"]}"
             fi
         fi
-        ((counter++))
     done
     echo
 }
@@ -199,25 +189,23 @@ _getInstallationOption() {
         echo
         if gum confirm "${pkginst_lang["install_seleced_packages"]}"; then
             for i in ${selected_packages[@]}; do
-                counter=0
-                for pkg in $(jq -r '.options['$index'] | .packages[] | .package' $json_file); do
-                    if [[ $pkg == $i ]]; then
-                        pkg=${pkg}
-                        pkg_test=$(jq -r '.options['$index'] | .packages['$counter'] | .test' $json_file)
-                        pkg_type=$(jq -r '.options['$index'] | .packages['$counter'] | .type' $json_file)                    
-                        if [ -f "$pkginst_data_folder/$pkginst_manager/$pkg" ]; then
-                            source "$pkginst_data_folder/$pkginst_manager/$pkg"
-                        elif [ -f "$pkginst_data_folder/$pkg_type/$pkg" ]; then 
-                            source "$pkginst_data_folder/$pkg_type/$pkg"
+                for pkg in $(jq -c '.options['$index'] | .packages[]' $json_file); do
+                    pkg_package=$(echo $pkg | jq -r '.package')
+                    pkg_type=$(echo $pkg | jq -r '.type')
+                    pkg_test=$(echo $pkg | jq -r '.test')
+                    if [[ $pkg_package == $i ]]; then
+                        if [ -f "$pkginst_data_folder/$pkginst_manager/$pkg_package" ]; then
+                            source "$pkginst_data_folder/$pkginst_manager/$pkg_package"
+                        elif [ -f "$pkginst_data_folder/$pkg_type/$pkg_package" ]; then 
+                            source "$pkginst_data_folder/$pkg_type/$pkg_package"
                         else
                             if [ $pkg_type == "flatpak" ]; then
-                                _installFlatpakFlathub "$pkg"
+                                _installFlatpakFlathub "$pkg_package"
                             else
-                                _installPackage "${pkg}" "${pkg_test}"
+                                _installPackage "$pkg_package" "$pkg_test"
                             fi
                         fi
                     fi
-                    ((counter++))
                 done
             done
             _getInstallationOptions "$json_file"                

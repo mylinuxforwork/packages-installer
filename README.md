@@ -1,6 +1,6 @@
 # Packages Installer
 
-> Please note: The script is currently in BETA. Several tests are running on different Linux distributions.
+> Please note: The script is currently in BETA and in developement. Should not be used for production. Several tests are running on different Linux distributions. Release is planned for May 2025.
 
 Create an enhanced and multiplatform installation script for your favorite package collection, dependencies for your dotfiles configuration or for a single flatpak app. This is possible with the Packges Installer script.
 

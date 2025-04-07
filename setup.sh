@@ -11,14 +11,14 @@ _checkCommandExists() {
 }
 
 # Check for git
-if [[ $(_checkCommandExists "git") == 1 ]]; then
-    echo "ERROR: Please install 'git' and 'jq' on your system first."
+if [[ $(_checkCommandExists "wget") == 1 ]]; then
+    echo "ERROR: Please install 'wget' and 'jq' on your system first."
     exit
 fi
 
 # Check for jq
 if [[ $(_checkCommandExists "jq") == 1 ]]; then
-    echo "ERROR: Please install 'git' and 'jq' on your system first."
+    echo "ERROR: Please install 'wget' and 'jq' on your system first."
     exit
 fi
 
@@ -43,9 +43,6 @@ fi
 
 # Get latest version
 echo ":: Downloading latest version of packages-installer..."
-
-# Clone latest commit
-# git clone --quiet --depth 1 https://github.com/mylinuxforwork/packages-installer.git $HOME/.cache/packages-installer > /dev/null
 
 # Download latest release
 wget -q -c "https://github.com/mylinuxforwork/packages-installer/releases/latest/download/packages-installer.zip" -O "$HOME/.cache/packages-installer.zip"

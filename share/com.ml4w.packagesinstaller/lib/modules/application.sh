@@ -1,3 +1,10 @@
+# ------------------------------------------------
+# GLOBALS
+# ------------------------------------------------
+pkginst_script_dependencies="$HOME/.local/share/com.ml4w.packagesinstaller/lib/dependencies"
+pkginst_download_folder="$HOME/.cache/download"
+pkginst_log_folder="$HOME/.local/share/com.ml4w.packagesinstaller/log"
+
 # ----------------------------------------------------------
 # Load Library
 # ----------------------------------------------------------
@@ -24,7 +31,7 @@ pkginst_source=""
 # Assume Yes
 assumeyes=1
 
-# Assume Yes
+# Aur Helper
 aur_helper="yay"
 
 # CommandErrorList

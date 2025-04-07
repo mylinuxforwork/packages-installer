@@ -19,10 +19,6 @@
         {
             "package":"jq",
             "test":"jq"
-        },
-        {
-            "package":"python-pip",
-            "test":""
         }
     ]
 }

@@ -1,1 +1,0 @@
-_installFlatpakRemote "$pkg" "https://github.com/mylinuxforwork/dotfiles-settings/releases/latest/download/$pkg.flatpak"

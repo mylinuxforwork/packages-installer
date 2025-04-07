@@ -81,48 +81,105 @@ _getNumberOfPackages() {
     echo "$(jq -r '.packages | length' $pkginst_data_folder/packages.json)"
 }
 
-# _selectManager
-_selectManager() {
-    if [ $(jq -r '.managers | length' $pkginst_data_folder/config.json) == 0 ]; then
-        _echo_error ${pkginst_lang["error_no_package_manager_defined"]}
-        exit
-    fi
-    if [ $(jq -r '.managers | length' $pkginst_data_folder/config.json) == 1 ]; then
-        _echo "${pkginst_lang["message_using"]} $(jq -r .managers[0] $pkginst_data_folder/config.json)"
-        pkginst_manager=$(jq -r .managers[0] $pkginst_data_folder/config.json)
+_installFlatpakPkg() {
+    row="$1"
+    pkg_flatpak=$(echo $row | jq -r '.flatpak')
+    pkg_flatpaktype=$(echo $row | jq -r '.flatpaktype')
+    pkg_flatpakremoteurl=$(echo $row | jq -r '.flatpakremoteurl')
+    pkg_flatpaklocaldir=$(echo $row | jq -r '.flatpaklocaldir')
+    if [[ ! "$pkg_flatpak" == "null" ]]; then
+        pkg="$pkg_flatpak"
+    fi                 
+    if [[ ! "$pkg_flatpaktype" == "null" ]]; then
+        case $pkg_flatpaktype in
+            "flatpak")
+                _installFlatpak "$pkg"
+            ;;
+            "remote")
+                if [[ ! "$pkg_flatpakremoteurl" == "null" ]]; then
+                _installFlatpakRemote "$pkg" "$pkg_flatpakremoteurl"
+                else
+                    break
+                fi
+            ;;
+            "local")
+                if [[ ! "$pkg_flatpaklocaldir" == "null" ]]; then
+                _installFlatpakLocal "$pkg" "$pkg_flatpaklocaldir"
+                else
+                    break
+                fi
+            ;;
+            "flathub")
+                _installFlatpakFlathub "$pkg"
+            ;;
+        esac
     else
-        supported="1"
-        for mng in $(jq -r .managers[] $pkginst_data_folder/config.json); do
-            if [[ "$mng" == "$pkginst_manager" ]]; then
-                supported=0
+        _installFlatpakFlathub "$pkg"
+    fi        
+}
+
+_installPkg() {
+    row="$1"
+    pkg=$(echo "$row" | jq -r '.package')
+    pkg_aur=$(echo "$row" | jq -r '.aur')
+    pkg_fedoracopr=$(echo "$row" | jq -r '.fedoracopr')
+    pkg_pacman=$(echo "$row" | jq -r '.pacman')
+    pkg_zypper=$(echo "$row" | jq -r '.zypper')
+    pkg_dnf=$(echo "$row" | jq -r '.dnf')
+    pkg_apt=$(echo "$row" | jq -r '.apt')
+    pkg_test=$(echo "$row" | jq -r '.test')
+    pkg_pip=$(echo "$row" | jq -r '.pip')
+    pkg_flatpak=$(echo "$row" | jq -r '.flatpak')
+
+    if [ -f "$pkginst_data_folder/$pkginst_manager/$pkg" ]; then
+        source "$pkginst_data_folder/$pkginst_manager/$pkg"
+    elif [[ ! "$pkg_flatpak" == "null" ]]; then
+        _installFlatpakPkg "$row"
+    else
+        case $pkginst_manager in
+        "pacman")
+            if [[ ! "$pkg_aur" == "null" ]]; then
+                _installPackageAur "$pkg" "$pkg_test"
+            else
+                if [[ ! "$pkg_pacman" == "null" ]]; then
+                    pkg="$pkg_pacman"
+                fi                
+                _installPackage "$pkg" "$pkg_test"
             fi
-        done
-        if [ $supported == "1" ]; then
-            _echo "${pkginst_lang["package_manager_not_supported"]}"
-            exit
-        fi
-    fi
+            ;;
+        "dnf")
+            if [[ ! "$pkg_fedoracopr" == "null" ]]; then
+                _addCoprRepository "$pkg_fedoracopr"
+            fi
+            if [[ ! "$pkg_dnf" == "null" ]]; then
+                pkg="$pkg_dnf"
+            fi
+            _installPackage "$pkg" "$pkg_test"
+            ;;
+        "apt")
+            if [[ ! "$pkg_apt" == "null" ]]; then
+                pkg="$pkg_apt"
+            fi            
+            _installPackage "$pkg" "$pkg_test"
+            ;;
+        "zypper")
+            if [[ ! "$pkg_zypper" == "null" ]]; then
+                pkg="$pkg_zypper"
+            fi            
+            _installPackage "$pkg" "$pkg_test"
+            ;;
+        "flatpak")
+            _installFlatpakPkg $row
+            ;;
+        esac
+    fi    
 }
 
 # _installPackages {json_file}
 _installPackages() {
     json_file="$1"
-    counter=0
-    for row in $(jq -c '.packages[]' $json_file); do
-        pkg=$(echo $row | jq -r '.package')
-        pkg_test=$(echo $row | jq -r '.test')
-        pkg_type=$(echo $row | jq -r '.type')
-        if [ -f "$pkginst_data_folder/$pkginst_manager/$pkg" ]; then
-            source "$pkginst_data_folder/$pkginst_manager/$pkg"
-        elif [ -f "$pkginst_data_folder/$pkg_type/$pkg" ]; then 
-            source "$pkginst_data_folder/$pkg_type/$pkg"
-        else
-            if [ $pkg_type == "flatpak" ]; then
-                _installFlatpakFlathub "$pkg"
-            else
-                _installPackage "$pkg" "$pkg_test"
-            fi
-        fi
+    for row in $(jq -c '.packages[]' "$json_file"); do
+        _installPkg "$row"
     done    
 }
 

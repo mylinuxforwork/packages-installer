@@ -1,12 +1,14 @@
 {
     "packages":[
         {
-            "package":"org.gnome.Platform",
-            "type":"flatpak"
+            "package":"GnomePlatform",
+            "flatpak":"org.gnome.Platform/x86_64/47"
         },
         {
             "package":"com.ml4w.hyprlandsettings",
-            "type":"flatpak"
+            "flatpak":"com.ml4w.hyprlandsettings",
+            "flatpaktype":"remote",
+            "flatpakremoteurl":"https://github.com/mylinuxforwork/hyprland-settings/releases/latest/download/com.ml4w.hyprlandsettings.flatpak"
         }
     ]
 }

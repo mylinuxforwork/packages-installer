@@ -1,8 +1,8 @@
 # _isInstalledFlatpak {package}
 _isInstalledFlatpak() {
 	package="$1"
-	check="$(flatpak list)"
-	if [[ $check == *"${package}"* ]]; then
+	check=$(flatpak list --app)
+    if [[ $check = *"$package"* ]]; then
 	  	echo 0
 	else
 		echo 1

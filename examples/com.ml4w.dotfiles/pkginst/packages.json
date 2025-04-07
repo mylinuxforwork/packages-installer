@@ -1,7 +1,13 @@
 {
     "packages":[
         {
-            "package":"hyprland"
+            "package":"python-pip",
+            "zypper":"python313-pip",
+            "test":"pip"
+        },
+        {
+            "package":"hyprland",
+            "fedoracopr":"solopasha/hyprland"
         },
         {
             "package":"hyprpaper",
@@ -20,13 +26,16 @@
             "test":"hyprpicker"
         },
         {
-            "package":"noto-fonts"
+            "package":"noto-fonts",
+            "zypper":"google-noto-fonts"
         },
         {
-            "package":"noto-fonts-emoji"
+            "package":"noto-fonts-emoji",
+            "zypper":"noto-emoji"
         },
         {
-            "package":"noto-fonts-cjk"
+            "package":"noto-fonts-cjk",
+            "zypper":"google-noto-serif-cjk-fonts"
         },
         {
             "package":"noto-fonts-extra"
@@ -42,7 +51,8 @@
             "test":"kitty"
         },
         {
-            "package":"qt5-wayland"
+            "package":"qt5-wayland",
+            "zypper":"libqt5-qtwayland"
         },
         {
             "package":"qt6-wayland"
@@ -62,13 +72,13 @@
             "test":"eza"
         },
         {
-            "package":"python-pip"
+            "package":"python-gobject",
+            "aur":"python-gobject"
         },
         {
-            "package":"python-gobject"
-        },
-        {
-            "package":"python-screeninfo"
+            "package":"python-screeninfo",
+            "aur":"python-screeninfo",
+            "pip":"screeninfo"
         },
         {
             "package":"tumbler"
@@ -79,10 +89,12 @@
         },
         {
             "package":"nm-connection-editor",
+            "zypper":"NetworkManager-connection-editor",
             "test":"nm-connection-editor"
         },
         {
-            "package":"network-manager-applet"
+            "package":"network-manager-applet",
+            "zypper":"NetworkManager-applet"
         },
         {
             "package":"gtk4"
@@ -91,10 +103,12 @@
             "package":"libadwaita"
         },
         {
-            "package":"fuse2"
+            "package":"fuse2",
+            "zypper":"fuse2fs"
         },
         {
-            "package":"imagemagick"
+            "package":"imagemagick",
+            "zypper":"ImageMagick"
         },
         {
             "package":"xclip"
@@ -105,11 +119,12 @@
         },
         {
             "package":"python-pywal",
+            "pip":"pywal",
             "test":"wal"
         },
         {
-            "package":"pinta",
-            "test":"pinta"
+            "package":"com.github.PintaProject.Pinta",
+            "flatpak":"com.github.PintaProject.Pinta"
         },
         {
             "package":"blueman"
@@ -121,10 +136,12 @@
             "package":"slurp"
         },
         {
-            "package":"cliphist"
+            "package":"cliphist",
+            "fedoracopr":"wef/cliphist"
         },
         {
             "package":"nwg-look",
+            "fedoracopr":"tofik/nwg-shell",
             "test":"nwg-look"
         },
         {
@@ -165,6 +182,9 @@
         },
         {
             "package":"swaync",
+            "fedoracopr":"erikreider/SwayNotificationCenter",
+            "dnf":"SwayNotificationCenter",
+            "zypper":"SwayNotificationCenter",
             "test":"swaync"
         },
         {
@@ -172,40 +192,56 @@
         },
         {
             "package":"wlogout",
+            "aur":"wlogout",
             "test":"wlogout"
         },
         {
             "package":"hyprshade",
+            "aur":"hyprshade",
+            "pip":"hyprshade",
             "test":"hyprshade"
         },
         {
             "package":"waypaper",
+            "aur":"waypaper",
+            "pip":"waypaper",
             "test":"waypaper"
         },
         {
-            "package":"grimblast-git"
+            "package":"grimblast-git",
+            "aur":"grimblast-git"
         },
         {
-            "package":"bibata-cursor-theme-bin"
+            "package":"bibata-cursor-theme-bin",
+            "aur":"bibata-cursor-theme-bin",
+            "fedoracopr":"peterwu/rendezvous",
+            "dnf":"bibata-cursor-themes"
         },
         {
             "package":"pacseek",
+            "aur":"pacseek",
+            "dnf":"SKIP",
+            "zypper":"SKIP",
             "test":"pacseek"
         },
         {
-            "package":"otf-font-awesome"
+            "package":"otf-font-awesome",
+            "zypper":"fontawesome-fonts"
         },
         {
             "package":"ttf-fira-sans"
         },
         {
-            "package":"ttf-fira-code"
+            "package":"ttf-fira-code",
+            "zypper":"fira-code-fonts"
         },
         {
-            "package":"ttf-firacode-nerd"
+            "package":"ttf-firacode-nerd",
+            "zypper":"SKIP"
         },
         {
-            "package":"ttf-dejavu"
+            "package":"ttf-dejavu",
+            "zypper":"dejavu-fonts"
         },
         {
             "package":"nwg-dock-hyprland"
@@ -214,35 +250,49 @@
             "package":"oh-my-posh-bin"
         },
         {
-            "package":"checkupdates-with-aur"
+            "package":"checkupdates-with-aur",
+            "aur":"checkupdates-with-aur",
+            "dnf":"SKIP",
+            "zypper":"SKIP",
+            "apt":"SKIP"
         },
         {
             "package":"power-profiles-daemon",
             "test":""
         },
         {
-            "package":"org.gnome.Platform",
-            "type":"flatpak"
+            "package":"GnomePlatform",
+            "flatpak":"org.gnome.Platform/x86_64/47"
         },
         {
             "package":"com.ml4w.welcome",
-            "type":"flatpak"
+            "flatpak":"com.ml4w.welcome",
+            "flatpaktype":"remote",
+            "flatpakremoteurl":"https://github.com/mylinuxforwork/dotfiles-welcome/releases/latest/download/com.ml4w.welcome.flatpak"
         },
         {
             "package":"com.ml4w.sidebar",
-            "type":"flatpak"
+            "flatpak":"com.ml4w.sidebar",
+            "flatpaktype":"remote",
+            "flatpakremoteurl":"https://github.com/mylinuxforwork/dotfiles-sidebar/releases/latest/download/com.ml4w.sidebar.flatpak"
         },
         {
             "package":"com.ml4w.calendar",
-            "type":"flatpak"
+            "flatpak":"com.ml4w.calendar",
+            "flatpaktype":"remote",
+            "flatpakremoteurl":"https://github.com/mylinuxforwork/dotfiles-calendar/releases/latest/download/com.ml4w.calendar.flatpak"
         },
         {
             "package":"com.ml4w.settings",
-            "type":"flatpak"
+            "flatpak":"com.ml4w.settings",
+            "flatpaktype":"remote",
+            "flatpakremoteurl":"https://github.com/mylinuxforwork/dotfiles-settings/releases/latest/download/com.ml4w.settings.flatpak"
         },
         {
             "package":"com.ml4w.hyprlandsettings",
-            "type":"flatpak"
+            "flatpak":"com.ml4w.hyprlandsettings",
+            "flatpaktype":"remote",
+            "flatpakremoteurl":"https://github.com/mylinuxforwork/hyprland-settings/releases/latest/download/com.ml4w.hyprlandsettings.flatpak"
         }
     ],
     "options":[
@@ -254,7 +304,8 @@
                     "test":"alacritty"
                 },
                 {
-                    "package":"ghostty"
+                    "package":"ghostty",
+                    "fedoracopr":"pgdev/ghostty"
                 }
             ]
         },
@@ -262,48 +313,49 @@
             "name": "Browsers",
             "packages":[
                 {
-                    "package":"org.mozilla.firefox",
-                    "type":"flatpak"
+                    "package":"Firefox",
+                    "flatpak":"org.mozilla.firefox"
                 },
                 {
-                    "package":"com.brave.Browser",
-                    "type":"flatpak"
+                    "package":"Brave",
+                    "flatpak":"com.brave.Browser"
                 },
                 {
-                    "package":"org.chromium.Chromium",
-                    "type":"flatpak"
+                    "package":"Chromium",
+                    "flatpak":"org.chromium.Chromium"
                 },
                 {
-                    "package":"app.zen_browser.zen",
-                    "type":"flatpak"
+                    "package":"ZenBrowser",
+                    "flatpak":"app.zen_browser.zen"
                 }
             ]
         },
         {
-            "name": "Text-Editors",
+            "name": "Text_Editors",
             "packages":[
                 {
                     "package":"neovim",
                     "test":"nvim"
                 },
                 {
-                    "package":"org.gnome.TextEditor",
-                    "type":"flatpak"
+                    "package":"GnomeTextEditor",
+                    "flatpak":"org.gnome.TextEditor"
                 }
             ]
         },
         {
-            "name": "File-Managers",
+            "name": "File_Managers",
             "packages":[
                 {
                     "package":"nautilus"
                 },
                 {
-                    "package":"yazi"
+                    "package":"yazi",
+                    "fedoracopr":"varlad/yazi"
                 },
                 {
-                    "package":"org.kde.dolphin",
-                    "type":"flatpak"
+                    "package":"Dolphin",
+                    "flatpak":"org.kde.dolphin"
                 },
                 {
                     "package":"thunar"
@@ -311,7 +363,7 @@
             ]
         },
         {
-            "name": "System-Monitors",
+            "name": "System_Monitors",
             "packages":[
                 {
                     "package":"htop"
@@ -320,8 +372,8 @@
                     "package":"btop"
                 },
                 {
-                    "package":"io.missioncenter.MissionCenter",
-                    "type":"flatpak"
+                    "package":"MissionCenter",
+                    "flatpak":"io.missioncenter.MissionCenter"
                 }
             ]
         },
@@ -329,12 +381,17 @@
             "name": "Other",
             "packages":[
                 {
-                    "package":"org.gnome.Calculator",
-                    "type":"flatpak"
+                    "package":"GnomeCalculator",
+                    "flatpak":"org.gnome.Calculator"
                 },
                 {
-                    "package":"org.gnome.Loupe",
-                    "type":"flatpak"
+                    "package":"Loupe",
+                    "flatpak":"org.gnome.Loupe"
+                },
+                {
+                    "package":"python-pywalfox",
+                    "aur":"python-pywalfox",
+                    "pip":"pywalfox"
                 }
             ]
         }        

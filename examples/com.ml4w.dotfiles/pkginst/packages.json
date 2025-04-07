@@ -31,14 +31,13 @@
         },
         {
             "package":"noto-fonts-emoji",
-            "zypper":"noto-emoji"
+            "zypper":"noto-emoji",
+            "dnf":"google-noto-emoji-fonts"
         },
         {
             "package":"noto-fonts-cjk",
-            "zypper":"google-noto-serif-cjk-fonts"
-        },
-        {
-            "package":"noto-fonts-extra"
+            "zypper":"google-noto-serif-cjk-fonts",
+            "dnf":"google-noto-sans-cjk-fonts"
         },
         {
             "package":"xdg-desktop-portal-hyprland"
@@ -52,10 +51,12 @@
         },
         {
             "package":"qt5-wayland",
-            "zypper":"libqt5-qtwayland"
+            "zypper":"libqt5-qtwayland",
+            "dnf":"qt5-qtwayland"
         },
         {
-            "package":"qt6-wayland"
+            "package":"qt6-wayland",
+            "dnf":"qt6-qtwayland"
         },
         {
             "package":"uwsm"
@@ -73,7 +74,8 @@
         },
         {
             "package":"python-gobject",
-            "aur":"python-gobject"
+            "aur":"python-gobject",
+            "dnf":"python3-gobject"
         },
         {
             "package":"python-screeninfo",
@@ -104,11 +106,13 @@
         },
         {
             "package":"fuse2",
-            "zypper":"fuse2fs"
+            "zypper":"fuse2fs",
+            "dnf":"fuse"
         },
         {
             "package":"imagemagick",
-            "zypper":"ImageMagick"
+            "zypper":"ImageMagick",
+            "dnf":"ImageMagick"
         },
         {
             "package":"xclip"
@@ -156,13 +160,15 @@
             "test":"rofi"
         },
         {
-            "package":"polkit-gnome"
+            "package":"polkit-gnome",
+            "dnf":"SKIP"
         },
         {
             "package":"zsh"
         },
         {
-            "package":"zsh-completions"
+            "package":"zsh-completions",
+            "dnf":"SKIP"
         },
         {
             "package":"fzf",
@@ -226,14 +232,17 @@
         },
         {
             "package":"otf-font-awesome",
-            "zypper":"fontawesome-fonts"
+            "zypper":"fontawesome-fonts",
+            "dnf":"fontawesome-fonts"
         },
         {
-            "package":"ttf-fira-sans"
+            "package":"ttf-fira-sans",
+            "dnf":"mozilla-fira-fonts"
         },
         {
             "package":"ttf-fira-code",
-            "zypper":"fira-code-fonts"
+            "zypper":"fira-code-fonts",
+            "dnf":"fira-code-fonts"
         },
         {
             "package":"ttf-firacode-nerd",
@@ -241,7 +250,8 @@
         },
         {
             "package":"ttf-dejavu",
-            "zypper":"dejavu-fonts"
+            "zypper":"dejavu-fonts",
+            "dnf":"dejavu-fonts-all"
         },
         {
             "package":"nwg-dock-hyprland"

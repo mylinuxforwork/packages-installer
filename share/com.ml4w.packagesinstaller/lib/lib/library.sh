@@ -164,7 +164,7 @@ _installPkg() {
         source "$pkginst_data_folder/$pkginst_manager/$pkg"
     elif [[ ! "$pkg_flatpak" == "null" ]]; then
         _installFlatpakPkg "$row"
-    elif [[ ! "$pkg_pip" == "null" ]]; then
+    elif [[ ! "$pkg_pip" == "null" && ! "$pkginst_manager" == "pacman" ]]; then
         _installPipPkg "$row"
     elif [[ ! "$pkg_cargo" == "null" ]]; then
         _installCargoPkg "$row"
@@ -327,14 +327,15 @@ _checkCommandExists() {
 # _installPip {package}
 _installPip() {
     package="$1"
-    _echo_success "${pkginst_lang["install_package"]} ${package}"
-    pip install -y "${package}" &>>$(_getLogFile)
+    _echo_success "${pkginst_lang["install_package"]} ${package} with pip"
+    # pip install -y "${package}" &>>$(_getLogFile)
+    pip install "${package}"
 }
 
 # _installCargo {package}
 _installCargo() {
     package="$1"
-    _echo_success "${pkginst_lang["install_package"]} ${package}"
+    _echo_success "${pkginst_lang["install_package"]} ${package} with cargo"
     cargo install "${package}" &>>$(_getLogFile)
 }
 

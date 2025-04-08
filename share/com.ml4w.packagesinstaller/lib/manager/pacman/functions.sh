@@ -18,7 +18,7 @@ _installPackage() {
 		_echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
         sudo pacman -S --needed --noconfirm "${package}" &>>$(_getLogFile)
-		_echo_success "${pkginst_lang["install_package"]} ${package}"
+		_echo_success "${pkginst_lang["install_package"]} ${package} with pacman"
         if [ ! -z $testcommand ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
                 _echo_error "$testcommand ${pkginst_lang["command_check_failed"]}"
@@ -35,7 +35,7 @@ _installPackageAur() {
 	if [[ $(_isInstalled "${package}") == 0 ]]; then
 		_echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
-		_echo_success "${pkginst_lang["install_package"]} ${package}"
+		_echo_success "${pkginst_lang["install_package"]} ${package} with ${aur_helper}"
         ${aur_helper} -S --noconfirm "${package}" &>>$(_getLogFile)
         if [ ! -z $testcommand ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then

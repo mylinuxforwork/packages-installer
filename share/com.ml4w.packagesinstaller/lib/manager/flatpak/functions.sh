@@ -15,7 +15,7 @@ _installFlatpak() {
     if [[ $(_isInstalledFlatpak "${package}") == 0 ]]; then
         _echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
-        _echo_success "${pkginst_lang["install_package"]} ${package}"
+        _echo_success "${pkginst_lang["install_package"]} ${package} with flatpak"
         flatpak -y install "${package}" &>>$(_getLogFile)
     fi
 }
@@ -24,7 +24,7 @@ _installFlatpak() {
 _installFlatpakRemote() {
     package="$1"
     url="$2"
-    _echo_success "${pkginst_lang["install_package"]} ${package}"
+    _echo_success "${pkginst_lang["install_package"]} ${package} with flatpak/remote"
     if [ ! -d $HOME/.cache ]; then
         mkdir -p $HOME/.cache
     fi
@@ -42,7 +42,7 @@ _installFlatpakRemote() {
 _installFlatpakLocal() {
     package="$1"
     dir="$2"
-    _echo_success "${pkginst_lang["install_package"]} ${package}"
+    _echo_success "${pkginst_lang["install_package"]} ${package} with flatpak/local"
     flatpak --user -y --reinstall install ${package}.flatpak &>>$(_getLogFile)
 }
 
@@ -53,7 +53,7 @@ _installFlatpakFlathub() {
     if [[ $(_isInstalledFlatpak "${package}") == 0 ]]; then
         _echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
-        _echo_success "${pkginst_lang["install_package"]} ${package}"
+        _echo_success "${pkginst_lang["install_package"]} ${package} with flatpak/flathub"
         flatpak -y install flathub "${package}" &>>$(_getLogFile)
     fi
 }

@@ -10,6 +10,7 @@ _echo_error() {
     echo "${echo_prefix_error}${output}"
 }
 
+# _echo_success {output}
 _echo_success() {
     output="$1"
     printf '\u2714\ufe0e' 
@@ -77,10 +78,12 @@ _showAllPackagesDialog() {
     _selectManager
 }
 
+# _getNumberOfPackages
 _getNumberOfPackages() {
     echo "$(jq -r '.packages | length' $pkginst_data_folder/packages.json)"
 }
 
+# _installFlatpakPkg {row}
 _installFlatpakPkg() {
     row="$1"
     pkg_flatpak=$(echo $row | jq -r '.flatpak')
@@ -118,6 +121,31 @@ _installFlatpakPkg() {
     fi        
 }
 
+# _installPipPkg {row}
+_installPipPkg() {
+    row="$1"
+    pkg_pip=$(echo $row | jq -r '.pip')
+    if [[ ! "$pkg_pip" == "null" ]]; then
+        pkg="$pkg_pip"
+    fi                 
+    if [ ! -z $pkg ]; then
+        _installPip "$pkg"
+    fi
+}
+
+# _installCargoPkg {row}
+_installCargoPkg() {
+    row="$1"
+    pkg_cargo=$(echo $row | jq -r '.cargo')
+    if [[ ! "$pkg_cargo" == "null" ]]; then
+        pkg="$pkg_cargo"
+    fi                 
+    if [ ! -z $pkg ]; then
+        _installCargo "$pkg"
+    fi
+}
+
+# _installPkg {row}
 _installPkg() {
     row="$1"
     pkg=$(echo "$row" | jq -r '.package')
@@ -129,12 +157,17 @@ _installPkg() {
     pkg_apt=$(echo "$row" | jq -r '.apt')
     pkg_test=$(echo "$row" | jq -r '.test')
     pkg_pip=$(echo "$row" | jq -r '.pip')
+    pkg_cargo=$(echo "$row" | jq -r '.cargo')
     pkg_flatpak=$(echo "$row" | jq -r '.flatpak')
 
     if [ -f "$pkginst_data_folder/$pkginst_manager/$pkg" ]; then
         source "$pkginst_data_folder/$pkginst_manager/$pkg"
     elif [[ ! "$pkg_flatpak" == "null" ]]; then
         _installFlatpakPkg "$row"
+    elif [[ ! "$pkg_pip" == "null" ]]; then
+        _installPipPkg "$row"
+    elif [[ ! "$pkg_cargo" == "null" ]]; then
+        _installCargoPkg "$row"
     else
         case $pkginst_manager in
         "pacman")
@@ -143,8 +176,10 @@ _installPkg() {
             else
                 if [[ ! "$pkg_pacman" == "null" ]]; then
                     pkg="$pkg_pacman"
-                fi                
-                _installPackage "$pkg" "$pkg_test"
+                fi
+                if [[ ! "$pkg" == "SKIP" ]]; then
+                    _installPackage "$pkg" "$pkg_test"
+                fi
             fi
             ;;
         "dnf")
@@ -154,19 +189,25 @@ _installPkg() {
             if [[ ! "$pkg_dnf" == "null" ]]; then
                 pkg="$pkg_dnf"
             fi
-            _installPackage "$pkg" "$pkg_test"
+            if [[ ! "$pkg" == "SKIP" ]]; then
+                _installPackage "$pkg" "$pkg_test"
+            fi
             ;;
         "apt")
             if [[ ! "$pkg_apt" == "null" ]]; then
                 pkg="$pkg_apt"
-            fi            
-            _installPackage "$pkg" "$pkg_test"
+            fi
+            if [[ ! "$pkg" == "SKIP" ]]; then
+                _installPackage "$pkg" "$pkg_test"
+            fi
             ;;
         "zypper")
             if [[ ! "$pkg_zypper" == "null" ]]; then
                 pkg="$pkg_zypper"
             fi            
-            _installPackage "$pkg" "$pkg_test"
+            if [[ ! "$pkg" == "SKIP" ]]; then
+                _installPackage "$pkg" "$pkg_test"
+            fi
             ;;
         "flatpak")
             _installFlatpakPkg $row
@@ -227,6 +268,7 @@ _getInstallationOptions() {
     fi
 }
 
+# _getInstallationOption {json_file} {index} {option}
 _getInstallationOption() {
     json_file="$1"
     index="$2"
@@ -286,7 +328,14 @@ _checkCommandExists() {
 _installPip() {
     package="$1"
     _echo_success "${pkginst_lang["install_package"]} ${package}"
-    pip install "${package}" &>>$(_getLogFile)
+    pip install -y "${package}" &>>$(_getLogFile)
+}
+
+# _installCargo {package}
+_installCargo() {
+    package="$1"
+    _echo_success "${pkginst_lang["install_package"]} ${package}"
+    cargo install "${package}" &>>$(_getLogFile)
 }
 
 # Define log file extension

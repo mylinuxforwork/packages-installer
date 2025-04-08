@@ -38,3 +38,6 @@ bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/packages-install
 
 ```
 
+You can add the packages-installer binary to your path with
+# export PATH=$PATH:~/.cargo/bin/
+export PATH=$PATH:~/.local/bin/

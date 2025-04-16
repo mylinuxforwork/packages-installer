@@ -31,19 +31,20 @@
         },
         {
             "package":"noto-fonts-emoji",
-            "zypper":"noto-emoji",
+            "zypper":"SKIP",
             "dnf":"google-noto-emoji-fonts"
         },
         {
             "package":"noto-fonts-cjk",
-            "zypper":"google-noto-serif-cjk-fonts",
+            "zypper":"SKIP",
             "dnf":"google-noto-sans-cjk-fonts"
         },
         {
             "package":"xdg-desktop-portal-hyprland"
         },
         {
-            "package":"libnotify"
+            "package":"libnotify",
+            "zypper":"libnotify-tools"
         },
         {
             "package":"kitty",
@@ -59,7 +60,9 @@
             "dnf":"qt6-qtwayland"
         },
         {
-            "package":"uwsm"
+            "package":"uwsm",
+            "dnf":"SKIP",
+            "zypper":"SKIP"
         },
         {
             "package":"fastfetch",
@@ -75,12 +78,13 @@
         {
             "package":"python-gobject",
             "aur":"python-gobject",
-            "dnf":"python3-gobject"
+            "dnf":"python3-gobject",
+            "zypper":"python313-gobject"
         },
         {
             "package":"python-screeninfo",
             "aur":"python-screeninfo",
-            "pip":"screeninfo"
+            "zypper":"python313-screeninfo"
         },
         {
             "package":"tumbler"
@@ -99,10 +103,12 @@
             "zypper":"NetworkManager-applet"
         },
         {
-            "package":"gtk4"
+            "package":"gtk4",
+            "zypper": "libgtk-4-1"
         },
         {
-            "package":"libadwaita"
+            "package":"libadwaita",
+            "zypper":"SKIP"
         },
         {
             "package":"fuse2",
@@ -123,7 +129,7 @@
         },
         {
             "package":"python-pywal",
-            "pip":"pywal",
+            "zypper":"python313-pywal",
             "test":"wal"
         },
         {
@@ -210,7 +216,7 @@
         {
             "package":"waypaper",
             "aur":"waypaper",
-            "pip":"waypaper",
+            "zypper":"python313-waypaper",
             "test":"waypaper"
         },
         {

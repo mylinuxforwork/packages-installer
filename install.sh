@@ -39,12 +39,12 @@ fi
 echo ":: Downloading latest version of packages-installer..."
 git clone --quiet --depth 1 https://github.com/mylinuxforwork/packages-installer.git $HOME/.cache/packages-installer  > /dev/null
 
-# Create folders id not exists
-if [ ! -f "$HOME/.local/bin" ]; then
+# Create folders if not exists
+if [ ! -d "$HOME/.local/bin" ]; then
     mkdir -p "$HOME/.local/bin"
 fi
 
-if [ ! -f "$HOME/.local/share" ]; then
+if [ ! -d "$HOME/.local/share" ]; then
     mkdir -p "$HOME/.local/share"
 fi
 

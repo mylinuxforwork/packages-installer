@@ -16,7 +16,11 @@ _installFlatpak() {
         _echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
         _echo_success "${pkginst_lang["install_package"]} ${package} with flatpak"
-        flatpak -y install "${package}" &>>$(_getLogFile)
+        if [[ "$debug" == 0 ]]; then
+            flatpak -y install "${package}"
+        else
+            flatpak -y install "${package}" &>>$(_getLogFile)
+        fi
     fi
 }
 
@@ -33,7 +37,11 @@ _installFlatpakRemote() {
     fi
     wget -q -P "$HOME/.cache" "${url}"
     cd "$HOME/.cache"
-    flatpak --user -y --reinstall install ${package}.flatpak &>>$(_getLogFile)
+    if [[ "$debug" == 0 ]]; then
+        flatpak --user -y --reinstall install ${package}.flatpak
+    else
+        flatpak --user -y --reinstall install ${package}.flatpak &>>$(_getLogFile)
+    fi
     rm "$HOME/.cache/${package}.flatpak"    
     cd "$pkginst_script_directory"
 }
@@ -43,17 +51,29 @@ _installFlatpakLocal() {
     package="$1"
     dir="$2"
     _echo_success "${pkginst_lang["install_package"]} ${package} with flatpak/local"
-    flatpak --user -y --reinstall install ${package}.flatpak &>>$(_getLogFile)
+    if [[ "$debug" == 0 ]]; then
+        flatpak --user -y --reinstall install ${package}.flatpak
+    else
+        flatpak --user -y --reinstall install ${package}.flatpak &>>$(_getLogFile)
+    fi
 }
 
 # _installFlatpakFlathub {package}
 _installFlatpakFlathub() {
     package="$1"
-    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo &>>$(_getLogFile)
+    if [[ "$debug" == 0 ]]; then
+        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    else
+        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo &>>$(_getLogFile)
+    fi
     if [[ $(_isInstalledFlatpak "${package}") == 0 ]]; then
         _echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
         _echo_success "${pkginst_lang["install_package"]} ${package} with flatpak/flathub"
-        flatpak -y install flathub "${package}" &>>$(_getLogFile)
+        if [[ "$debug" == 0 ]]; then
+            flatpak -y install flathub "${package}"
+        else
+            flatpak -y install flathub "${package}" &>>$(_getLogFile)
+        fi
     fi
 }

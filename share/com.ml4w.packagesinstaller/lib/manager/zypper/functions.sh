@@ -21,7 +21,11 @@ _installPackage() {
 		_echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
 		_echo_success "${pkginst_lang["install_package"]} ${package} with zypper"
-        sudo zypper -n install "${package}" &>>$(_getLogFile)
+        if [[ "$debug" == 0 ]]; then
+            sudo zypper -n install "${package}"
+        else
+            sudo zypper -n install "${package}" &>>$(_getLogFile)
+        fi
         if [ ! -z $testcommand ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
                 _echo_error "$testcommand ${pkginst_lang["command_check_failed"]}"

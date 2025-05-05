@@ -17,7 +17,11 @@ _installPackage() {
 	if [[ $(_isInstalled "${package}") == 0 ]]; then
 		_echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
-        sudo pacman -S --needed --noconfirm "${package}" &>>$(_getLogFile)
+        if [[ "$debug" == 0 ]]; then
+            sudo pacman -S --needed --noconfirm "${package}"
+        else
+            sudo pacman -S --needed --noconfirm "${package}" &>>$(_getLogFile)
+        fi
 		_echo_success "${pkginst_lang["install_package"]} ${package} with pacman"
         if [ ! -z $testcommand ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
@@ -36,7 +40,11 @@ _installPackageAur() {
 		_echo_success "${package} ${pkginst_lang["package_already_installed"]}"
     else
 		_echo_success "${pkginst_lang["install_package"]} ${package} with ${aur_helper}"
-        ${aur_helper} -S --noconfirm "${package}" &>>$(_getLogFile)
+        if [[ "$debug" == 0 ]]; then
+            ${aur_helper} -S --noconfirm "${package}"
+        else
+            ${aur_helper} -S --noconfirm "${package}" &>>$(_getLogFile)
+        fi
         if [ ! -z $testcommand ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
                 _echo_error "$testcommand ${pkginst_lang["command_check_failed"]}"

@@ -74,7 +74,7 @@ fi
 # ----------------------------------------------------------
 # Parse command-line options
 # ----------------------------------------------------------
-OPTS=$(getopt -o s:p:a:hyi --long packagemanager:,aurhelper:,help,assumeyes,installed -- "$@")
+OPTS=$(getopt -o s:p:a:hyid --long packagemanager:,aurhelper:,help,assumeyes,debug,installed -- "$@")
 
 if [ $? -ne 0 ]; then
   _echo_error "Failed to parse options" >&2
@@ -129,6 +129,10 @@ while true; do
             ASSUMEYES=true
             shift
         ;;
+        -d | --debug)
+            DEBUG=true
+            shift
+        ;;
         -i | --installed)
             INSTALLED=true
             shift
@@ -156,6 +160,7 @@ if [ "$HELP" = true ]; then
     echo "  -a, --aurhelper AURHELPER           Define the Aur Helper in case of pacman for Arch based distributions"
     echo "  -i, --installed                     Shows all main packages that will be installed"
     echo "  -y, --assumeyes                     Assume yes for all confirmation dialogs"
+    echo "  -d, --debug                         Show console output for debugging"
     echo "  -h, --help                          Display this help message"
     echo
     echo ":: Packages Installer $pkginst_version"
@@ -167,6 +172,11 @@ fi
 # ASSUMEYES
 if [ "$ASSUMEYES" = true ]; then
     assumeyes=0
+fi
+
+# DEBUG
+if [ "$DEBUG" = true ]; then
+    debug=0
 fi
 
 # INSTALLED

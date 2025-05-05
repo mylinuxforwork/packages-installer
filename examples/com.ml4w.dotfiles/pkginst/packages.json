@@ -1,11 +1,6 @@
 {
     "packages":[
         {
-            "package":"python-pip",
-            "zypper":"python313-pip",
-            "test":"pip"
-        },
-        {
             "package":"hyprland",
             "fedoracopr":"solopasha/hyprland"
         },
@@ -26,18 +21,16 @@
             "test":"hyprpicker"
         },
         {
-            "package":"noto-fonts",
-            "zypper":"google-noto-fonts"
+            "package":"rust"
         },
         {
-            "package":"noto-fonts-emoji",
-            "zypper":"SKIP",
-            "dnf":"google-noto-emoji-fonts"
+            "package":"flatpak"
         },
         {
-            "package":"noto-fonts-cjk",
-            "zypper":"SKIP",
-            "dnf":"google-noto-sans-cjk-fonts"
+            "package":"python-pip",
+            "dnf":"python3-pip",
+            "zypper":"python313-pip",
+            "test":"pip"
         },
         {
             "package":"xdg-desktop-portal-hyprland"
@@ -76,12 +69,6 @@
             "test":"eza"
         },
         {
-            "package":"python-gobject",
-            "aur":"python-gobject",
-            "dnf":"python3-gobject",
-            "zypper":"python313-gobject"
-        },
-        {
             "package":"python-screeninfo",
             "aur":"python-screeninfo",
             "zypper":"python313-screeninfo"
@@ -103,34 +90,17 @@
             "zypper":"NetworkManager-applet"
         },
         {
-            "package":"gtk4",
-            "zypper": "libgtk-4-1"
-        },
-        {
-            "package":"libadwaita",
-            "zypper":"SKIP"
-        },
-        {
-            "package":"fuse2",
-            "zypper":"fuse2fs",
-            "dnf":"fuse"
-        },
-        {
             "package":"imagemagick",
             "zypper":"ImageMagick",
             "dnf":"ImageMagick"
-        },
-        {
-            "package":"xclip"
         },
         {
             "package":"vim",
             "test":"vim"
         },
         {
-            "package":"python-pywal",
-            "zypper":"python313-pywal",
-            "test":"wal"
+            "package":"matugen",
+            "cargo":"matugen"
         },
         {
             "package":"com.github.PintaProject.Pinta",
@@ -190,9 +160,6 @@
             "package":"breeze"
         },
         {
-            "package":"flatpak"
-        },
-        {
             "package":"swaync",
             "fedoracopr":"erikreider/SwayNotificationCenter",
             "dnf":"SwayNotificationCenter",
@@ -235,6 +202,20 @@
             "dnf":"SKIP",
             "zypper":"SKIP",
             "test":"pacseek"
+        },
+        {
+            "package":"noto-fonts",
+            "zypper":"google-noto-fonts"
+        },
+        {
+            "package":"noto-fonts-emoji",
+            "zypper":"SKIP",
+            "dnf":"google-noto-emoji-fonts"
+        },
+        {
+            "package":"noto-fonts-cjk",
+            "zypper":"SKIP",
+            "dnf":"google-noto-sans-cjk-fonts"
         },
         {
             "package":"otf-font-awesome",

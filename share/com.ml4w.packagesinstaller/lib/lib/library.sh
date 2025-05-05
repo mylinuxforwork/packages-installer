@@ -328,15 +328,22 @@ _checkCommandExists() {
 _installPip() {
     package="$1"
     _echo_success "${pkginst_lang["install_package"]} ${package} with pip"
-    # pip install -y "${package}" &>>$(_getLogFile)
-    pip install "${package}"
+    if [[ "$debug" == 0 ]]; then
+        pip install -y "${package}"
+    else
+        pip install -y "${package}" &>>$(_getLogFile)
+    fi
 }
 
 # _installCargo {package}
 _installCargo() {
     package="$1"
     _echo_success "${pkginst_lang["install_package"]} ${package} with cargo"
-    cargo install "${package}" &>>$(_getLogFile)
+    if [[ "$debug" == 0 ]]; then
+        cargo install "${package}"
+    else
+        cargo install "${package}" &>>$(_getLogFile)
+    fi
 }
 
 # Define log file extension

@@ -181,7 +181,6 @@
         {
             "package":"waypaper",
             "aur":"waypaper",
-            "zypper":"python313-waypaper",
             "test":"waypaper"
         },
         {

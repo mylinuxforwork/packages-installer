@@ -23,7 +23,7 @@ _installPackage() {
             sudo pacman -S --needed --noconfirm "${package}" &>>$(_getLogFile)
         fi
 		_echo_success "${pkginst_lang["install_package"]} ${package} with pacman"
-        if [ ! -z $testcommand ]; then
+        if [ ! -z "$testcommand" ] && [ "$testcommand" != "null" ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
                 _echo_error "$testcommand ${pkginst_lang["command_check_failed"]}"
                 pkginst_commanderrors+=($testcommand)
@@ -45,7 +45,7 @@ _installPackageAur() {
         else
             ${aur_helper} -S --noconfirm "${package}" &>>$(_getLogFile)
         fi
-        if [ ! -z $testcommand ]; then
+        if [ ! -z "$testcommand" ] && [ "$testcommand" != "null" ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
                 _echo_error "$testcommand ${pkginst_lang["command_check_failed"]}"
                 pkginst_commanderrors+=($testcommand)

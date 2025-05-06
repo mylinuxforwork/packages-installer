@@ -26,7 +26,7 @@ _installPackage() {
         else
             sudo zypper -n install "${package}" &>>$(_getLogFile)
         fi
-        if [ ! -z $testcommand ]; then
+        if [ ! -z "$testcommand" ] && [ "$testcommand" != "null" ]; then
             if [ $(_checkCommandExists "$testcommand") == 1 ]; then
                 _echo_error "$testcommand ${pkginst_lang["command_check_failed"]}"
                 pkginst_commanderrors+=($testcommand)

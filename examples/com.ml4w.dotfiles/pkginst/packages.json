@@ -24,6 +24,9 @@
             "package":"rust"
         },
         {
+            "package":"cargo"
+        },
+        {
             "package":"flatpak"
         },
         {
@@ -66,7 +69,7 @@
         },
         {
             "package":"eza",
-            "test":"eza"
+            "cargo":"eza"
         },
         {
             "package":"python-screeninfo",

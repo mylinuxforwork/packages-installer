@@ -340,9 +340,9 @@ _installCargo() {
     package="$1"
     _echo_success "${pkginst_lang["install_package"]} ${package} with cargo"
     if [[ "$debug" == 0 ]]; then
-        cargo install --force "${package}"
+        cargo install "${package}"
     else
-        cargo install --force "${package}" &>>$(_getLogFile)
+        cargo install "${package}" &>>$(_getLogFile)
     fi
 }
 

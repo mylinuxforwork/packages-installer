@@ -27,6 +27,10 @@
             "package":"cargo"
         },
         {
+            "package":"cargo-update",
+            "cargo":"cargo-update"
+        },
+        {
             "package":"flatpak"
         },
         {

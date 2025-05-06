@@ -56,11 +56,6 @@
             "dnf":"qt6-qtwayland"
         },
         {
-            "package":"uwsm",
-            "dnf":"SKIP",
-            "zypper":"SKIP"
-        },
-        {
             "package":"fastfetch",
             "test":"fastfetch"
         },

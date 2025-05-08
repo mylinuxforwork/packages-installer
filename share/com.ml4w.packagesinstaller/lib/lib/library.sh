@@ -220,7 +220,10 @@ _installPkg() {
 _installPackages() {
     json_file="$1"
     for row in $(jq -c '.packages[]' "$json_file"); do
-        _installPkg "$row"
+        pkg=$(echo "$row" | jq -r '.package')
+        if [[ "$pkg" != "null" ]]; then
+            _installPkg "$row"
+        fi
     done    
 }
 

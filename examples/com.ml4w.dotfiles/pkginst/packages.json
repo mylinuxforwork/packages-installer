@@ -1,6 +1,11 @@
 {
     "packages":[
         {
+            "#":"----------------------",
+            "#":"HYPRLAND",
+            "#":"----------------------"
+        },
+        {
             "package":"hyprland",
             "fedoracopr":"solopasha/hyprland"
         },
